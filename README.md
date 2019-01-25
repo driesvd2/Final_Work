@@ -10,3 +10,8 @@ Frontend: http://dtsl.ehb.be/~dries.van.dievoort/Final_Work/index.php
 Frontend DB: https://dt5.ehb.be/phpmyadmin/index.php
 
 ## Web Service
+
+
+## Artificiele Intelligentie
+
+
