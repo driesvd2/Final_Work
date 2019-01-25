@@ -11,7 +11,7 @@ Dit is de repository met al de code die wij geschreven hebben van het vak Final 
 
 ## Frontend
 
-* Frontend: http://dtsl.ehb.be/~dries.van.dievoort/Final_Work/index.php
+* Frontend: http://dtsl.ehb.be/~dries.van.dievoort/Final_Work_Frontend/
 
 * Frontend DB: https://dt5.ehb.be/phpmyadmin/index.php
 
