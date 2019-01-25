@@ -79,16 +79,16 @@ include_once './Database/DAO/ErrorDB.php';
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>Id</th>
+                        <th>#</th>
                         <th>Cause</th>
                     </tr>
                 </thead>
                 <tbody>
             <?php $causes = CauseDB::getAll();
-            foreach ($causes as $c){ ?>
+            for($c = 0; $c < count($causes); $c++){ ?>
                 <tr>
-                    <td><?php echo $c->idCause ?></td>
-                    <td><?php echo $c->CauseName ?></td>
+                    <td><?php echo $c+1 ?></td>
+                    <td><?php echo $causes[$c]->CauseName ?></td>
                 </tr>
             <?php } ?>
                 </tbody>
@@ -99,16 +99,16 @@ include_once './Database/DAO/ErrorDB.php';
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
-                <th>Id</th>
+                <th>#</th>
                 <th>Cause</th>
             </tr>
             </thead>
             <tbody>
             <?php $effects = EffectDB::getAll();
-            foreach ($effects as $e){ ?>
+            for ($e = 0; $e < count($effects); $e++){ ?>
                 <tr>
-                    <td><?php echo $e->idEffect ?></td>
-                    <td><?php echo $e->EffectName ?></td>
+                    <td><?php echo $e + 1 ?></td>
+                    <td><?php echo $effects[$e]->EffectName ?></td>
                 </tr>
             <?php } ?>
             </tbody>

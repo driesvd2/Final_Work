@@ -27,6 +27,17 @@ class EffectDB
         return $resultatenArray;
     }
 
+    public static function getAllQueue() {
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM EffectQueue");
+        $resultatenArray = array();
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+            $databaseRij = $resultaat->fetch_array();
+            $nieuw = self::converteerRijNaarEffect($databaseRij);
+            $resultatenArray[$index] = $nieuw;
+        }
+        return $resultatenArray;
+    }
+
     public static function getById($id) {
         $resultatenArray = array();
         $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect WHERE idEffect=" .$id);
@@ -41,12 +52,20 @@ class EffectDB
 
 
 
-    public static function insert($effect) {
-        return self::getVerbinding()->voerSqlQueryUit("INSERT INTO Effect(idEffect, EffectName, EffectDescription) VALUES ('?','?','?')", array($effect->idEffect, $effect->EffectName, $effect->EffectDescription));
+    public static function insert($effectName) {
+        return self::getVerbinding()->voerSqlQueryUit("INSERT INTO Effect(idEffect, EffectName, EffectDescription) VALUES (null ,'$effectName',null)");
+    }
+
+    public static function insertQueue($effectName) {
+        return self::getVerbinding()->voerSqlQueryUit("INSERT INTO EffectQueue(idEffect, EffectName, EffectDescription) VALUES (null ,'$effectName',null)");
     }
 
     public static function deleteById($id) {
         return self::getVerbinding()->voerSqlQueryUit("DELETE FROM Effect WHERE idEffect=".$id);
+    }
+
+    public static function deleteByIdQueue($id) {
+        return self::getVerbinding()->voerSqlQueryUit("DELETE FROM EffectQueue WHERE idEffect=".$id);
     }
 
     public static function delete($effect) {
