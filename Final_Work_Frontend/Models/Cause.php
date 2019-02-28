@@ -9,12 +9,10 @@
 class Cause {
     public $idCause;
     public $CauseName;
-    public $CauseDescription;
 
-    public function __construct($id, $naam, $beschrijving) {
+    public function __construct($id, $naam) {
         $this->idCause = $id;
         $this->CauseName = $naam;
-        $this->CauseDescription = $beschrijving;
     }
 
 }

@@ -20,3 +20,5 @@ class User
         $this->userType = $userType;
     }
 }
+
+?>

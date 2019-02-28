@@ -6,7 +6,7 @@
  * Time: 01:32
  */
 
-include 'Database/Login - Registreer/server.php';
+include 'Database/Forms/Login - Registreer/server.php';
 ?>
 
 <html>
@@ -21,7 +21,7 @@ include 'Database/Login - Registreer/server.php';
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">Final Work - MMS DB Acces</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,21 +30,24 @@ include 'Database/Login - Registreer/server.php';
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php">Home
-                        </a>
+                        <a class="nav-link" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <?php if(isset($_SESSION['login'])){?>
-                            <a class="nav-link" href="admin.php"><?php echo 'Admin'; ?></a>
+                        <?php if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){ ?>
+                            <a class="nav-link" href="relations.php"><?php echo 'Relations'; ?></a>
+                        <?php } ?>
+                    </li>
+                    <li class="nav-item">
+                        <?php if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){ ?>
+                            <a class="nav-link" href="manageUser.php"><?php echo 'User Management & Webservice'; ?></a>
                         <?php } ?>
                     </li>
                     <li class="nav-item active">
                         <?php if (isset($_SESSION['login'])){ ?>
-                        <a class="nav-link" href="index.php?logout='1'">Logout</a>
+                        <a class="nav-link" href="index.php?logout='1'">Logout<span class="sr-only">(current)</span></a>
                         <?php }
                         else{ ?>
-                        <a class="nav-link" href="login.php">Login</a>
-                            <span class="sr-only">(current)</span>
+                        <a class="nav-link" href="login.php">Login<span class="sr-only">(current)</span></a>
                         <?php }?>
 
                     </li>

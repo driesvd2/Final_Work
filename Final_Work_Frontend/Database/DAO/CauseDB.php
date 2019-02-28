@@ -39,13 +39,11 @@ class CauseDB {
     }
 
 
-
-
     public static function insert($cause) {
-        return self::getVerbinding()->voerSqlQueryUit("INSERT INTO Cause(idCause, CauseName, CauseDescription) VALUES ('?','?','?')", array($cause->idCause, $cause->CauseName, $cause->CauseDescription));
-    }
+    return self::getVerbinding()->voerSqlQueryUit("INSERT INTO Cause(idCause, CauseName) VALUES (null ,'$cause')");
+}
 
-    public static function deleteById($id) {
+    public static function deleteCauseById($id) {
         return self::getVerbinding()->voerSqlQueryUit("DELETE FROM Cause WHERE idCause=".$id);
     }
 
@@ -53,12 +51,12 @@ class CauseDB {
         return self::deleteById($cause->idCause);
     }
 
-    public static function update($cause) {
-        return self::getVerbinding()->voerSqlQueryUit("UPDATE Cause SET CauseName='?',CauseDescription='?' WHERE idCause='?'", array($cause->CauseName, $cause->CauseDescription, $cause->idCause));
+    public static function update($causename,$id) {
+        return self::getVerbinding()->voerSqlQueryUit("UPDATE Cause SET CauseName='$causename' WHERE idCause= $id");
     }
 
     protected static function converteerRijNaarCause($databaseRij) {
-        return new Cause($databaseRij['idCause'], $databaseRij['CauseName'], $databaseRij['CauseDescription']);
+        return new Cause($databaseRij['idCause'], $databaseRij['CauseName']);
     }
 }
 ?>

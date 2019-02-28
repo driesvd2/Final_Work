@@ -10,11 +10,13 @@ class Effect
 {
     public $idEffect;
     public $EffectName;
-    public $EffectDescription;
-
-    public function __construct($id, $naam, $beschrijving) {
+    public $EffectStatus;
+    public $Error_idError;
+    
+    public function __construct($id, $naam, $status, $eff_errorid) {
         $this->idEffect = $id;
         $this->EffectName = $naam;
-        $this->EffectDescription = $beschrijving;
+        $this->EffectStatus = $status;
+        $this->Error_idError = $eff_errorid;
     }
 }
