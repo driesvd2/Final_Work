@@ -36,7 +36,7 @@ include_once './Database/DAO/ErrorDB.php';
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="index.php">Home
                         </a>
                     </li>
@@ -79,7 +79,7 @@ include_once './Database/DAO/ErrorDB.php';
         </form>
     </div>
     
-    <div class="container" style="width: 50%; float: left">
+    <div class="container" style="width: 50%; float: left;overflow: auto; height: 500px;">
         <h1>Causes</h1>
         <table class="table table-bordered table-hover">
             <thead>

@@ -32,8 +32,8 @@ include_once './Database/DAO/ErrorDB.php';
     </title>
     
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
      
 </head>
 
@@ -83,16 +83,19 @@ include_once './Database/DAO/ErrorDB.php';
     
                                 
 
-    <div class="container" style="width: 50%; float: left">
-            <h1>Causes</h1>
-            <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
-            <a href="insert_Cause.php" class="btn btn-dark" margin-botton="5%">Insert Cause</a>
-            <?php } ?>
+    <div class="container" style="width: 50%; float: left;overflow: auto; height: 500px;">
+            <h1>Causes <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
+            <a href="insert_Cause.php"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a>
+            <?php } ?></h1>
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Cause</th>
+                        <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
+                        <th>Delete</th>
+                        <th>Update</th>
+                        <?php } ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -105,13 +108,13 @@ include_once './Database/DAO/ErrorDB.php';
                     <td>
                         <form method="post" action="index.php">
                         <input type="hidden" value="<?php echo $causes[$c]->idCause?>" name="delete_idCause">
-                        <button type="submit" class="btn btn-danger" name="delete_cause">Delete</button>
+                        <button type="submit" class="btn btn-danger" name="delete_cause"><i class="fa fa-trash" style="font-size: 20px;"></i></button>
                         </form>
                     </td>
                     <?php } ?>
                     <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
                     <td>
-                        <a href="edit_Cause.php?idCause=<?php echo $causes[$c]->idCause; ?>" class="btn btn-primary">Update Cause</a>
+                        <a href="edit_Cause.php?idCause=<?php echo $causes[$c]->idCause; ?>" class="btn btn-primary"><i class="fa fa-edit" style="font-size: 20px;"></i></a>
                     </td>
                     <?php } ?>
                 </tr>
@@ -119,16 +122,19 @@ include_once './Database/DAO/ErrorDB.php';
                 </tbody>
             </table>
     </div>
-    <div class="container" style="width: 50%; float: left">
-        <h1>Effects</h1>
-        <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
-        <a href="insert_effect_admin.php" class="btn btn-dark" margin-botton="5%">Insert Effect</a>
-        <?php } ?>
+    <div class="container" style="width: 50%; float: left;overflow: auto; height: 500px;">
+        <h1>Effects <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
+        <a href="insert_effect_admin.php"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a>
+        <?php } ?></h1>
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
                 <th>#</th>
                 <th>Effect</th>
+                <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
+                <th>Delete</th>
+                <th>Update</th>
+                <?php } ?>
             </tr>
             </thead>
             <tbody>
@@ -141,13 +147,13 @@ include_once './Database/DAO/ErrorDB.php';
                     <td>
                         <form method="post" action="index.php">
                         <input type="hidden" value="<?php echo $effects[$e]->idEffect?>" name="delete_idEffect">
-                        <button type="submit" class="btn btn-danger" name="delete_effect">Delete</button>
+                        <button type="submit" class="btn btn-danger" name="delete_effect"><i class="fa fa-trash" style="font-size: 20px;"></i></button>
                         </form>
                     </td>
                     <?php } ?>
                     <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
                     <td>
-                        <a href="edit_Effect.php?idEffect=<?php echo $effects[$e]->idEffect; ?>" class="btn btn-primary">Update Effect</a>
+                        <a href="edit_Effect.php?idEffect=<?php echo $effects[$e]->idEffect; ?>" class="btn btn-primary"><i class="fa fa-edit" style="font-size: 20px;"></i></a>
                     </td>
                     <?php } ?>
                 </tr>

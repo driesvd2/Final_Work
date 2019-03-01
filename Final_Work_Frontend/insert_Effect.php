@@ -76,7 +76,7 @@ include_once './Database/DAO/ErrorDB.php';
         </form>
     </div>
     
-    <div class="container" style="width: 50%; float: left">
+    <div class="container" style="width: 50%; float: left;overflow: auto; height: 500px;">
         <h1>Effects</h1>
         <table class="table table-bordered table-hover">
             <thead>

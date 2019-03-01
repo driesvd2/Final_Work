@@ -27,7 +27,7 @@ include_once './Database/DAO/ClusterDB.php';
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 
@@ -72,11 +72,11 @@ include_once './Database/DAO/ClusterDB.php';
     <br>
     <br>
 
-    <div class="container" style="width: 50%; float: left; height: 600px;">
+    <div class="container" style="width: 50%; float: left; height: 500px;">
         <h1>Insert Cause <-> Effect</h1>
         <form method="post" action="insert_Cause_Effect.php">
             <h2>Causes</h2>
-            <div class="container" style="float: left; overflow: auto; height: 170px; margin-top: 8px; margin-bottom: 8px">
+            <div class="container" style="float: left; overflow: auto; height: 140px; margin-top: 8px; margin-bottom: 8px">
                 <?php
                 $causes = CauseDB::getAll();
                 for ($e = 0; $e < count($causes); $e++)
@@ -91,7 +91,7 @@ include_once './Database/DAO/ClusterDB.php';
                 <?php } ?>
             </div>
             <h2>Effects</h2>
-            <div class="container" style="float: left; overflow: auto; height: 170px; margin-top: 8px; margin-bottom: 8px">
+            <div class="container" style="float: left; overflow: auto; height: 150px; margin-top: 8px; margin-bottom: 8px">
             <?php
             $effects = EffectDB::getAllWhereStatusIsNot0();
             for ($e = 0; $e < count($effects); $e++)
@@ -109,7 +109,7 @@ include_once './Database/DAO/ClusterDB.php';
         </form>
     </div>
 
-        <div class="container" style="overflow: auto; height: 550px; width: 50%; float: left">
+        <div class="container" style="overflow: auto; height: 500px; width: 50%; float: left">
             <h1>Cause <-> Effect</h1>
             <table class="table table-bordered table-hover">
                 <thead>
@@ -130,7 +130,7 @@ include_once './Database/DAO/ClusterDB.php';
                         <td>
                             <form method="post" action="insert_Cause_Effect.php">
                                 <input type="hidden" value="<?php echo $causeEffects[$e]->id?>" name="Delete_causeEffect_id">
-                                <button type="submit" class="btn btn-danger" name="Delete_causeEffect">Delete</button>
+                                <button type="submit" class="btn btn-danger" name="Delete_causeEffect"><i class="fa fa-trash" style="font-size: 20px;"></i></button>
                             </form>
                         </td>
                     </tr>

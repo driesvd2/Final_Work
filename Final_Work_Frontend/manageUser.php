@@ -23,7 +23,8 @@ include_once './Database/DAO/UserDB.php';
         Final Work - MMS DB Acces
     </title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -84,13 +85,15 @@ include_once './Database/DAO/UserDB.php';
 
     
 
-    <div class="container" style="width: 50%; float: left">
+    <div class="container" style="width: 50%; float: left;overflow: auto;height: 500px;">
         <h1>Users</h1>
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
                 <th>#</th>
                 <th>User</th>
+                <th>Delete</th>
+                <th>Edit</th>
             </tr>
             </thead>
             <tbody>
@@ -102,12 +105,12 @@ include_once './Database/DAO/UserDB.php';
                     <td>
                         <form method="post" action="manageUser.php">
                         <input type="hidden" value="<?php echo $users[$e]->userId?>" name="delete_userid">
-                        <button type="submit" class="btn btn-danger" name="delete_user">Delete</button>
+                        <button type="submit" class="btn btn-danger" name="delete_user"><i class="fa fa-trash" style="font-size: 20px;"></i></button>
                         </form>
                     </td>
                     <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
                     <td>
-                        <a href="edit_User.php?userId=<?php echo $users[$e]->userId; ?>" class="btn btn-primary">Update User</a>
+                        <a href="edit_User.php?userId=<?php echo $users[$e]->userId; ?>" class="btn btn-primary"><i class="fa fa-edit" style="font-size: 20px;"></i></a>
                     </td>
                     <?php } ?>
                 </tr>
