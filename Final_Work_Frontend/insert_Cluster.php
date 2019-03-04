@@ -16,7 +16,7 @@ include_once './Database/DAO/ErrorDB.php';
 include_once './Database/DAO/ClusterDB.php';
 ?>
 
-<html>
+<html style="height: 100%; overflow: hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Final Work">
@@ -31,7 +31,7 @@ include_once './Database/DAO/ClusterDB.php';
 
 </head>
 
-<body>
+<body style="height: 100%; overflow: hidden">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">Final Work - MMS DB Acces</a>
@@ -72,11 +72,11 @@ include_once './Database/DAO/ClusterDB.php';
     <br>
     <br>
 
-    <div class="container" style="width: 50%; float: left; height: 500px;">
+    <div class="container" style="width: 50%; float: left; height: 90%;">
         <h1>Insert Cluster</h1>
         <form method="post" action="insert_Cluster.php">
             <h2>Causes</h2>
-            <div class="container" style="float: left; overflow: auto; height: 140px; margin-top: 8px; margin-bottom: 8px">
+            <div class="container" style="float: left; overflow: auto; height: 28%; margin-top: 8px; margin-bottom: 8px">
                 <?php
                 $causes = CauseDB::getAll();
                 for ($e = 0; $e < count($causes); $e++)
@@ -91,7 +91,7 @@ include_once './Database/DAO/ClusterDB.php';
                 <?php } ?>
             </div>
             <h2>Effects</h2>
-            <div class="container" style="float: left; overflow: auto; height: 150px; margin-top: 8px; margin-bottom: 8px">
+            <div class="container" style="float: left; overflow: auto; height: 28%; margin-top: 8px; margin-bottom: 8px">
             <?php
             $effects = EffectDB::getAllWhereStatusIsNot0();
             for ($e = 0; $e < count($effects); $e++)
@@ -109,7 +109,7 @@ include_once './Database/DAO/ClusterDB.php';
         </form>
     </div>
 
-        <div class="container" style="overflow: auto; height: 500px; width: 50%; float: left">
+        <div class="container" style="overflow: auto; height: 90%; width: 50%; float: left">
             <h1>Clusters</h1>
             <table class="table table-bordered table-hover">
                 <thead>

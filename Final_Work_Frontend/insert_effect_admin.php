@@ -13,7 +13,7 @@ include_once './Database/DAO/ErrorDB.php';
 
 ?>
 
-<html>
+<html style="height: 100%; overflow: hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Final Work">
@@ -25,7 +25,7 @@ include_once './Database/DAO/ErrorDB.php';
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body style="height: 100%; overflow: hidden">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">Final Work - MMS DB Acces</a>
@@ -78,7 +78,7 @@ include_once './Database/DAO/ErrorDB.php';
         </form>
     </div>
     
-    <div class="container" style="width: 50%; float: left">
+    <div class="container" style="width: 50%; float: left; height: 90%; overflow:auto">
         <h1>Effects</h1>
         <table class="table table-bordered table-hover">
             <thead>

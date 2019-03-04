@@ -16,7 +16,7 @@ include_once './Database/DAO/ErrorDB.php';
 include_once './Database/DAO/ClusterDB.php';
 ?>
 
-<html>
+<html style="height: 100%; overflow: hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Final Work">
@@ -31,7 +31,7 @@ include_once './Database/DAO/ClusterDB.php';
 
 </head>
 
-<body>
+<body style="height: 100%; overflow: hidden">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">Final Work - MMS DB Acces</a>
@@ -72,7 +72,7 @@ include_once './Database/DAO/ClusterDB.php';
     <br>
     <br>
 
-        <div class="container" style="overflow: auto; height: 500px; width: 50%; float: left">
+        <div class="container" style="overflow: auto; height: 90%; width: 50%; float: left">
             <h1>Clusters <a href="insert_Cluster.php"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a></h1>
             <table class="table table-bordered table-hover">
                 <thead>
@@ -113,7 +113,7 @@ include_once './Database/DAO/ClusterDB.php';
             </table>
         </div>
 
-    <div class="container" style="width: 50%; float: left;overflow: auto; height: 500px;">
+    <div class="container" style="width: 50%; float: left;overflow: auto; height: 90%;">
         <h1>Cause <-> Effect  <a href="insert_Cause_Effect.php"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a></h1>
         <table class="table table-bordered table-hover" >
             <thead>

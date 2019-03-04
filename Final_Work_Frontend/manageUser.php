@@ -14,7 +14,7 @@ include_once './Database/DAO/UserDB.php';
 ?>
 
 
-<html>
+<html style="height: 100%; overflow: hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Final Work">
@@ -27,7 +27,7 @@ include_once './Database/DAO/UserDB.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-<body>
+<body style="height: 100%; overflow: hidden">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">Final Work - MMS DB Acces</a>
@@ -85,7 +85,7 @@ include_once './Database/DAO/UserDB.php';
 
     
 
-    <div class="container" style="width: 50%; float: left;overflow: auto;height: 500px;">
+    <div class="container" style="width: 50%; float: left;overflow: auto;height: 90%;">
         <h1>Users</h1>
         <table class="table table-bordered table-hover">
             <thead>

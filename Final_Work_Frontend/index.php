@@ -22,7 +22,7 @@ include_once './Database/DAO/EffectDB.php';
 include_once './Database/DAO/ErrorDB.php';
 ?>
 
-<html>
+<html style="height: 100%; overflow: hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Final Work">
@@ -37,7 +37,7 @@ include_once './Database/DAO/ErrorDB.php';
      
 </head>
 
-<body>
+<body style="height: 100%;">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">Final Work - MMS DB Acces</a>
@@ -83,7 +83,7 @@ include_once './Database/DAO/ErrorDB.php';
     
                                 
 
-    <div class="container" style="width: 50%; float: left;overflow: auto; height: 500px;">
+    <div class="container" style="width: 50%; float: left;overflow: auto; height: 90%;">
             <h1>Causes <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
             <a href="insert_Cause.php"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a>
             <?php } ?></h1>
@@ -122,7 +122,7 @@ include_once './Database/DAO/ErrorDB.php';
                 </tbody>
             </table>
     </div>
-    <div class="container" style="width: 50%; float: left;overflow: auto; height: 500px;">
+    <div class="container" style="width: 50%; float: left;overflow: auto; height: 90%;">
         <h1>Effects <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
         <a href="insert_effect_admin.php"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a>
         <?php } ?></h1>
