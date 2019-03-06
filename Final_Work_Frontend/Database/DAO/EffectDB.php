@@ -59,10 +59,54 @@ class EffectDB
         }
         return $resultatenArray;
     }
+    
+    public static function getAllStatusZero() {
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect where EffectStatus=0");
+        $resultatenArray = array();
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+            $databaseRij = $resultaat->fetch_array();
+            $nieuw = self::converteerRijNaarEffect($databaseRij);
+            $resultatenArray[$index] = $nieuw;
+        }
+        return $resultatenArray;
+    }
+    
+    public static function getAllStatusOne() {
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect where EffectStatus=1");
+        $resultatenArray = array();
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+            $databaseRij = $resultaat->fetch_array();
+            $nieuw = self::converteerRijNaarEffect($databaseRij);
+            $resultatenArray[$index] = $nieuw;
+        }
+        return $resultatenArray;
+    }
 
     public static function getById($id) {
         $resultatenArray = array();
         $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect WHERE idEffect=" .$id);
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+            $databaseRij = $resultaat->fetch_array();
+            $nieuw = self::converteerRijNaarEffect($databaseRij);
+            $resultatenArray[$index] = $nieuw;
+        }
+        return $resultatenArray;
+    }
+    
+    public static function getSearchEffect($searchq) {
+        $resultatenArray = array();
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("select * from Effect where EffectName LIKE '%$searchq%'");
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+            $databaseRij = $resultaat->fetch_array();
+            $nieuw = self::converteerRijNaarEffect($databaseRij);
+            $resultatenArray[$index] = $nieuw;
+        }
+        return $resultatenArray;
+    }
+    
+    public static function getSearchEffectWhereStatusNotZero($searchq) {
+        $resultatenArray = array();
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("select * from Effect where EffectName LIKE '%$searchq%' AND EffectStatus != 0");
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
             $nieuw = self::converteerRijNaarEffect($databaseRij);

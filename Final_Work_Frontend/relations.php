@@ -14,9 +14,36 @@ include_once './Database/DAO/CauseDB.php';
 include_once './Database/DAO/EffectDB.php';
 include_once './Database/DAO/ErrorDB.php';
 include_once './Database/DAO/ClusterDB.php';
+
+
+
+if(isset($_POST['searchcluster'])){
+    
+    $searchqclus = $_POST['searchcluster'];
+    
+    $searchqclus = preg_replace_callback("#[^0-9a-z]#i","", $searchqclus);
+    
+    $querySearchCluster = ClusterDB::getSearchCluster($searchqclus);
+    
+    var_dump($querySearchCluster);
+
+}
+
+if(isset($_POST['searchCause'])){
+    
+    $searchquery = $_POST['searchCause'];
+    
+    $searchquery = preg_replace_callback("#[^0-9a-z]#i","", $searchquery);
+    
+    $querySearchCausetab2 = CauseDB::getSearchCause($searchquery);
+
+}
+
+
+
 ?>
 
-<html style="height: 100%; overflow: hidden">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Final Work">
@@ -31,7 +58,7 @@ include_once './Database/DAO/ClusterDB.php';
 
 </head>
 
-<body style="height: 100%; overflow: hidden">
+<body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">Final Work - MMS DB Acces</a>
@@ -47,6 +74,11 @@ include_once './Database/DAO/ClusterDB.php';
                     <li class="nav-item active">
                         <?php if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){ ?>
                             <a class="nav-link" href="relations.php"><?php echo 'Relations'; ?><span class="sr-only">(current)</span></a>
+                        <?php } ?>
+                    </li>
+                    <li class="nav-item">
+                        <?php if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){ ?>
+                            <a class="nav-link" href="manage_status_effect.php"><?php echo 'Status Effect'; ?><span class="sr-only">(current)</span></a>
                         <?php } ?>
                     </li>
                     <li class="nav-item">
@@ -72,8 +104,53 @@ include_once './Database/DAO/ClusterDB.php';
     <br>
     <br>
 
-        <div class="container" style="overflow: auto; height: 90%; width: 50%; float: left">
+        <div class="container" style="overflow: auto; height: 80%; width: 50%; float: left">
             <h1>Clusters <a href="insert_Cluster.php"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a></h1>
+            <form action="relations.php" method="post">
+                <input type="text" name="searchcluster" placeholder="Search for cluster...">
+                <input type="submit" value=">>" />
+            </form>
+            <?php if(isset($querySearchCluster)) { ?>
+            
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Cause</th>
+                        <th>Effects</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+            <?php
+            for($c = 0; $c < count($querySearchCluster); $c++){ ?>
+                <tr>
+                    <td><?php echo $c+1 ?></td>
+                    <td><?php $cause = CauseDB::getById($querySearchCluster[$c]->Cause_idCause); echo $cause[0]->CauseName;?></td>
+                    <?php
+                    $arrayEffects = ClusterDB::translateStringToEffects($querySearchCluster[$c]->Cluster_Effects);
+                    ?>
+                    <td><?php
+                    $stringEffects = "";
+                        foreach ($arrayEffects as $a){
+                            $effect = EffectDB::getById((int)$a);
+                            $stringEffects .= $effect[0]->EffectName . " | ";
+                        }
+                        print_r($stringEffects);
+                    ?></td>
+                    <td>
+                        <form method="post" action="relations.php">
+                            <input type="hidden" value="<?php echo $querySearchCluster[$c]->idCluster?>" name="Delete_Cluster_id">
+                            <button type="submit" class="btn btn-danger" name="Delete_Cluster"><i class="fa fa-trash" style="font-size: 20px;"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            <?php } ?>
+                </tbody>
+            </table>
+        
+        <?php } else { ?>
+            
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
@@ -111,9 +188,12 @@ include_once './Database/DAO/ClusterDB.php';
             <?php } ?>
                 </tbody>
             </table>
+        <?php } ?>
         </div>
+    
+<!--   ------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 
-    <div class="container" style="width: 50%; float: left;overflow: auto; height: 90%;">
+    <div class="container" style="width: 50%; float: left;overflow: auto; height: 80%;">
         <h1>Cause <-> Effect  <a href="insert_Cause_Effect.php"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a></h1>
         <table class="table table-bordered table-hover" >
             <thead>
@@ -142,6 +222,8 @@ include_once './Database/DAO/ClusterDB.php';
             </tbody>
         </table>
     </div>
+        
+    
 
 
 

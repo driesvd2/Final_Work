@@ -38,6 +38,17 @@ class ClusterDB
         }
         return $resultatenArray;
     }
+    
+    public static function getSearchCluster($searchq) {
+        $resultatenArray = array();
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("select * from Cluster where Cause_idCause LIKE '%$searchq%'");
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+            $databaseRij = $resultaat->fetch_array();
+            $nieuw = self::converteerRijNaarCluster($databaseRij);
+            $resultatenArray[$index] = $nieuw;
+        }
+        return $resultatenArray;
+    }
 
     public static function insert($causeid, $array) {
         $string = self::arrayToClusterEffects($array);

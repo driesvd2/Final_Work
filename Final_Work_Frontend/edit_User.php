@@ -40,7 +40,7 @@ include 'Database/Forms/UpdateUser/server.php';
                             <a class="nav-link" href="relations.php"><?php echo 'Relations'; ?></a>
                         <?php } ?>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <?php if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){ ?>
                             <a class="nav-link" href="manageUser.php"><?php echo 'User Management & Webservice'; ?></a>
                         <?php } ?>

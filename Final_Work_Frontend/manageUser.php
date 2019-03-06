@@ -11,10 +11,22 @@ session_start();
 include './Database/Forms/InsertUser/insertuser.php';
 include './Database/Forms/DeleteUser/server.php';
 include_once './Database/DAO/UserDB.php';
+
+
+if(isset($_POST['search'])){
+    
+    $searchq = $_POST['search'];
+    
+    $searchq = preg_replace_callback("#[^0-9a-z]#i","", $searchq);
+    
+    $querysearchuser = UserDB::getSearchUser($searchq);
+
+}
+
 ?>
 
 
-<html style="height: 100%; overflow: hidden">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Final Work">
@@ -27,7 +39,7 @@ include_once './Database/DAO/UserDB.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-<body style="height: 100%; overflow: hidden">
+<body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">Final Work - MMS DB Acces</a>
@@ -43,6 +55,11 @@ include_once './Database/DAO/UserDB.php';
                     <li class="nav-item">
                         <?php if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){ ?>
                             <a class="nav-link" href="relations.php"><?php echo 'Relations'; ?></a>
+                        <?php } ?>
+                    </li>
+                    <li class="nav-item">
+                        <?php if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){ ?>
+                            <a class="nav-link" href="manage_status_effect.php"><?php echo 'Status Effect'; ?><span class="sr-only">(current)</span></a>
                         <?php } ?>
                     </li>
                     <li class="nav-item active">
@@ -85,8 +102,44 @@ include_once './Database/DAO/UserDB.php';
 
     
 
-    <div class="container" style="width: 50%; float: left;overflow: auto;height: 90%;">
+    <div class="container" style="width: 50%; float: left;overflow: auto;height: 500px;">
         <h1>Users</h1>
+        <form action="manageUser.php" method="post">
+            <input type="text" name="search" placeholder="Search for users...">
+            <input type="submit" value=">>" />
+        </form>
+        <?php if(isset($querysearchuser)) { ?>
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>User</th>
+                <th>Delete</th>
+                <th>Edit</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php 
+            for ($e = 0; $e < count($querysearchuser); $e++){ ?>
+                <tr>
+                    <td><?php echo $e + 1 ?></td>
+                    <td><?php echo $querysearchuser[$e]->username ?></td>
+                    <td>
+                        <form method="post" action="manageUser.php">
+                        <input type="hidden" value="<?php echo $querysearchuser[$e]->userId?>" name="delete_userid">
+                        <button type="submit" class="btn btn-danger" name="delete_user"><i class="fa fa-trash" style="font-size: 20px;"></i></button>
+                        </form>
+                    </td>
+                    <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
+                    <td>
+                        <a href="edit_User.php?userId=<?php echo $querysearchuser[$e]->userId; ?>" class="btn btn-primary"><i class="fa fa-edit" style="font-size: 20px;"></i></a>
+                    </td>
+                    <?php } ?>
+                </tr>
+            <?php } ?>
+            </tbody>
+        </table>
+        <?php } else { ?>
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
@@ -117,6 +170,8 @@ include_once './Database/DAO/UserDB.php';
             <?php } ?>
             </tbody>
         </table>
+        
+        <?php } ?>
     </div>
     
     

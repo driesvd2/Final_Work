@@ -20,9 +20,33 @@ include_once './Database/DAO/CauseEffectDB.php';
 include_once './Database/DAO/CauseDB.php';
 include_once './Database/DAO/EffectDB.php';
 include_once './Database/DAO/ErrorDB.php';
+
+
+if(isset($_POST['search'])){
+    
+    $searchq = $_POST['search'];
+    
+    $searchq = preg_replace_callback("#[^0-9a-z]#i","", $searchq);
+    
+    $querySearchCause = CauseDB::getSearchCause($searchq);
+
+}
+
+if(isset($_POST['searchEffect'])){
+    
+    $searchquery = $_POST['searchEffect'];
+    
+    $searchquery = preg_replace_callback("#[^0-9a-z]#i","", $searchquery);
+    
+    $querySearchEffect = EffectDB::getSearchEffect($searchquery);
+
+}
+
+
+
 ?>
 
-<html style="height: 100%; overflow: hidden">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Final Work">
@@ -37,7 +61,7 @@ include_once './Database/DAO/ErrorDB.php';
      
 </head>
 
-<body style="height: 100%;">
+<body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">Final Work - MMS DB Acces</a>
@@ -54,6 +78,11 @@ include_once './Database/DAO/ErrorDB.php';
                     <li class="nav-item">
                         <?php if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){ ?>
                             <a class="nav-link" href="relations.php"><?php echo 'Relations'; ?></a>
+                        <?php } ?>
+                    </li>
+                    <li class="nav-item">
+                        <?php if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){ ?>
+                            <a class="nav-link" href="manage_status_effect.php"><?php echo 'Status Effect'; ?><span class="sr-only">(current)</span></a>
                         <?php } ?>
                     </li>
                     <li class="nav-item">
@@ -79,14 +108,16 @@ include_once './Database/DAO/ErrorDB.php';
     <br>
     <br>
     
-    
-    
-                                
-
-    <div class="container" style="width: 50%; float: left;overflow: auto; height: 90%;">
+    <div class="container" style="width: 50%; float: left;overflow: auto; height: 80%;">
             <h1>Causes <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
             <a href="insert_Cause.php"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a>
             <?php } ?></h1>
+            <form action="index.php" method="post">
+                <input type="text" name="search" placeholder="Search for causes...">
+                <input type="submit" value=">>" />
+            </form>
+            <?php if(isset($querySearchCause)) { ?>
+    
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
@@ -94,7 +125,45 @@ include_once './Database/DAO/ErrorDB.php';
                         <th>Cause</th>
                         <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
                         <th>Delete</th>
-                        <th>Update</th>
+                        <th>Edit</th>
+                        <?php } ?>
+                    </tr>
+                </thead>
+                <tbody>
+            <?php for($q = 0; $q < count($querySearchCause); $q++){ ?>
+                <tr>
+                    <td><?php echo $q+1 ?></td>
+                    <td><?php echo $querySearchCause[$q]->CauseName ?></td>
+                    <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
+                    <td>
+                        <form method="post" action="index.php">
+                        <input type="hidden" value="<?php echo $querySearchCause[$q]->idCause?>" name="delete_idCause">
+                        <button type="submit" class="btn btn-danger" name="delete_cause"><i class="fa fa-trash" style="font-size: 20px;"></i></button>
+                        </form>
+                    </td>
+                    <?php } ?>
+                    <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
+                    <td>
+                        <a href="edit_Cause.php?idCause=<?php echo $querySearchCause[$q]->idCause; ?>" class="btn btn-primary"><i class="fa fa-edit" style="font-size: 20px;"></i></a>
+                    </td>
+                    <?php } ?>
+                </tr>
+            <?php } ?>
+                </tbody>
+            </table>
+                
+                
+           <?php } else { ?>
+                
+         
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Cause</th>
+                        <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
+                        <th>Delete</th>
+                        <th>Edit</th>
                         <?php } ?>
                     </tr>
                 </thead>
@@ -121,11 +190,58 @@ include_once './Database/DAO/ErrorDB.php';
             <?php } ?>
                 </tbody>
             </table>
+        <?php } ?>
     </div>
-    <div class="container" style="width: 50%; float: left;overflow: auto; height: 90%;">
+    
+    <!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>
+    
+    
+    <div class="container" style="width: 50%; float: left;overflow: auto; height: 80%;">
         <h1>Effects <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
         <a href="insert_effect_admin.php"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a>
         <?php } ?></h1>
+        <form action="index.php" method="post">
+                <input type="text" name="searchEffect" placeholder="Search for effects...">
+                <input type="submit" value=">>" />
+        </form>
+        <?php if(isset($querySearchEffect)) { ?>
+    
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Effect</th>
+                        <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
+                        <th>Delete</th>
+                        <th>Edit</th>
+                        <?php } ?>
+                    </tr>
+                </thead>
+                <tbody>
+            <?php for($q = 0; $q < count($querySearchEffect); $q++){ ?>
+                <tr>
+                    <td><?php echo $q+1 ?></td>
+                    <td><?php echo $querySearchEffect[$q]->EffectName ?></td>
+                    <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
+                    <td>
+                        <form method="post" action="index.php">
+                        <input type="hidden" value="<?php echo $querySearchEffect[$q]->idEffect?>" name="delete_idEffect">
+                        <button type="submit" class="btn btn-danger" name="delete_effect"><i class="fa fa-trash" style="font-size: 20px;"></i></button>
+                        </form>
+                    </td>
+                    <?php } ?>
+                    <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
+                    <td>
+                        <a href="edit_Effect.php?idEffect=<?php echo $querySearchEffect[$q]->idEffect; ?>" class="btn btn-primary"><i class="fa fa-edit" style="font-size: 20px;"></i></a>
+                    </td>
+                    <?php } ?>
+                </tr>
+            <?php } ?>
+                </tbody>
+            </table>
+                
+                
+           <?php } else { ?>
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
@@ -133,7 +249,7 @@ include_once './Database/DAO/ErrorDB.php';
                 <th>Effect</th>
                 <?php  if(isset($_SESSION['login']) && $_SESSION['userType'] == 0){   ?>
                 <th>Delete</th>
-                <th>Update</th>
+                <th>Edit</th>
                 <?php } ?>
             </tr>
             </thead>
@@ -160,6 +276,7 @@ include_once './Database/DAO/ErrorDB.php';
             <?php } ?>
             </tbody>
         </table>
+        <?php } ?>
     </div>
     
     

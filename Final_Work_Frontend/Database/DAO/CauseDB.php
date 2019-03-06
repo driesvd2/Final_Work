@@ -37,6 +37,17 @@ class CauseDB {
         }
         return $resultatenArray;
     }
+    
+    public static function getSearchCause($searchq) {
+        $resultatenArray = array();
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("select * from Cause where CauseName LIKE '%$searchq%'");
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+            $databaseRij = $resultaat->fetch_array();
+            $nieuw = self::converteerRijNaarCause($databaseRij);
+            $resultatenArray[$index] = $nieuw;
+        }
+        return $resultatenArray;
+    }
 
 
     public static function insert($cause) {
