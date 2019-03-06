@@ -59,7 +59,7 @@ if(isset($_POST['searchEffectCluster'])){
 
 ?>
 
-<html>
+<html style="height: 100%;overflow:hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Final Work">
@@ -74,7 +74,7 @@ if(isset($_POST['searchEffectCluster'])){
 
 </head>
 
-<body>
+<body style="height: 100%;overflow:hidden">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">Final Work - MMS DB Acces</a>
@@ -120,16 +120,20 @@ if(isset($_POST['searchEffectCluster'])){
     <br>
     <br>
 
-    <div class="container" style="width: 50%; float: left; height: 500px;">
+    <div class="container" style="width: 50%; float: left; height: 80%;">
         <h1>Insert Cluster</h1>
-        <?php $deIdvoorDriesMijnKapoentje = EffectDB::getById(($_GET['update_idEffect_one'])); 
+        <?php if (isset($_GET['idEffect'])) {
+            $deIdvoorDriesMijnKapoentje = $_GET['idEffect'];
+        }else {
+            $deIdvoorDriesMijnKapoentje = 0;
+        }
         ?>
         <form method="post" action="insert_Cluster.php">
             <h2>Causes</h2>
             <input type="text" name="searchCause" placeholder="Search for causes...">
             <input type="submit" value=">>" />
             <?php if(isset($querySearchCauseInsertCluster)) { ?>
-            <div class="container" style="float: left; overflow: auto; height: 140px; margin-top: 8px; margin-bottom: 8px">
+            <div class="container" style="float: left; overflow: auto; height: 20%; margin-top: 8px; margin-bottom: 8px">
                 <?php
                 for ($e = 0; $e < count($querySearchCauseInsertCluster); $e++)
                 {
@@ -144,7 +148,7 @@ if(isset($_POST['searchEffectCluster'])){
             </div>
             <?php } else { ?>
                 
-            <div class="container" style="float: left; overflow: auto; height: 140px; margin-top: 8px; margin-bottom: 8px">
+            <div class="container" style="float: left; overflow: auto; height: 20%; margin-top: 8px; margin-bottom: 8px">
                 <?php
                 $causes = CauseDB::getAll();
                 for ($e = 0; $e < count($causes); $e++)
@@ -164,13 +168,15 @@ if(isset($_POST['searchEffectCluster'])){
             <input type="text" name="searchEffectCluster" placeholder="Search for effects...">
             <input type="submit" value=">>" />
             <?php if(isset($querySearchEffectInsertCluster)) { ?>
-            <div class="container" style="float: left; overflow: auto; height: 150px; margin-top: 8px; margin-bottom: 8px">
+            <div class="container" style="float: left; overflow: auto; height: 20%; margin-top: 8px; margin-bottom: 8px">
             <?php
             for ($e = 0; $e < count($querySearchEffectInsertCluster); $e++)
             {
             ?>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="effects[]" value="<?php echo $querySearchEffectInsertCluster[$e]->idEffect?>" id="<?php echo $querySearchEffectInsertCluster[$e]->idEffect?>">
+                <input <?php if ($deIdvoorDriesMijnKapoentje == $querySearchEffectInsertCluster[$e]->idEffect) {
+                    echo 'checked';
+                } ?> class="form-check-input" type="checkbox" name="effects[]" value="<?php echo $querySearchEffectInsertCluster[$e]->idEffect?>" id="<?php echo $querySearchEffectInsertCluster[$e]->idEffect?>">
                 <label class="form-check-label" for="<?php echo $querySearchEffectInsertCluster[$e]->idEffect?>">
                     <?php echo $querySearchEffectInsertCluster[$e]->EffectName?>
                 </label>
@@ -179,14 +185,16 @@ if(isset($_POST['searchEffectCluster'])){
             </div>
             <?php } else { ?>
             
-            <div class="container" style="float: left; overflow: auto; height: 150px; margin-top: 8px; margin-bottom: 8px">
+            <div class="container" style="float: left; overflow: auto; height: 20%; margin-top: 8px; margin-bottom: 8px">
             <?php
             $effects = EffectDB::getAllWhereStatusIsNot0();
             for ($e = 0; $e < count($effects); $e++)
             {
             ?>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="effects[]" value="<?php echo $effects[$e]->idEffect?>" id="<?php echo $effects[$e]->idEffect?>">
+                <input <?php if ($deIdvoorDriesMijnKapoentje == $effects[$e]->idEffect) {
+                    echo 'checked';
+                }?> class="form-check-input" type="checkbox" name="effects[]" value="<?php echo $effects[$e]->idEffect?>" id="<?php echo $effects[$e]->idEffect?>">
                 <label class="form-check-label" for="<?php echo $effects[$e]->idEffect?>">
                     <?php echo $effects[$e]->EffectName?>
                 </label>

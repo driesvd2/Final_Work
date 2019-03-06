@@ -121,7 +121,12 @@ if(isset($_POST['searchEffectCluster'])){
 
     <div class="container" style="width: 50%; float: left; height: 80%;">
         <h1>Insert Cause - Effect</h1>
-        <?php $deIdvoorDriesMijnKapoentje = EffectDB::getById(($_GET['update_idEffect_two'])); ?>
+        <?php if (isset($_GET['idEffect'])) {
+            $deIdvoorDriesMijnKapoentje = $_GET['idEffect'];
+        }else {
+            $deIdvoorDriesMijnKapoentje = 0;
+        }
+        ?>
         <form method="post" action="insert_Cause_Effect.php">
             <h2>Causes</h2>
             <input type="text" name="searchCause" placeholder="Search for causes...">
@@ -168,7 +173,8 @@ if(isset($_POST['searchEffectCluster'])){
             {
             ?>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="Effect" value="<?php echo $querySearchEffectInsertCluster[$e]->idEffect?>" id="<?php echo $querySearchEffectInsertCluster[$e]->idEffect?>">
+                <input <?php if ($deIdvoorDriesMijnKapoentje == $querySearchEffectInsertCluster[$e]->idEffect) {
+                    echo 'checked';} ?> class="form-check-input" type="radio" name="Effect" value="<?php echo $querySearchEffectInsertCluster[$e]->idEffect?>" id="<?php echo $querySearchEffectInsertCluster[$e]->idEffect?>">
                 <label class="form-check-label" for="<?php echo $querySearchEffectInsertCluster[$e]->idEffect?>">
                     <?php echo $querySearchEffectInsertCluster[$e]->EffectName?>
                 </label>
@@ -184,7 +190,8 @@ if(isset($_POST['searchEffectCluster'])){
             {
             ?>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="Effect" value="<?php echo $effects[$e]->idEffect?>" id="<?php echo $effects[$e]->idEffect?>">
+                <input <?php if ($deIdvoorDriesMijnKapoentje == $effects[$e]->idEffect) {
+                    echo 'checked';}?> class="form-check-input" type="radio" name="Effect" value="<?php echo $effects[$e]->idEffect?>" id="<?php echo $effects[$e]->idEffect?>">
                 <label class="form-check-label" for="<?php echo $effects[$e]->idEffect?>">
                     <?php echo $effects[$e]->EffectName?>
                 </label>

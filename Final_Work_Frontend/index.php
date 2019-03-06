@@ -8,6 +8,8 @@
 
 session_start();
 
+error_reporting(E_ERROR | E_PARSE);
+
 if (isset($_GET['logout'])){
     session_destroy();
     unset($_SESSION['login']);
@@ -46,7 +48,7 @@ if(isset($_POST['searchEffect'])){
 
 ?>
 
-<html>
+<html style="height: 100%;overflow:hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Final Work">
@@ -61,7 +63,7 @@ if(isset($_POST['searchEffect'])){
      
 </head>
 
-<body>
+<body style="height: 100%;overflow:hidden">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">Final Work - MMS DB Acces</a>

@@ -22,7 +22,7 @@ include_once './Database/DAO/EffectDB.php';
 include_once './Database/DAO/ErrorDB.php';
 ?>
 
-<html>
+<html style="height: 100%;overflow:hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Final Work">
@@ -37,7 +37,7 @@ include_once './Database/DAO/ErrorDB.php';
      
 </head>
 
-<body>
+<body style="height: 100%;overflow:hidden">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">Final Work - MMS DB Acces</a>

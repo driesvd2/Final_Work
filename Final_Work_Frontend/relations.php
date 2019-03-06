@@ -8,6 +8,8 @@
 
 session_start();
 
+error_reporting(E_ERROR | E_PARSE);
+
 include './Database/Forms/Relations/server.php';
 include_once './Database/DAO/CauseEffectDB.php';
 include_once './Database/DAO/CauseDB.php';
@@ -43,7 +45,7 @@ if(isset($_POST['searchCause'])){
 
 ?>
 
-<html>
+<html style="height: 100%;overflow:hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Final Work">
@@ -58,7 +60,7 @@ if(isset($_POST['searchCause'])){
 
 </head>
 
-<body>
+<body style="height: 100%;overflow:hidden">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">Final Work - MMS DB Acces</a>
