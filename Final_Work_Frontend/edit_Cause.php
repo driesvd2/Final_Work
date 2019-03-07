@@ -77,7 +77,7 @@ include 'Database/Forms/UpdateCause/server.php';
                 <input type="hidden" value="<?php echo $c->idCause; ?>" name="causeid"/>
                 <label>Cause name:</label><br>
                 <input class="col-lg-4" value="<?php echo $c->CauseName; ?>" name="update_causename"><br><br>
-                <button type="submit" class="btn btn-primary" name="update_cause">Submit</button>
+                <button type="submit" class="btn btn-success" name="update_cause">Submit</button>
             </div>
         </form>
     <?php } ?>

@@ -34,6 +34,7 @@ if(isset($_POST['search'])){
     <title>
         Final Work - MMS DB Acces
     </title>
+    <link rel="stylesheet" href="./CSS/Custom.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -95,7 +96,7 @@ if(isset($_POST['search'])){
                 <label>Password: </label>
                 <input type="password" class="form-control" id="Password" name="Password" placeholder="Enter password..." required>
             </div>
-            <button type="submit" class="btn btn-dark" name="insert_user">Insert</button>
+            <button type="submit" class="btn btn-success" name="insert_user">Insert</button>
         </form>
     </div>
     
@@ -105,8 +106,14 @@ if(isset($_POST['search'])){
     <div class="container" style="width: 50%; float: left;overflow: auto;height: 80%;">
         <h1>Users</h1>
         <form action="manageUser.php" method="post">
-            <input type="text" name="search" placeholder="Search for users...">
-            <input type="submit" value=">>" />
+        <div class="wrap">
+                <div class="search">
+                    <input type="text" class="searchTerm" name="search" placeholder="Filter results...">
+                    <button type="submit" class="searchButton">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+        </div>
         </form>
         <?php if(isset($querysearchuser)) { ?>
         <table class="table table-bordered table-hover">

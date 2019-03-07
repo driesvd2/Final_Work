@@ -80,7 +80,7 @@ include_once './Database/DAO/ErrorDB.php';
                 <label for="Cause">Cause: </label>
                 <input type="text" class="form-control" id="Cause" name="Cause" placeholder="Enter Cause..." required>
             </div>
-            <button type="submit" class="btn btn-dark" name="insert_cause">Insert</button>
+            <button type="submit" class="btn btn-success" name="insert_cause">Insert</button>
         </form>
     </div>
     

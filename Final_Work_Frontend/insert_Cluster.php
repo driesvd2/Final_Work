@@ -67,7 +67,7 @@ if(isset($_POST['searchEffectCluster'])){
     <title>
         Final Work - MMS DB Acces
     </title>
-
+    <link rel="stylesheet" href="./CSS/Custom.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -130,8 +130,14 @@ if(isset($_POST['searchEffectCluster'])){
         ?>
         <form method="post" action="insert_Cluster.php">
             <h2>Causes</h2>
-            <input type="text" name="searchCause" placeholder="Search for causes...">
-            <input type="submit" value=">>" />
+            <div class="wrap" style="height: 25px">
+                <div class="search">
+                    <input type="text" class="searchTerm" name="searchCause" placeholder="Filter results...">
+                    <button type="submit" class="searchButton">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
             <?php if(isset($querySearchCauseInsertCluster)) { ?>
             <div class="container" style="float: left; overflow: auto; height: 20%; margin-top: 8px; margin-bottom: 8px">
                 <?php
@@ -165,8 +171,14 @@ if(isset($_POST['searchEffectCluster'])){
             
             <?php } ?>
             <h2>Effects</h2>
-            <input type="text" name="searchEffectCluster" placeholder="Search for effects...">
-            <input type="submit" value=">>" />
+            <div class="wrap" style="height: 25px">
+                <div class="search">
+                    <input type="text" class="searchTerm" name="searchEffectCluster" placeholder="Filter results...">
+                    <button type="submit" class="searchButton">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
             <?php if(isset($querySearchEffectInsertCluster)) { ?>
             <div class="container" style="float: left; overflow: auto; height: 20%; margin-top: 8px; margin-bottom: 8px">
             <?php
@@ -203,7 +215,7 @@ if(isset($_POST['searchEffectCluster'])){
             </div>
             <?php } ?>
             <br><br>
-            <button type="submit" class="btn btn-dark" name="insert_Cluster" style="margin-top: 8px">Insert</button>
+            <button type="submit" class="btn btn-success" name="insert_Cluster" style="margin-top: 8px">Insert</button>
         </form>
     </div>
 

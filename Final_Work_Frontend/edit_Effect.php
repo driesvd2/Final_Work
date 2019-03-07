@@ -84,7 +84,7 @@ include 'Database/Forms/UpdateEffect/server.php';
                     <option value="1">Approved without Cause</option>
                     <option value="2">Fully Approved</option>
                 </select><br><br>
-                <button type="submit" class="btn btn-primary" name="update_effect">Submit</button>
+                <button type="submit" class="btn btn-success" name="update_effect">Submit</button>
             </form>
         </div>
     <?php } ?>

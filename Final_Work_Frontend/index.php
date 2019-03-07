@@ -49,6 +49,7 @@ if(isset($_POST['searchEffect'])){
 ?>
 
 <html style="height: 100%;overflow:hidden">
+
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Final Work">
@@ -57,6 +58,7 @@ if(isset($_POST['searchEffect'])){
         Final Work - MMS DB Acces
     </title>
     
+    <link rel="stylesheet" href="./CSS/Custom.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -115,8 +117,14 @@ if(isset($_POST['searchEffect'])){
             <a href="insert_Cause.php"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a>
             <?php } ?></h1>
             <form action="index.php" method="post">
-                <input type="text" name="search" placeholder="Search for causes...">
-                <input type="submit" value=">>" />
+            <div class="wrap">
+                <div class="search">
+                    <input type="text" class="searchTerm" name="search" placeholder="Filter results...">
+                    <button type="submit" class="searchButton">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>             
             </form>
             <?php if(isset($querySearchCause)) { ?>
     
@@ -203,8 +211,14 @@ if(isset($_POST['searchEffect'])){
         <a href="insert_effect_admin.php"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a>
         <?php } ?></h1>
         <form action="index.php" method="post">
-                <input type="text" name="searchEffect" placeholder="Search for effects...">
-                <input type="submit" value=">>" />
+        <div class="wrap">
+                <div class="search">
+                    <input type="text" class="searchTerm" name="searchEffect" placeholder="Filter results...">
+                    <button type="submit" class="searchButton">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+        </div> 
         </form>
         <?php if(isset($querySearchEffect)) { ?>
     

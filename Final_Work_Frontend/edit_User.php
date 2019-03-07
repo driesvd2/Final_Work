@@ -85,7 +85,7 @@ include 'Database/Forms/UpdateUser/server.php';
                     <option value="0">Admin</option>
                     <option value="1">Normal user</option>
                 </select><br><br>
-                <button type="submit" class="btn btn-primary" name="update_user">Submit</button>
+                <button type="submit" class="btn btn-success" name="update_user">Submit</button>
             </div>
         </form>
         

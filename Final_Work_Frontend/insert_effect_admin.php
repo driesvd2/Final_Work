@@ -79,7 +79,7 @@ include_once './Database/DAO/ErrorDB.php';
                 <label for="Effect">Effect: </label>
                 <input type="text" class="form-control" id="Effect" name="EffectName" placeholder="Enter Effect..." required>
             </div>
-            <button type="submit" class="btn btn-dark" name="insert_effect_admin">Insert</button>
+            <button type="submit" class="btn btn-success" name="insert_effect_admin">Insert</button>
         </form>
     </div>
     
