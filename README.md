@@ -7,11 +7,9 @@ Gemaakt tot het behalen van de graad van bachelor in de toegepaste informatica t
 
 * Blog: https://finalworkdriesenstef.blogspot.com/
 
-* Quamotion Docs: http://docs.quamotion.mobi/
-
 ## Frontend
 
-* Frontend: http://dtsl.ehb.be/~dries.van.dievoort/Final_Work_Frontend/
+* Frontend: http://dtsl.ehb.be/~stefanos.stoikos/Final_Work_Frontend/
 
 * Frontend DB: https://dt5.ehb.be/phpmyadmin/index.php
 
