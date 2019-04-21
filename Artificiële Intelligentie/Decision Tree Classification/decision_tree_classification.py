@@ -1,4 +1,4 @@
-# K-Nearest Neighbors (K-NN)
+# Decision Tree Classification
 
 # Importing the libraries
 import pandas as pd
@@ -18,13 +18,13 @@ sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 
-# Fitting K-NN to the Training set
-from sklearn.neighbors import KNeighborsClassifier
+# Fitting Decision Tree Classification to the Training set
+from sklearn.tree import DecisionTreeClassifier
 Acounter = 0
 Apercent = 0
 Aperfect = 0
 for x in range(1, 500):
-    classifier = KNeighborsClassifier(n_neighbors = x, weights='distance' ,algorithm='auto',metric = 'minkowski', p = 1) 
+    classifier = DecisionTreeClassifier(criterion = 'gini', random_state = x)
     classifier.fit(X_train, y_train)
 
 # Predicting the Test set results
