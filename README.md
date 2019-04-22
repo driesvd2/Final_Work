@@ -23,7 +23,7 @@ Gemaakt tot het behalen van de graad van bachelor in de toegepaste informatica t
 
 * getCausesByEffectName(): POST http://dtsl.ehb.be/~stefanos.stoikos/Final_Work_Frontend/API/getCausesByEffectName.php
 
-* Voor Credentials: contacteer ons.
+Voor Credentials: contacteer ons.
 
 ## Artificiële Intelligentie
 
