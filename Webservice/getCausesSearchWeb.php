@@ -69,8 +69,8 @@ class getCausesSearchWeb
         foreach ($causes as $c){
             if (!empty($c)){
                 foreach ($c as $cause){
-                    $cause = CauseDB::getById($cause->Cause_idCause);
-                    array_push($finalCauses, $cause[0]->idCause);
+                    $cause = CauseDB::getById($cause->cause);
+                    array_push($finalCauses, $cause[0]->id);
                 }
             }
         }
@@ -94,7 +94,7 @@ class getCausesSearchWeb
         } else if (sizeof($effectenArray) <= 1) {
             $causes1 = CauseEffectDB::getCausebyEffectId($effectenArray[0]);
             foreach ($causes1 as $c){
-                $cause = CauseDB::getById($c->Cause_idCause);
+                $cause = CauseDB::getById($c->cause);
                 array_push($causes, $cause);
             }
             return $causes;

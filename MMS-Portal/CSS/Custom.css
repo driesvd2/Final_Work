@@ -1,40 +1,98 @@
 .search {
-    width: 100%;
-    position: relative
-  }
-  
-  .searchTerm {
-    float: left;
-    width: 100%;
-    border: 3px solid #007bff;
-    padding: 5px;
-    height: 36px;
-    border-radius: 5px 0px 0px 5px;
-    outline: none;
-    color: #9DBFAF;
-  }
-  
-  .searchTerm:focus{
-    color: #007bff;
-  }
-  
-  .searchButton {
-    position: absolute; 
-    margin-left: -2px; 
-    width: 40px;
-    height: 36px;
-    border: 3px solid #007bff;
-    background: #007bff;
-    text-align: center;
-    color: #fff;
-    border-radius: 0px 5px 5px 0px;
-    cursor: pointer;
-    font-size: 20px;
-  }
+  width: 100%;
+  position: relative
+}
 
-  .wrap{
-    width: 50%;
-    height: 36px;
-    float: left;
-    margin-bottom: 8px;
-  }
+.searchTerm {
+  float: left;
+  width: 100%;
+  border: 3px solid #223A50;
+  padding: 5px;
+  height: 36px;
+  border-radius: 5px 0px 0px 5px;
+  outline: none;
+  color: #9DBFAF;
+}
+
+.searchTermAjax {
+  float: left;
+  width: 100%;
+  border: 3px solid #223A50;
+  padding: 5px;
+  height: 36px;
+  border-radius: 5px;
+  outline: none;
+  color: #9DBFAF;
+}
+
+.searchTerm:focus {
+  color: #223A50;
+}
+
+.searchButton {
+  position: absolute;
+  margin-left: -2px;
+  width: 40px;
+  height: 36px;
+  border: 3px solid #223A50;
+  background: #223A50;
+  text-align: center;
+  color: #fff;
+  border-radius: 0px 5px 5px 0px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.wrap {
+  width: 50%;
+  height: 36px;
+  float: left;
+  margin-bottom: 8px;
+}
+
+nav {
+  color: #223A50;
+  background-color: #223A50;
+}
+
+.greenIcon {
+  color: #0b6623;
+}
+
+.title {
+  color: #DA291C;
+}
+
+h1,
+h2 {
+  color: #484848;
+  font-weight: 600;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  outline: 0;
+  box-shadow: none;
+  border: 0 !important;
+  background: #223A50;
+  background-image: none;
+}
+
+select {
+  padding: 0 .5em .2em .5em;
+  color: #fff;
+  cursor: pointer;
+  border-radius: .25em;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+.select {
+  overflow: hidden;
+  border-radius: .25em;
+}

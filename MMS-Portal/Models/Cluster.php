@@ -8,13 +8,13 @@
 
 class Cluster
 {
-    public $idCluster;
-    public $Cause_idCause;
-    public $Cluster_Effects;
+    public $id;
+    public $cause;
+    public $effects;
 
-    public function __construct($idCluster, $Cause_idCause, $Cluster_Effects) {
-        $this->idCluster = $idCluster;
-        $this->Cause_idCause = $Cause_idCause;
-        $this->Cluster_Effects = $Cluster_Effects;
+    public function __construct($id, $cause, $effects) {
+        $this->id = $id;
+        $this->cause = $cause;
+        $this->effects = $effects;
     }
 }

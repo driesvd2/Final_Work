@@ -15,7 +15,22 @@ Gemaakt tot het behalen van de graad van bachelor in de toegepaste informatica t
 
 ## Web Service
 
+* Link: http://dtsl.ehb.be/~stefanos.stoikos/Final_Work_Frontend/API/
 
-## Artificiele Intelligentie
+* getAll(): POST http://dtsl.ehb.be/~stefanos.stoikos/Final_Work_Frontend/API/getAll.php
+
+* getCausesSearch(): POST http://dtsl.ehb.be/~stefanos.stoikos/Final_Work_Frontend/API/getCausesSearch.php
+
+* getCausesByEffectName(): POST http://dtsl.ehb.be/~stefanos.stoikos/Final_Work_Frontend/API/getCausesByEffectName.php
+
+* Voor Credentials: contacteer ons.
+
+## Artificiële Intelligentie
+
+* Decision tree classificatie
+
+* K-Neirest Neigbour (K-NN)
+
+* Naïve Bayes
 
 

@@ -2,19 +2,28 @@
 
 include_once './Database/DAO/CauseDB.php';
 
-//Update CauseName
+//Update name
 
-if (isset($_POST['update_cause']) && isset($_POST['update_causename']) && isset($_POST['causeid'])) {
-    $causeName = $_POST['update_causename'];
-    $causeId = $_POST['causeid'];
-    
-    
-    CauseDB::update($causeName, $causeId);
-    header('location: index.php');    
-    
-}else{
-    print("camarchepas");
+if (isset($_POST['update_cause']) && isset($_POST['id']) && isset($_POST['name'])) {
+
+$arrayMeta = array();
+
+$arrayMeta['name'] = $_POST['name'];
+
+$causeMetaData = CauseDB::getAllMetaColumnsOfCause();
+foreach ($causeMetaData as $m) {
+    if(!empty($_POST[$m]) && !ctype_space($_POST[$m])){
+        $arrayMeta[$m] = $_POST[$m];
+    } else {
+        $arrayMeta[$m] = null;
+    }  
 }
+ 
+CauseDB::update($arrayMeta, $_POST['id']);
 
-
+header('location: index.php');    
+ 
+}
+ 
+ 
 ?>

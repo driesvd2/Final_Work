@@ -70,8 +70,8 @@ function functionAPI($array){
     foreach ($causes as $c){
         if (!empty($c)){
             foreach ($c as $cause){
-                $cause = CauseDB::getById($cause->Cause_idCause);
-                array_push($finalCauses, $cause[0]->idCause);
+                $cause = CauseDB::getById($cause->cause);
+                array_push($finalCauses, $cause[0]->id);
             }
         }
     }
@@ -100,7 +100,7 @@ if (isset($data->credentials->login) && isset($data->credentials->pass)){
                 }
             }
             for ($i =0; $i<sizeof($tempEffectsArray);$i++){
-                array_push($effectsArray,(integer)$tempEffectsArray[$i][0]->idEffect);
+                array_push($effectsArray,(integer)$tempEffectsArray[$i][0]->id);
             }
             if (sizeof($effectsArray) > 1){
                 $ik = functionAPI($effectsArray);
@@ -115,7 +115,7 @@ if (isset($data->credentials->login) && isset($data->credentials->pass)){
             }else if (sizeof($effectsArray) <= 1) {
                 $causes1 = CauseEffectDB::getCausebyEffectId($effectsArray[0]);
                 foreach ($causes1 as $c){
-                    $cause = CauseDB::getById($c->Cause_idCause);
+                    $cause = CauseDB::getById($c->cause);
                     array_push($causes, $cause);
                 }
                 http_response_code(200);

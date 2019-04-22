@@ -38,7 +38,7 @@ class UserDB
         }
         foreach ($resultatenArray as $e){
             if ($e->username == $username && $e->password == $password){
-                return $e->userType;
+                return $e->type;
             }
         }
         return 99;
@@ -46,7 +46,7 @@ class UserDB
 
     public static function getById($id) {
         $resultatenArray = array();
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM User WHERE userId=" .$id);
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM User WHERE id=" .$id);
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
             $nieuw = self::converteerRijNaarUser($databaseRij);
@@ -66,35 +66,24 @@ class UserDB
         return $resultatenArray;
     }
 
-
-    public static function insertUser($user) {
-        return self::getVerbinding()->voerSqlQueryUit("INSERT INTO User(username , password , userType) VALUES ('?','?','?')", array($user->username,$user->password,$user->userType));
+    public static function deleteByIdQueue($id) {
+        return self::getVerbinding()->voerSqlQueryUit("DELETE FROM User WHERE id=".$id);
     }
-
 
     public static function insertNewUser($username, $password, $usertype){
-        return self::getVerbinding()->voerSqlQueryUit("INSERT INTO User(userId,username, password, userType) VALUES (null, '$username','$password',$usertype)");
-    }
-
-
-    public static function deleteByIdQueue($id) {
-        return self::getVerbinding()->voerSqlQueryUit("DELETE FROM User WHERE userId=".$id);
+        return self::getVerbinding()->voerSqlQueryUit("INSERT INTO User(id,username, password, type) VALUES (null, '$username','$password',$usertype)");
     }
 
 
     public static function updateUser($username,$password,$adminornot,$userid) {
-        return self::getVerbinding()->voerSqlQueryUit("UPDATE User SET username='$username', password='$password', userType=$adminornot WHERE userId=$userid");
+        return self::getVerbinding()->voerSqlQueryUit("UPDATE User SET username='$username', password='$password', type=$adminornot WHERE id=$userid");
     }
-
-    /*public static function update($causename,$id) {
-        return self::getVerbinding()->voerSqlQueryUit("UPDATE Cause SET CauseName='$causename' WHERE idCause= $id");
-   }*/
 
     public static function converteerRijNaarUser($databaseRij) {
         return new User(
-            $databaseRij['userId'],
+            $databaseRij['id'],
             $databaseRij['username'],
             $databaseRij['password'],
-            $databaseRij['userType']);
+            $databaseRij['type']);
     }
 }

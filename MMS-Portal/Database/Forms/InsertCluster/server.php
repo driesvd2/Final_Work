@@ -23,15 +23,6 @@ if (isset($_POST['insert_ClusterSession']) && isset($_SESSION['effectOnChangeNam
     }
 }
 
-
-
-
-if (isset($_POST['Delete_Cluster_id']) && isset($_POST['Delete_Cluster'])) {
-    ClusterDB::deleteById($_POST['Delete_Cluster_id']);
-}
-
-
-
 if(isset($_POST['unsetSessionsCluster'])){
     
     unset($_SESSION['causeOnChangeName']);
@@ -43,3 +34,4 @@ if(isset($_POST['unsetSessionsCluster'])){
 
 
 ?>
+

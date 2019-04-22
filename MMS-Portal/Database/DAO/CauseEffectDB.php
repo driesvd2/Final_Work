@@ -14,12 +14,40 @@ include_once "Database/DatabaseFactory.php";
 class CauseEffectDB
 {
 
+    public static function getAllColumnsOfCauseEffect() {
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT column_name FROM information_schema.columns WHERE table_schema = '1819FW_DRIESD_STEFANOSS' AND table_name = 'Cause_Effect'");
+        $resultatenArray = array();
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+                $result = $resultaat->fetch_array();
+                $resultatenArray[$index] = $result["column_name"];
+            }
+        return $resultatenArray;
+    }
+     
+    public static function getAllMetaColumnsOfCauseEffect() {
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT column_name FROM information_schema.columns WHERE table_schema = '1819FW_DRIESD_STEFANOSS' AND table_name = 'Cause_Effect' AND column_name != 'id' AND column_name != 'cause' AND column_name != 'effect'");
+        $resultatenArray = array();
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+                $result = $resultaat->fetch_array();
+                $resultatenArray[$index] = $result["column_name"];
+            }
+        return $resultatenArray;
+    }
+    
+    public static function addColumnCauseEffect($name) {
+        return self::getVerbinding()->voerSqlQueryUit('ALTER TABLE Cause_Effect ADD '.$name.' VARCHAR(1500) NULL');
+    }
+
+    public static function deleteColumnCauseEffect($name) {
+        return self::getVerbinding()->voerSqlQueryUit('ALTER TABLE Cause_Effect DROP COLUMN '.$name);
+    }
+
     private static function getVerbinding() {
         return DatabaseFactory::getDatabase();
     }
 
     public static function getAll() {
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect");
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect ORDER BY id ASC");
         $resultatenArray = array();
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
@@ -28,21 +56,33 @@ class CauseEffectDB
         }
         return $resultatenArray;
     }
-
-    public static function getEffectbyCauseId($id) {
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT Effect_idEffect FROM Cause_Effect WHERE Cause_idCause=".$id);
-        $resultatenArray = array();
+    
+    public static function getByIdMeta($id) {
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect WHERE id=".$id." ORDER BY id ASC");
+        $result = $resultaat->fetch_array();
+        return $result;
+    }
+ 
+    public static function getCauseEffects($array) {
+        $finalArray = array();
+        foreach ($array as $a) {
+            $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect WHERE effect=".$a . " ORDER BY id ASC");
+            $resultatenArray = array();
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
-            $databaseRij = EffectDB::getById($databaseRij['Effect_idEffect']);
-            $nieuw = self::converteerRijNaarEffect($databaseRij);
+            $nieuw = self::converteerRijNaarCauseEffect($databaseRij);
             $resultatenArray[$index] = $nieuw;
         }
-        return $resultatenArray;
+        //array_push($finalArray, $resultatenArray);
+        $finalArray[$a] = $resultatenArray;
+        }
+        return $finalArray;
     }
 
+    
+
     public static function getCausebyEffectId($id) {
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect WHERE id=".$id);
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect WHERE id=".$id . " ORDER BY id ASC");
         $resultatenArray = array();
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
@@ -53,7 +93,18 @@ class CauseEffectDB
     }
     
     public static function getCausebyEffectIdOne($id) {
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect WHERE Effect_idEffect=".$id);
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect WHERE effect=".$id . " ORDER BY id ASC");
+        $resultatenArray = array();
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+            $databaseRij = $resultaat->fetch_array();
+            $nieuw = self::converteerRijNaarCauseEffect($databaseRij);
+            $resultatenArray[$index] = $nieuw;
+        }
+        return $resultatenArray;
+    }
+    
+    public static function getCauseEffectbyCauseForDelete($id) {
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect WHERE cause=".$id . " ORDER BY id ASC");
         $resultatenArray = array();
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
@@ -64,7 +115,7 @@ class CauseEffectDB
     }
     
     public static function getCauseEffectWhereIdCause($id) {
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect WHERE Cause_idCause=".$id);
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect WHERE cause=".$id . " ORDER BY id ASC");
         $resultatenArray = array();
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
@@ -75,7 +126,7 @@ class CauseEffectDB
     }
     
     public static function getCauseEffectWhereIdEffect($id) {
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect WHERE Effect_idEffect=".$id);
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect WHERE effect=".$id . " ORDER BY id ASC");
         $resultatenArray = array();
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
@@ -85,9 +136,9 @@ class CauseEffectDB
         return $resultatenArray;
     }
     
-    
-    public static function getSearchCauseOfCauseEffect($searchq) {
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect where Cause_idCause LIKE '%$searchq%'");
+                                                            
+    public static function getSearchCauseOfCauseEffect($searchq, $column) {
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect where ".$column." LIKE '%$searchq%' ORDER BY id ASC");
         $resultatenArray = array();
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
@@ -99,7 +150,7 @@ class CauseEffectDB
 
     public static function ifExists($causeid, $effectId){
         $mysqli = new mysqli("dt5.ehb.be", "1819FW_DRIESD_STEFANOSS", "DzwWqw", "1819FW_DRIESD_STEFANOSS");
-        $result = $mysqli->query("SELECT * FROM Cause_Effect WHERE Cause_idCause=".$causeid." AND Effect_idEffect=".$effectId);
+        $result = $mysqli->query("SELECT * FROM Cause_Effect WHERE cause=".$causeid." AND effect=".$effectId . " ORDER BY id ASC");
         if($result->num_rows == 0) {
             return false;
         } else {
@@ -109,39 +160,39 @@ class CauseEffectDB
     }
 
     public static function insert($causeid, $effectId) {
-        return self::getVerbinding()->voerSqlQueryUit("INSERT INTO Cause_Effect(Cause_idCause, Effect_idEffect) VALUES ('$causeid','$effectId')");
+        return self::getVerbinding()->voerSqlQueryUit("INSERT INTO Cause_Effect(cause, effect) VALUES ('$causeid','$effectId')");
     }
 
-    public static function updateCause($causeid, $effectId) {
-        return self::getVerbinding()->voerSqlQueryUit("UPDATE Cause_Effect SET Cause_idCause=".$causeid." WHERE Effect_idEffect=".$effectId);
+    public static function updateCauseEffectEntity($array,$id) {
+        $query = "UPDATE Cause_Effect SET ";
+    foreach ($array as $key => $value) {
+        $query .= " ".$key." = '$value', ";
     }
+    $query = substr($query, 0, -2);
+               
 
-    public static function updateEffect($effectId, $causeid) {
-        return self::getVerbinding()->voerSqlQueryUit("UPDATE Cause_Effect SET Effect_idEffect=".$effectId." WHERE Cause_idCause=".$causeid);
+    $query .= " where id =".$id;
+        
+        
+        
+        return self::getVerbinding()->voerSqlQueryUit($query);
     }
+    
 
     public static function deleteById($id) {
         return self::getVerbinding()->voerSqlQueryUit("DELETE FROM Cause_Effect WHERE id=".$id);
     }
 
-    public static function deleteCauseById($id) {
-        return self::getVerbinding()->voerSqlQueryUit("DELETE FROM Cause_Effect WHERE Cause_idCause=".$id);
-    }
-
-    public static function deleteEffectById($id) {
-        return self::getVerbinding()->voerSqlQueryUit("DELETE FROM Cause_Effect WHERE Effect_idEffect=".$id);
-    }
-
     protected static function converteerRijNaarCauseEffect($databaseRij) {
-        return new Cause_Effect($databaseRij['id'],$databaseRij['Cause_idCause'], $databaseRij['Effect_idEffect']);
+        return new Cause_Effect($databaseRij['id'],$databaseRij['cause'], $databaseRij['effect']);
     }
 
 
     protected static function converteerRijNaarEffect($databaseRij) {
-        return new Effect($databaseRij['idEffect'], $databaseRij['EffectName'], $databaseRij['EffectStatus'], $databaseRij['Error_idError']);
+        return new Effect($databaseRij['id'], $databaseRij['name'], $databaseRij['status'], $databaseRij['Error_idError']);
     }
 
     protected static function converteerRijNaarCause($databaseRij) {
-        return new Cause($databaseRij['idCause'], $databaseRij['CauseName']);
+        return new Cause($databaseRij['id'], $databaseRij['name']);
     }
 }

@@ -2,12 +2,12 @@
 
 include_once './Database/DAO/UserDB.php';
 
-//Update CauseName
+//Update name
 
-if (isset($_POST['update_user']) && isset($_POST['update_username']) && isset($_POST['userId']) && isset($_POST['update_password']) && isset($_POST['adminOrNot'])) {
+if (isset($_POST['update_user']) && isset($_POST['update_username']) && isset($_POST['id']) && isset($_POST['update_password']) && isset($_POST['adminOrNot'])) {
     
     $username = $_POST['update_username'];
-    $userid = $_POST['userId'];
+    $userid = $_POST['id'];
     $password = $_POST['update_password'];
     $adminornot = $_POST['adminOrNot'];
     

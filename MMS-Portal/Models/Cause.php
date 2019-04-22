@@ -7,12 +7,12 @@
  */
 
 class Cause {
-    public $idCause;
-    public $CauseName;
+    public $id;
+    public $name;
 
     public function __construct($id, $naam) {
-        $this->idCause = $id;
-        $this->CauseName = $naam;
+        $this->id = $id;
+        $this->name = $naam;
     }
 
 }

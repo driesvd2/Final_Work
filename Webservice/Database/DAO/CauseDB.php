@@ -29,7 +29,7 @@ class CauseDB {
 
     public static function getById($id) {
         $resultatenArray = array();
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause WHERE idCause=" .$id);
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause WHERE id=" .$id);
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
             $nieuw = self::converteerRijNaarCause($databaseRij);
@@ -40,7 +40,7 @@ class CauseDB {
     
     public static function getSearchCause($searchq) {
         $resultatenArray = array();
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("select * from Cause where CauseName LIKE '%$searchq%'");
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("select * from Cause where name LIKE '%$searchq%'");
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
             $nieuw = self::converteerRijNaarCause($databaseRij);
@@ -51,23 +51,23 @@ class CauseDB {
 
 
     public static function insert($cause) {
-    return self::getVerbinding()->voerSqlQueryUit("INSERT INTO Cause(idCause, CauseName) VALUES (null ,'$cause')");
+    return self::getVerbinding()->voerSqlQueryUit("INSERT INTO Cause(id, name) VALUES (null ,'$cause')");
 }
 
     public static function deleteCauseById($id) {
-        return self::getVerbinding()->voerSqlQueryUit("DELETE FROM Cause WHERE idCause=".$id);
+        return self::getVerbinding()->voerSqlQueryUit("DELETE FROM Cause WHERE id=".$id);
     }
 
     public static function delete($cause) {
-        return self::deleteById($cause->idCause);
+        return self::deleteById($cause->id);
     }
 
     public static function update($causename,$id) {
-        return self::getVerbinding()->voerSqlQueryUit("UPDATE Cause SET CauseName='$causename' WHERE idCause= $id");
+        return self::getVerbinding()->voerSqlQueryUit("UPDATE Cause SET name='$causename' WHERE id= $id");
     }
 
     protected static function converteerRijNaarCause($databaseRij) {
-        return new Cause($databaseRij['idCause'], $databaseRij['CauseName']);
+        return new Cause($databaseRij['id'], $databaseRij['name']);
     }
 }
 ?>

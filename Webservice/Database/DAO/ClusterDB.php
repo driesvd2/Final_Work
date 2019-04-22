@@ -30,7 +30,7 @@ class ClusterDB
 
     public static function getById($id) {
         $resultatenArray = array();
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cluster WHERE idCluster=" .$id);
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cluster WHERE id=" .$id);
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
             $nieuw = self::converteerRijNaarCluster($databaseRij);
@@ -41,7 +41,7 @@ class ClusterDB
 
     public static function insert($causeid, $array) {
         $string = self::arrayToClusterEffects($array);
-        return self::getVerbinding()->voerSqlQueryUit("INSERT INTO Cluster(idCluster, Cause_idCause,Cluster_Effects) VALUES (null ,'$causeid','$string')");
+        return self::getVerbinding()->voerSqlQueryUit("INSERT INTO Cluster(id, cause,effects) VALUES (null ,'$causeid','$string')");
     }
 
 
@@ -57,7 +57,7 @@ class ClusterDB
     public static function ifExists($causeid, $array){
         $string = self::arrayToClusterEffects($array);
         $mysqli = new mysqli("dt5.ehb.be", "1819FW_DRIESD_STEFANOSS", "DzwWqw", "1819FW_DRIESD_STEFANOSS");
-        $result = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cluster WHERE Cause_idCause=".$causeid." AND Cluster_Effects= '$string'");
+        $result = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cluster WHERE cause=".$causeid." AND effects= '$string'");
         if($result->num_rows == 0) {
             return false;
         } else {
@@ -68,11 +68,13 @@ class ClusterDB
 
     public static function getCausesForAPI($array){
         $causes = array();
+        $counter = 0;
         $query = "SELECT * FROM Cluster WHERE 1!=1 OR (";
         foreach ($array as $a){
             $query = "SELECT * FROM Cluster WHERE 1!=1 OR (";
             for ($i = 0;$i < count($a); $i++){
-                $query .= "Cluster_Effects like '%$a[$i]%' AND ";
+                $counter++;
+                $query .= "effects like '%$a[$i]%' AND ";
             }
             $query .= " 1=1)";
             $mysqli = new mysqli("dt5.ehb.be", "1819FW_DRIESD_STEFANOSS", "DzwWqw", "1819FW_DRIESD_STEFANOSS");
@@ -83,22 +85,25 @@ class ClusterDB
                 $nieuw = self::converteerRijNaarCluster($databaseRij);
                 $resultatenArray[$index] = $nieuw;
             }
-            array_push($causes, $resultatenArray);
+            for($i = 0;$i < $counter; $i++){
+                array_push($causes, $resultatenArray);
+            }
+            $counter = 0;
         }
         return $causes;
     }
 
-    public static function updateClusterCause($idCluster,$causeid) {
-        return self::getVerbinding()->voerSqlQueryUit("UPDATE Cluster SET Cause_idCause=".$causeid." WHERE idCluster=".$idCluster);
+    public static function updateClusterCause($id,$causeid) {
+        return self::getVerbinding()->voerSqlQueryUit("UPDATE Cluster SET cause=".$causeid." WHERE id=".$id);
     }
 
-    public static function updateClusterEffect($idCluster,$array) {
+    public static function updateClusterEffect($id,$array) {
         $string = self::arrayToClusterEffects($array);
-        return self::getVerbinding()->voerSqlQueryUit("UPDATE Cluster SET Cluster_Effects=".$string." WHERE idCluster=".$idCluster);
+        return self::getVerbinding()->voerSqlQueryUit("UPDATE Cluster SET effects=".$string." WHERE id=".$id);
     }
 
     public static function deleteById($id) {
-        return self::getVerbinding()->voerSqlQueryUit("DELETE FROM Cluster WHERE idCluster=".$id);
+        return self::getVerbinding()->voerSqlQueryUit("DELETE FROM Cluster WHERE id=".$id);
     }
 
 
@@ -109,14 +114,14 @@ class ClusterDB
 
 
     protected static function converteerRijNaarCluster($databaseRij) {
-        return new Cluster($databaseRij['idCluster'], $databaseRij['Cause_idCause'], $databaseRij['Cluster_Effects']);
+        return new Cluster($databaseRij['id'], $databaseRij['cause'], $databaseRij['effects']);
     }
 
     protected static function converteerRijNaarEffect($databaseRij) {
-        return new Effect($databaseRij['idEffect'], $databaseRij['EffectName'], $databaseRij['EffectStatus'], $databaseRij['Error_idError']);
+        return new Effect($databaseRij['id'], $databaseRij['name'], $databaseRij['status'], $databaseRij['Error_idError']);
     }
 
     protected static function converteerRijNaarCause($databaseRij) {
-        return new Cause($databaseRij['idCause'], $databaseRij['CauseName']);
+        return new Cause($databaseRij['id'], $databaseRij['name']);
     }
 }

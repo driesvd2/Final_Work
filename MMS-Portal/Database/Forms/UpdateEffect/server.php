@@ -2,22 +2,31 @@
 
 include_once './Database/DAO/EffectDB.php';
 
-//Update CauseName
+//Update name
 
-if (isset($_POST['update_effect']) && isset($_POST['effectid']) && isset($_POST['update_effectname']) && isset($_POST['update_effectstatus'])) {
+if (isset($_POST['update_effect']) && isset($_POST['id']) && isset($_POST['name']) && isset($_POST['status'])) { 
     
-    $effectid = $_POST['effectid'];
-    $effectname = $_POST['update_effectname'];
-    $effectstatus = $_POST['update_effectstatus'];
-    
-    
-    
-    EffectDB::updateEffect($effectid,$effectname,$effectstatus);
-    header('location: index.php');    
-    
-}else{
-    print("camarchepas");
+$arrayMeta = array();
+
+$arrayMeta['name'] = $_POST['name'];
+$arrayMeta['status'] = $_POST['status'];
+
+$effectMetaData = EffectDB::getAllColumnsOfEffect();
+foreach ($effectMetaData as $m) {
+    if(!empty($_POST[$m]) && !ctype_space($_POST[$m])){
+        $arrayMeta[$m] = $_POST[$m];
+    } else {
+        $arrayMeta[$m] = null;
+    }  
 }
 
+EffectDB::update($arrayMeta, $_POST['id']);
+
+    
+    
+header('location: index.php'); 
+ 
+}
+ 
 
 ?>

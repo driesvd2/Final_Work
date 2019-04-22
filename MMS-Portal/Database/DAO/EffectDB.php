@@ -16,8 +16,36 @@ class EffectDB
         return DatabaseFactory::getDatabase();
     }
 
+    public static function getAllColumnsOfEffect() {
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT column_name FROM information_schema.columns WHERE table_schema = '1819FW_DRIESD_STEFANOSS' AND table_name = 'Effect'");
+        $resultatenArray = array();
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+                $result = $resultaat->fetch_array();
+                $resultatenArray[$index] = $result["column_name"];
+            }
+        return $resultatenArray;
+    }
+      
+    public static function getAllMetaColumnsOfEffect() {
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT column_name FROM information_schema.columns WHERE table_schema = '1819FW_DRIESD_STEFANOSS' AND table_name = 'Effect' AND column_name != 'id' AND column_name != 'name' AND column_name != 'status'");
+        $resultatenArray = array();
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+                $result = $resultaat->fetch_array();
+                $resultatenArray[$index] = $result["column_name"];
+            }
+        return $resultatenArray;
+    }
+    
+    public static function addColumnEffect($name) {
+        return self::getVerbinding()->voerSqlQueryUit('ALTER TABLE Effect ADD '.$name.' VARCHAR(1500) NULL');
+    }
+
+    public static function deleteColumnEffect($name) {
+        return self::getVerbinding()->voerSqlQueryUit('ALTER TABLE Effect DROP COLUMN '.$name);
+    }
+
     public static function getAll() {
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect");
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect ORDER BY id ASC");
         $resultatenArray = array();
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
@@ -27,19 +55,11 @@ class EffectDB
         return $resultatenArray;
     }
 
-    public static function getAllWhereStatusIsNot0() {
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect where EffectStatus != 0");
-        $resultatenArray = array();
-        for ($index = 0; $index < $resultaat->num_rows; $index++) {
-            $databaseRij = $resultaat->fetch_array();
-            $nieuw = self::converteerRijNaarEffect($databaseRij);
-            $resultatenArray[$index] = $nieuw;
-        }
-        return $resultatenArray;
-    }
     
-    public static function getAllWhereStatusIsTwo() {
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect where EffectStatus=2");
+
+    
+    public static function getAllWhereStatusIsOneAndTwo() {
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect where (status = 1) OR (status = 2) ORDER BY id ASC"); 
         $resultatenArray = array();
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
@@ -49,19 +69,9 @@ class EffectDB
         return $resultatenArray;
     }
  
-    public static function getAllQueue() {
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect where EffectStatus=0 OR EffectStatus=1");
-        $resultatenArray = array();
-        for ($index = 0; $index < $resultaat->num_rows; $index++) {
-            $databaseRij = $resultaat->fetch_array();
-            $nieuw = self::converteerRijNaarEffect($databaseRij);
-            $resultatenArray[$index] = $nieuw;
-        }
-        return $resultatenArray;
-    }
     
     public static function getAllStatusZero() {
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect where EffectStatus=0");
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect where status=0 ORDER BY id ASC");
         $resultatenArray = array();
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
@@ -72,7 +82,7 @@ class EffectDB
     }
     
     public static function getAllStatusOne() {
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect where EffectStatus=1");
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect where status=1 ORDER BY id ASC");
         $resultatenArray = array();
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
@@ -81,10 +91,10 @@ class EffectDB
         }
         return $resultatenArray;
     }
-
+ 
     public static function getById($id) {
         $resultatenArray = array();
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect WHERE idEffect=" .$id);
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect WHERE id=" .$id . " ORDER BY id ASC");
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
             $nieuw = self::converteerRijNaarEffect($databaseRij);
@@ -93,9 +103,16 @@ class EffectDB
         return $resultatenArray;
     }
     
-    public static function getSearchEffect($searchq) {
+    
+    public static function getByIdMeta($id) {
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect WHERE id=".$id." ORDER BY id ASC");
+        $result = $resultaat->fetch_array();
+        return $result;
+    }
+    
+    public static function getSearchEffect($searchq, $column) {
         $resultatenArray = array();
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("select * from Effect where EffectName LIKE '%$searchq%'");
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("select * from Effect where ".$column." LIKE '%$searchq%' ORDER BY id ASC");
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
             $nieuw = self::converteerRijNaarEffect($databaseRij);
@@ -104,10 +121,10 @@ class EffectDB
         return $resultatenArray;
     }
     
-    
+                           
     public static function getSearchEffectID($searchq) {
         $resultatenArray = array();
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("select idEffect from Effect where EffectName LIKE '%$searchq%'");
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("select id from Effect where name LIKE '%$searchq%' ORDER BY id ASC");
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
             $nieuw = self::converteerRijNaarEffect($databaseRij);
@@ -120,7 +137,7 @@ class EffectDB
     
     public static function getSearchEffectWhereStatusNotZero($searchq) {
         $resultatenArray = array();
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("select * from Effect where EffectName LIKE '%$searchq%' AND EffectStatus != 0");
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("select * from Effect where name LIKE '%$searchq%' AND status != 0 ORDER BY id ASC");
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
             $nieuw = self::converteerRijNaarEffect($databaseRij);
@@ -129,49 +146,50 @@ class EffectDB
         return $resultatenArray;
     }
 
-    public static function setStatus0($effectId) {
-        return self::getVerbinding()->voerSqlQueryUit("UPDATE Effect SET EffectStatus=0 WHERE idEffect=".$effectId);
-    }
 
     public static function setStatus1($effectId, $effectName) {
-        return self::getVerbinding()->voerSqlQueryUit("UPDATE Effect SET EffectStatus=1, EffectName='$effectName' WHERE idEffect=".$effectId);
+        return self::getVerbinding()->voerSqlQueryUit("UPDATE Effect SET status=1, name='$effectName' WHERE id=".$effectId);
     }
     
     public static function setStatus1AfterDelete($effectId) {
-        return self::getVerbinding()->voerSqlQueryUit("UPDATE Effect SET EffectStatus=1 WHERE idEffect=".$effectId);
+        return self::getVerbinding()->voerSqlQueryUit("UPDATE Effect SET status=1 WHERE id=".$effectId);
     }
 
     public static function setStatus2($effectId) {
-        return self::getVerbinding()->voerSqlQueryUit("UPDATE Effect SET EffectStatus=2 WHERE idEffect=".$effectId);
+        return self::getVerbinding()->voerSqlQueryUit("UPDATE Effect SET status=2 WHERE id=".$effectId);
     }
 
 
     public static function insert($effectName) {
-        return self::getVerbinding()->voerSqlQueryUit("INSERT INTO Effect(idEffect, EffectName, EffectStatus, Error_idError) VALUES (null ,'$effectName', 1, null)");
+        return self::getVerbinding()->voerSqlQueryUit("INSERT INTO Effect(id, name, status, Error_idError) VALUES (null ,'$effectName', 1, null)");
     }
 
     public static function insertNewEffect($effectname, $effectstatus){
-        return self::getVerbinding()->voerSqlQueryUit("INSERT INTO Effect(idEffect,EffectName, EffectStatus, Error_idError) VALUES (null, '$effectname',$effectstatus,null)");
+        return self::getVerbinding()->voerSqlQueryUit("INSERT INTO Effect(id,name, status) VALUES (null, '$effectname',$effectstatus)");
     }
 
     public static function deleteById($id) {
-        return self::getVerbinding()->voerSqlQueryUit("DELETE FROM Effect WHERE idEffect=".$id);
+        return self::getVerbinding()->voerSqlQueryUit("DELETE FROM Effect WHERE id=".$id);
     }
 
+    public static function update($array, $id) {
+    $query = "UPDATE Effect SET ";
+    foreach ($array as $key => $value) {
+        $query .= " ".$key." = '$value', ";
+    }
+    $query = substr($query, 0, -2);
+               
 
-    public static function delete($effect) {
-        return self::deleteById($effect->idEffect);
+    $query .= " where id =".$id;
+        
+        var_dump($query);
+
+        return self::getVerbinding()->voerSqlQueryUit($query);
     }
 
-    public static function update($effect) {
-        return self::getVerbinding()->voerSqlQueryUit("UPDATE Effect SET EffectName='?' WHERE idEffect='?'", array($effect->EffectName, $effect->idEffect));
-    }
-    public static function updateEffect($ideffect,$effectname,$effectstatus) {
-        return self::getVerbinding()->voerSqlQueryUit("UPDATE Effect SET EffectName='$effectname', EffectStatus='$effectstatus' WHERE idEffect=$ideffect");
-    }
 
     protected static function converteerRijNaarEffect($databaseRij) {
-        return new Effect($databaseRij['idEffect'], $databaseRij['EffectName'], $databaseRij['EffectStatus'], $databaseRij['Error_idError']);
+        return new Effect($databaseRij['id'], $databaseRij['name'], $databaseRij['status']);
     }
 
 }

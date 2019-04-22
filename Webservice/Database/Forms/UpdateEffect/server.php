@@ -2,7 +2,7 @@
 
 include_once './Database/DAO/EffectDB.php';
 
-//Update CauseName
+//Update name
 
 if (isset($_POST['update_effect']) && isset($_POST['effectid']) && isset($_POST['update_effectname']) && isset($_POST['update_effectstatus'])) {
     

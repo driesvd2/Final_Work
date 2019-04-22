@@ -9,12 +9,12 @@
 class Cause_Effect
 {
     public $id;
-    public $Cause_idCause;
-    public $Effect_idEffect;
+    public $cause;
+    public $effect;
 
     public function __construct($id, $Cause_id, $Effect_id) {
         $this->id = $id;
-        $this->Cause_idCause = $Cause_id;
-        $this->Effect_idEffect = $Effect_id;
+        $this->cause = $Cause_id;
+        $this->effect = $Effect_id;
     }
 }

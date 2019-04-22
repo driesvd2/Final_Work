@@ -8,15 +8,15 @@
 
 class Effect
 {
-    public $idEffect;
-    public $EffectName;
-    public $EffectStatus;
-    public $Error_idError;
+    public $id;
+    public $name;
+    public $status;
     
-    public function __construct($id, $naam, $status, $eff_errorid) {
-        $this->idEffect = $id;
-        $this->EffectName = $naam;
-        $this->EffectStatus = $status;
-        $this->Error_idError = $eff_errorid;
+    
+    public function __construct($id, $naam, $status) {
+        $this->id = $id;
+        $this->name = $naam;
+        $this->status = $status;
+        
     }
 }
