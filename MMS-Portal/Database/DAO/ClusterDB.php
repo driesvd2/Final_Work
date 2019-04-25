@@ -173,7 +173,7 @@ class ClusterDB
 
         $query .= " where id =".$id;
         
-            var_dump($query);
+            //var_dump($query);
         
         return self::getVerbinding()->voerSqlQueryUit($query);
     }

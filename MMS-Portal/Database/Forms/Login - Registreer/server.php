@@ -16,23 +16,20 @@ if (isset($_POST['login_gebruiker']) && isset($_POST['log_username']) && isset($
 
     $logUsername = mysqli_real_escape_string($db, $_POST['log_username']);
     $logPassword = mysqli_real_escape_string($db, $_POST['log_paswoord']);
+    $logPassword = strtoupper(hash('sha512', $logPassword));
     $type = UserDB::Login($logUsername, $logPassword);
-    $_SESSION["logged"]=true;
+    $_SESSION["logged"] = true;
 
-    if ($type == 0)
-    {
+    if ($type == 0) {
         $_SESSION['login'] = $_POST['log_username'];
         $_SESSION['type'] = 0;
         header('location: index.php');
-    }elseif ($type == 1)
-    {
+    } elseif ($type == 1) {
         $_SESSION['login'] = $_POST['log_username'];
         $_SESSION['type'] = 1;
         header('location: index.php');
-    }else{
+    } else {
         unset($_SESSION['login']);
         unset($_SESSION['type']);
     }
 }
- 
-?>

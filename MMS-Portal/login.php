@@ -73,6 +73,11 @@ include 'Database/Forms/Login - Registreer/server.php';
                         <?php } ?>
                     </li>
                     <li class="nav-item">
+                        <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) { ?>
+                            <a class="nav-link" href="manage_status_effect.php"><?php echo 'Status Effect'; ?></a>
+                        <?php } ?>
+                    </li>
+                    <li class="nav-item">
                         <?php if(isset($_SESSION['login']) && $_SESSION['type'] == 0){ ?>
                             <a class="nav-link" href="manageUser.php"><?php echo 'User Management & Webservice'; ?></a>
                         <?php } ?>

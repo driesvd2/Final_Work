@@ -187,7 +187,7 @@ if (isset($_POST['searchclusterCause']) && isset($_POST['causeOrEffectSelectedCl
     <link rel="stylesheet" href="./CSS/custom.css">
 </head>
 
-<body style="height: 100%;overflow:hidden">
+<body style="height: 100%;overflow:auto">
     <nav class="navbar navbar-expand-lg navbar-dark   fixed-top">
         <div class="container">
             <a class="navbar-brand" style="font-weight: bold;" href="index.php">Final Work - MMS Portal</a>
