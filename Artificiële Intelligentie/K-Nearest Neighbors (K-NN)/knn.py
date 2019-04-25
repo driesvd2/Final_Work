@@ -24,7 +24,7 @@ Acounter = 0
 Apercent = 0
 Aperfect = 0
 for x in range(1, 500):
-    classifier = KNeighborsClassifier(n_neighbors = x, weights='distance' ,algorithm='auto',metric = 'minkowski', p = 1) 
+    classifier = KNeighborsClassifier(n_neighbors = x, weights='distance' ,algorithm='auto',metric = 'minkowski', p = 2) 
     classifier.fit(X_train, y_train)
 
 # Predicting the Test set results
@@ -34,7 +34,7 @@ for x in range(1, 500):
             Acounter += 1
     if round((Acounter/len(y_pred) * 100), 1) > Apercent:
         Apercent = round((Acounter/len(y_pred) * 100), 1)
-        Aperfect = Acounter
+        Aperfect = x
         Acounter = 0
     else:
         Acounter = 0

@@ -23,7 +23,7 @@ from sklearn.tree import DecisionTreeClassifier
 Acounter = 0
 Apercent = 0
 Aperfect = 0
-for x in range(1, 500):
+for x in range(1, 1500):
     classifier = DecisionTreeClassifier(criterion = 'gini', random_state = x)
     classifier.fit(X_train, y_train)
 
@@ -34,7 +34,7 @@ for x in range(1, 500):
             Acounter += 1
     if round((Acounter/len(y_pred) * 100), 1) > Apercent:
         Apercent = round((Acounter/len(y_pred) * 100), 1)
-        Aperfect = Acounter
+        Aperfect = x
         Acounter = 0
     else:
         Acounter = 0
