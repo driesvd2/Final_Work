@@ -12,9 +12,9 @@ $outputEffect = '';
 if(isset($_POST["queryWebservice"]) && isset($_POST["columnSearchEffectWebservice"]))
 {
     $searchEffect = mysqli_real_escape_string($connect, $_POST["queryWebservice"]);
-    $queryEffect = "SELECT * FROM Effect WHERE ".$_POST["columnSearchEffectWebservice"]." LIKE '%".$searchEffect."%' AND (status = 1 OR status = 2)";
+    $queryEffect = "SELECT * FROM Effect WHERE ".$_POST["columnSearchEffectWebservice"]." LIKE '%".$searchEffect."%' AND status = 2";
 } else {
-    $queryEffect = "SELECT * FROM Effect WHERE (status = 1 OR status = 2) ORDER BY id";
+    $queryEffect = "SELECT * FROM Effect WHERE status = 2 ORDER BY id";
 }
 
 $resultEffect = mysqli_query($connect, $queryEffect);

@@ -139,8 +139,9 @@ if (isset($_POST['search']) && isset($_POST['user_column'])) {
 
 
 
-
-    <div class="container" style="width: 50%; float: left;overflow: auto;height: 80%;">
+ 
+        <div class="container" style="width: 50%; float:right;">
+        <div class="container">    
         <h1>Users</h1>
         <form action="manageUser.php" method="post">
             <div class="wrap">
@@ -162,6 +163,8 @@ if (isset($_POST['search']) && isset($_POST['user_column'])) {
                 </select>
             </div>
         </form>
+        </div>
+        <div class="container" style="height: 60%; float:right; overflow:auto;">
         <?php if (isset($querysearchuser)) { ?>
             <table class="table table-bordered table-hover">
                 <thead>
@@ -227,7 +230,7 @@ if (isset($_POST['search']) && isset($_POST['user_column'])) {
 
         <?php } ?>
     </div>
-
+    </div>
 
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

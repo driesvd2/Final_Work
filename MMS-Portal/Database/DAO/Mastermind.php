@@ -47,15 +47,38 @@ class Mastermind
        //$array = [2,7,8,14,22];
     $finalArray = array();
     $temparray = array();
-    for($i = sizeof($array); $i > 1; $i--){
-        //echo $i ." comb ".$c.":<br>";
-        $counterArray = self::combination_integer(sizeof($array), $i);
-        foreach ($counterArray as $combination) {
-            foreach ($combination as $e) {
-                array_push($temparray, $array[$e]);
+    if(sizeof($array) > 20) {
+            $counterArray = self::combination_integer(sizeof($array), sizeof($array));
+            foreach ($counterArray as $combination) {
+                foreach ($combination as $e) {
+                    array_push($temparray, $array[$e]);
+                }
+                array_push($finalArray, $temparray);
+                $temparray = array();
             }
-            array_push($finalArray, $temparray);
-            $temparray = array();
+    }else if (sizeof($array) > 12) {
+        for($i = sizeof($array); $i > sizeof($array) - 5; $i--){
+            //echo $i ." comb ".$c.":<br>";
+            $counterArray = self::combination_integer(sizeof($array), $i);
+            foreach ($counterArray as $combination) {
+                foreach ($combination as $e) {
+                    array_push($temparray, $array[$e]);
+                }
+                array_push($finalArray, $temparray);
+                $temparray = array();
+            }
+        }
+    }else{
+        for($i = sizeof($array); $i > 1; $i--){
+            //echo $i ." comb ".$c.":<br>";
+            $counterArray = self::combination_integer(sizeof($array), $i);
+            foreach ($counterArray as $combination) {
+                foreach ($combination as $e) {
+                    array_push($temparray, $array[$e]);
+                }
+                array_push($finalArray, $temparray);
+                $temparray = array();
+            }
         }
     }
         //echo $counter. "<br>";

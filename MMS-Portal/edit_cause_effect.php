@@ -8,15 +8,35 @@ include_once './Database/DAO/CauseEffectDB.php';
 include_once './Database/DAO/CauseDB.php';
 include_once './Database/DAO/EffectDB.php';
 include_once './Database/DAO/ClusterDB.php';
-
+ 
 session_start();
 
-
-
+$variable = 0;
 if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     header('location: login.php');
 }
-if (!isset($_GET['id']) || CauseEffectDB::getByIdMeta($_GET['id']) == null) {
+if (isset($_POST['cause']) && !isset($_POST['effect'])) {
+
+    if (!empty(CauseDB::getById($_POST['cause']))) {
+
+        $_SESSION['causeObjEdit'] = CauseDB::getByIdMeta($_POST['cause']);
+    }
+    $variable = 1;
+}
+
+if (isset($_POST['effect']) && !isset($_POST['cause'])) {
+
+    if (!empty(EffectDB::getById($_POST['effect']))) {
+
+        $_SESSION['effectObjEdit'] = EffectDB::getByIdMeta($_POST['effect']);
+    }
+    $variable = 1;
+}
+if (isset($_GET['id']) && !ctype_space($_GET['id']) && !empty($_GET['id']) && CauseEffectDB::getByIdMeta($_GET['id']) != null || $variable == 1) {
+    $variable = 1;
+} else if ($variable == 1) {
+    $variable = 1;
+} else {
     header('location: relations.php');
 }
 
@@ -41,12 +61,8 @@ if (isset($_SESSION["insertCauseFromEditCluster"])) {
     unset($_SESSION["insertCauseFromEditCluster"]);
 }
 
-if (isset($_SESSION['causeEffectObjEdit'])) {
 
-    unset($_SESSION['causeEffectObjEdit']);
-}
-
-if (isset($_GET['id'])) {
+if (isset($_GET['id']) && !empty($_GET['id']) && !ctype_space($_GET['id'])) {
 
     $_SESSION['causeEffectObjEdit'] = CauseEffectDB::getByIdMeta($_GET['id']);
 
@@ -54,23 +70,6 @@ if (isset($_GET['id'])) {
 
     $_SESSION['effectObjEdit'] = EffectDB::getByIdMeta($_SESSION['causeEffectObjEdit']['effect']);
 }
-
-if (isset($_POST['cause']) && !isset($_POST['effect'])) {
-
-    if (!empty(CauseDB::getById($_POST['cause']))) {
-
-        $_SESSION['causeObjEdit'] = CauseDB::getByIdMeta($_POST['cause']);
-    }
-}
-
-if (isset($_POST['effect']) && !isset($_POST['cause'])) {
-
-    if (!empty(EffectDB::getById($_POST['effect']))) {
-
-        $_SESSION['effectObjEdit'] = EffectDB::getByIdMeta($_POST['effect']);
-    }
-}
-
 
 ?>
 
@@ -142,7 +141,7 @@ if (isset($_POST['effect']) && !isset($_POST['cause'])) {
         <form method="post" action="edit_cause_effect.php">
             <h2>Causes <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                     <a href="insert_Cause.php?clickedOnCauseEffectEdit=editCauseEffect&id=<?php echo $_SESSION['causeEffectObjEdit']['id'] ?>" class="greenIcon"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a>
-                
+
                 <?php } ?></h2>
             <div class="wrap" style="height: 25px">
                 <div class="search">
@@ -194,7 +193,7 @@ if (isset($_POST['effect']) && !isset($_POST['cause'])) {
     <?php $causeEffectMetaData = CauseEffectDB::getAllMetaColumnsOfCauseEffect(); ?>
     <form method="post" action="edit_cause_effect.php">
 
-        <div class="form-check container" style="overflow: auto; height: 80%; width: 50%; float: left;">
+        <div class="form-check container" style="overflow: auto; height: 70%; width: 50%; float: left;">
 
             <h2>Cause</h2>
 
@@ -247,9 +246,11 @@ if (isset($_POST['effect']) && !isset($_POST['cause'])) {
                 <input class="col-lg-4" value="<?php echo $_SESSION['causeEffectObjEdit'][$m]; ?>" name="<?php echo $m ?>"><br><br>
 
             <?php } ?>
-
+            </div>
+            <div class="form-check container" style="overflow: auto; height: 15%; width: 35%; float: left;margin-top:10px;">
             <button type="submit" class="btn btn-success" style="background-color: #0b6623;" name="update_causeEffect">Update Cause-Effect</button>
-        </div>
+            </div>
+        
     </form>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

@@ -29,6 +29,8 @@ if (isset($_SESSION["insertCauseFromEditCluster"])) {
     unset($_SESSION["insertCauseFromEditCluster"]);
 }
 
+error_reporting(E_ERROR | E_PARSE);
+
 if (isset($_GET['logout'])) {
     session_destroy();
     unset($_SESSION['login']);
@@ -43,6 +45,20 @@ include_once './Database/DAO/EffectDB.php';
 
 if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     header('location: login.php');
+}
+
+if (isset($_POST['search'])) {
+    $searchq = $_POST['search'];
+    $selColCause = "name";
+    $searchq = preg_replace_callback("#[^0-9a-z]#i", "", $searchq);
+    $querySearchCause = EffectDB::getSearchEffectStatus0($searchq, $selColCause);
+}
+
+if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn'])) {
+    $searchquery = $_POST['searchEffect'];
+    $selColEffect = $_POST['search_selectEffectColumn'];
+    $searchquery = preg_replace_callback("#[^0-9a-z]#i", "", $searchquery);
+    $querySearchEffect = EffectDB::getSearchEffectStatus1($searchquery, $selColEffect);
 }
 
 ?>
@@ -108,9 +124,23 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     <br>
     <br>
     <br>
-
-    <div class="container" style="width: 50%; float: left;overflow: auto; height: 80%;">
-        <h1>Unapproved Effects</h1>
+    
+    
+    <div class="container" style="width: 50%; float:left;">
+    <div class="container">
+    <h1>Unapproved Effects</h1>
+    <form action="manage_status_effect.php" method="post">
+            <div class="wrap">
+                <div class="search">
+                    <input type="text" class="searchTerm" name="search" placeholder="Filter results...">
+                    <button type="submit" class="searchButton">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>       
+        </form>
+    </div>
+    <div class="container" style="height: 60%; float:left; overflow:auto;">
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
@@ -122,7 +152,8 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
                 </tr>
             </thead>
             <tbody>
-                <?php $effects = EffectDB::getAllStatusZero();
+                <?php if (isset($querySearchCause)) {
+                    $effects = $querySearchCause;
                 for ($e = 0; $e < count($effects); $e++) { ?>
                     <tr>
                         <form method="post" action="manage_status_effect.php">
@@ -140,13 +171,58 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
                             </form>
                         <?php } ?>
                     </tr>
-                <?php } ?>
+                <?php }
+                }else{ 
+                    $effects = EffectDB::getAllStatusZero();
+                for ($e = 0; $e < count($effects); $e++) { ?>
+                    <tr>
+                        <form method="post" action="manage_status_effect.php">
+                            <td>
+                                <input type="hidden" value="<?php echo $effects[$e]->id; ?>" name="update_idEffect_zero">
+                                <input type="text" class="form-control" name="unap_effectName" value="<?php echo $effects[$e]->name; ?>" />
+                            </td>
+                            <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
+                                <td>
+                                    <button type="submit" class="btn btn-primary" style="background-color: #223A50;" name="update_effect_zero">Approve</button>
+                                </td>
+                                <td>
+                                    <button type="submit" class="btn btn-primary" style="background-color: #223A50;" name="update_effect_one">Deny</button>
+                                </td>
+                            </form>
+                        <?php } ?>
+                    </tr>
+                <?php }
+            } ?>
             </tbody>
         </table>
     </div>
-
-    <div class="container" style="width: 50%; float: left;overflow: auto; height: 80%;">
-        <h1>Approved Effects</h1>
+    </div>
+    
+    
+    <div class="container" style="width: 50%; float:left;">
+    <div class="container">
+    <h1>Approved Effects</h1>
+    <form action="manage_status_effect.php" method="post">
+            <div class="wrap">
+                <div class="search">
+                    <input type="text" class="searchTerm" name="searchEffect" placeholder="Filter results...">
+                    <button type="submit" class="searchButton">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>            
+            <div class="select">
+                <select name="search_selectEffectColumn" style="width:120px;margin-left:55px; margin-top:3px;">
+                <option value="name">---- Filter ----</option>
+                <?php $metaColumnsEffect = EffectDB::getAllStandardColumnsOfEffect(); ?>
+                    <?php foreach ($metaColumnsEffect as $metaSelectEff) { ?>
+                        <option value="<?php echo $metaSelectEff; ?>"><?php echo $metaSelectEff; ?></option>
+                    <?php } ?>
+                </select>                
+            </div>
+        </form>
+    </div>
+    <div class="container" style="height: 60%; float:left; overflow:auto;">
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
@@ -161,7 +237,8 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
                 </tr>
             </thead>
             <tbody>
-                <?php $effects = EffectDB::getAllStatusOne();
+            <?php if (isset($querySearchEffect)) {
+                $effects = $querySearchEffect;
                 for ($e = 0; $e < count($effects); $e++) { ?>
                     <tr>
                         <td><?php echo $effects[$e]->id ?></td>
@@ -183,11 +260,35 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
                             </td>
                         <?php } ?>
                     </tr>
-                <?php } ?>
+                        <?php }
+                        } else{ 
+                    $effects = EffectDB::getAllStatusOne();
+                for ($e = 0; $e < count($effects); $e++) { ?>
+                    <tr>
+                        <td><?php echo $effects[$e]->id ?></td>
+                        <td><?php echo $effects[$e]->name ?></td>
+                        <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
+                            <td>
+                                <form method="get" action="manage_status_effect.php">
+                                    <input type="hidden" value="<?php echo $effects[$e]->id ?>" name="update_idEffect_one">
+                                    <a href="insert_Cluster.php?id=<?php echo $effects[$e]->id; ?>" class="btn btn-primary" style="background-color: #223A50;">Go Cluster</a>
+                                </form>
+                            </td>
+                        <?php } ?>
+                        <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
+                            <td>
+                                <form method="get" action="manage_status_effect.php">
+                                    <input type="hidden" value="<?php echo $effects[$e]->id ?>" name="update_idEffect_two">
+                                    <a href="insert_Cause_Effect.php?id=<?php echo $effects[$e]->id; ?>" class="btn btn-primary" style="background-color: #223A50;">Go insert Cause effect</a>
+                                </form>
+                            </td>
+                        <?php } ?>
+                    </tr>
+                <?php } }?>
             </tbody>
         </table>
     </div>
-
+    </div>
 
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

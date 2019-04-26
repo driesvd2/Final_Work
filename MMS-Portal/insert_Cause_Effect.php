@@ -13,12 +13,11 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     header('location: login.php');
 }
 
-if (EffectDB::getById($_GET['id']) == null) {
+if (isset($_GET['id']) && EffectDB::getById($_GET['id']) == null) {
     header('location: relations.php');
 }
 
 if (isset($_SESSION['causeOnChangeName']) || isset($_SESSION['effectOnChangeName'])) {
-
     unset($_SESSION['causeOnChangeName']);
     unset($_SESSION['effectOnChangeName']);
 }
@@ -105,7 +104,7 @@ if (isset($_SESSION["insertCauseFromEditCluster"])) {
     <br>
     <br>
     <br>
-
+ 
     <div class="container" style="width: 50%; float: left; height: 80%;">
         <h1>Insert Cause - Effect</h1>
         <?php handleErrorRadioButtons(); ?>
@@ -186,9 +185,10 @@ if (isset($_SESSION["insertCauseFromEditCluster"])) {
     </div>
 
 
-
-    <div class="container" style="overflow: auto; height: 80%; width: 50%; float: left">
-        <h1>Cause - Effect</h1>
+ 
+    
+    <h1>Cause - Effect</h1>
+    <div class="container" style="overflow: auto; height: 60%; width: 50%; float: right">
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>

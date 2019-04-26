@@ -2,7 +2,7 @@
 
 ini_set('session.cache_limiter', 'public');
 session_cache_limiter(false);
-
+ 
 include './Database/Forms/UpdateCluster/server.php';
 include_once './Database/DAO/CauseEffectDB.php';
 include_once './Database/DAO/CauseDB.php';
@@ -39,16 +39,44 @@ include_once './Database/DAO/ClusterDB.php';
 // 
 //    header('location: relations.php');
 //    
-//}
+//} 
 
-
+$variable = 0;
 if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     header('location: login.php');
 }
-if (!isset($_GET['id']) || ClusterDB::getByIdMeta($_GET['id']) == null) {
-    header('location: relations.php');
+
+if (isset($_POST['effect'])) {
+
+    $sessietje = array();
+
+    $tempVarPostEffectClusterClick = EffectDB::getByIdMeta($_POST['effect']);
+
+    if (is_array($sessietje)) {
+        if (in_array($tempVarPostEffectClusterClick['id'], $_SESSION["effectsClusterOfObjEdit"])) {
+
+            echo "<script type='text/javascript'>alert('Effect already in the list!');</script>";
+        } else {
+
+            array_push($_SESSION['effectsClusterOfObjEdit'], $tempVarPostEffectClusterClick['id']);
+        }
+    }
+    $variable = 1;
 }
 
+
+if (isset($_POST['cause'])) {
+    $_SESSION['causeClusterObjEdit'] = CauseDB::getByIdMeta($_POST['cause']);
+    $variable = 1;
+}
+
+if (isset($_GET['id']) && !ctype_space($_GET['id']) && !empty($_GET['id']) && ClusterDB::getByIdMeta($_GET['id']) != null || $variable == 1) {
+    $variable = 1;
+} else if ($variable == 1) {
+    $variable = 1;
+} else {
+    header('location: relations.php');
+}
 
 if (isset($_POST['searchCause']) && !empty($_POST['searchCause'])) {
 
@@ -79,7 +107,7 @@ if (isset($_POST["deleteEffectListEdit"]) && isset($_POST["delete_effectFromList
     $_SESSION['effectsClusterOfObjEdit'] = array_values($_SESSION['effectsClusterOfObjEdit']);
 }
 
-if (isset($_GET['id'])) {
+if (isset($_GET['id'])  && !ctype_space($_GET['id']) && !empty($_GET['id'])) {
 
     $_SESSION['clusterObjEdit'] = ClusterDB::getByIdMeta($_GET['id']);
 
@@ -96,28 +124,10 @@ if (isset($_GET['id'])) {
     }
 }
 
-if (isset($_POST['effect'])) {
 
-    $sessietje = array();
-
-    $tempVarPostEffectClusterClick = EffectDB::getByIdMeta($_POST['effect']);
-
-    if (is_array($sessietje)) {
-        if (in_array($tempVarPostEffectClusterClick['id'], $_SESSION["effectsClusterOfObjEdit"])) {
-
-            echo "<script type='text/javascript'>alert('Effect already in the list!');</script>";
-        } else {
-
-            array_push($_SESSION['effectsClusterOfObjEdit'], $tempVarPostEffectClusterClick['id']);
-        }
-    }
-}
-
-
-if (isset($_POST['cause'])) {
-
-    $_SESSION['causeClusterObjEdit'] = CauseDB::getByIdMeta($_POST['cause']);
-}
+/*if (!isset($_GET['id']) && ClusterDB::getByIdMeta($_GET['id']) == null && $variable != 1) {
+    header('location: relations.php');
+}*/
 
 
 
@@ -256,7 +266,7 @@ if (isset($_POST['cause'])) {
     <form method="post" action="edit_cluster.php">
 
         <?php if (isset($_SESSION["effectsClusterOfObjEdit"]) && isset($_SESSION["causeClusterObjEdit"])) { ?>
-            <div class="form-check container" style="overflow: auto; height: 80%; width: 50%; float: left;">
+            <div class="form-check container" style="overflow: auto; height: 70%; width: 50%; float: left;">
 
                 <input class="form-check-input" type="hidden" name="id" value="<?php echo $_SESSION['clusterObjEdit']['id'] ?>" id="<?php echo $_SESSION['clusterObjEdit']['id'] ?>">
 
@@ -321,15 +331,17 @@ if (isset($_POST['cause'])) {
 
                     <label><?php echo $m ?></label><br>
                     <input class="col-lg-4" value="<?php echo $_SESSION['clusterObjEdit'][$m]; ?>" name="<?php echo $m ?>"><br><br>
-
+                
                 <?php } ?>
-
+                </div>
+                <div class="form-check container" style="overflow: auto; padding-top:25px; width: 35%; float: left;margin-top:10px;">
                 <?php if (count($_SESSION["effectsClusterOfObjEdit"]) >= 2) {   ?>
                     <button type="submit" class="btn btn-success" style="background-color: #0b6623;" name="edit_The_Cluster" style="margin-top: 8px">Update Cluster</button><br />
                 <?php } ?>
+                </div>
 
             <?php } ?>
-        </div>
+        
     </form>
 
 

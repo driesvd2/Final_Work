@@ -166,7 +166,7 @@ if (isset($_POST['searchclusterCause']) && isset($_POST['causeOrEffectSelectedCl
 }
 
 ?>
-
+ 
 
 <html style="height: 100%;overflow:hidden">
 
@@ -232,7 +232,8 @@ if (isset($_POST['searchclusterCause']) && isset($_POST['causeOrEffectSelectedCl
     <br>
     <br>
     <?php $getMetaCluster = ClusterDB::getAllColumnsOfCluster(); ?>
-    <div class="container" style="overflow: auto; height: 80%; width: 50%; float: left">
+    <div class="container" style="width: 50%; float:left;">
+    <div class="container">
         <h1>Clusters <a href="insert_Cluster.php" class="greenIcon"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a></h1>
         <form action="relations.php" method="post">
             <div class="wrap">
@@ -254,7 +255,8 @@ if (isset($_POST['searchclusterCause']) && isset($_POST['causeOrEffectSelectedCl
                 <a href="manageClusterTable.php" title="Manage cluster metadata" class="btn btn-primary" style="background-color: #223A50;"><i class="fa fa-cog"></i></a>
             </div>
         </form>
-
+    </div>
+    <div class="container" style="height: 60%; float:right; overflow:auto;">
         <?php if (isset($resultSearchCausesOfCluster)) { ?>
 
 
@@ -459,12 +461,14 @@ if (isset($_POST['searchclusterCause']) && isset($_POST['causeOrEffectSelectedCl
         <?php } ?>
 
 
+        </div>
     </div>
 
     <!--   ------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 
     <?php $metaColumnsCauseEffect = CauseEffectDB::getAllColumnsOfCauseEffect(); ?>
-    <div class="container" style="width: 50%; float: left;overflow: auto; height: 80%;">
+    <div class="container" style="width: 50%; float:right;">
+    <div class="container">
         <h1>Cause - Effect <a href="insert_Cause_Effect.php" class="greenIcon"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a></h1>
         <form action="relations.php" method="post">
             <div class="wrap">
@@ -487,7 +491,8 @@ if (isset($_POST['searchclusterCause']) && isset($_POST['causeOrEffectSelectedCl
                 <a href="manageCause_EffectTable.php" title="Manage cause-effect metadata" class="btn btn-primary" style="background-color: #223A50;"><i class="fa fa-cog"></i></a>
             </div>
         </form>
-
+        </div>
+        <div class="container" style="height: 60%; float:right; overflow:auto;">
         <?php if (isset($resultSearchCausesOfCauseEffect)) { ?>
             <table class="table table-bordered table-hover">
                 <thead>
@@ -637,6 +642,7 @@ if (isset($_POST['searchclusterCause']) && isset($_POST['causeOrEffectSelectedCl
             </table>
 
         <?php } ?>
+        </div>
     </div>
     
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

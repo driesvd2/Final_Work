@@ -33,7 +33,7 @@ if (isset($_SESSION["insertCauseFromEditCluster"])) {
 
     unset($_SESSION["insertCauseFromEditCluster"]);
 }
-
+ 
 error_reporting(E_ERROR | E_PARSE);
 
 if (isset($_GET['logout'])) {
@@ -54,7 +54,7 @@ if (isset($_POST['search']) && isset($_POST['search_selectCauseColumn'])) {
     $searchq = $_POST['search'];
     $selColCause = $_POST['search_selectCauseColumn'];
     $searchq = preg_replace_callback("#[^0-9a-z]#i", "", $searchq);
-    $querySearchCause = CauseDB::getSearchCause($searchq, $selColCause);
+    $querySearchCause = EffectDB::getSearchEffectStatus0($searchq, $selColCause);
 
 }
 
@@ -139,7 +139,8 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
 
 
     <?php $metaColumnsCause = CauseDB::getAllColumnsOfCause(); ?>
-    <div class="container" style="width: 50%; float: left; height: 80%; overflow:auto">
+    <div class="container" style="width: 50%; float:left;">
+    <div class="container">
         <h1>Causes <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                 <a href="insert_Cause.php" class="greenIcon"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a>
             <?php } ?></h1>
@@ -169,10 +170,11 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
             <?php } ?>
             
             <?php errorHandlingDeleteCause() ?>
-            
+           
         </form>
+    </div> 
+    <div class="container" style="height: 60%; float:left; overflow:auto;">
         <?php if (isset($querySearchCause)) { ?>
-
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
@@ -245,13 +247,14 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
             </table>
         <?php } ?>
     </div>
-    
+    </div>
     
 
     <!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>
 
     <?php $metaColumnsEffect = EffectDB::getAllColumnsOfEffect(); ?>
-    <div class="container" style="width: 50%; float: left;overflow: auto; height: 80%;">
+    <div class="container" style="width: 50%; float:right;">
+    <div class="container">
         <h1>Effects <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                 <a href="insert_effect_admin.php" class="greenIcon"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a>
             <?php } ?></h1>
@@ -283,8 +286,9 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
             <?php errorHandlingDeleteEffect(); ?>
 
         </form>
+    </div>
+        <div class="container" style="height: 60%; float:right; overflow:auto;">
         <?php if (isset($querySearchEffect)) { ?>
-
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
@@ -357,7 +361,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
             </table>
         <?php } ?>
     </div>
-
+    </div>
 
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

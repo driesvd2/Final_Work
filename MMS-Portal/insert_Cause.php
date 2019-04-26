@@ -110,7 +110,7 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     ?>
 
 
-
+ 
 
     <div class="container" style="width: 50%; float: left">
         <h1>Insert Cause</h1>
@@ -125,8 +125,9 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
         </form>
     </div>
 
-    <div class="container" style="width: 50%; float: left;overflow: auto; height: 80%;">
-        <h1>Causes</h1>
+    
+    <h1>Causes</h1>
+    <div class="container" style="width: 50%; float: left; height: 60%;overflow:auto">
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>

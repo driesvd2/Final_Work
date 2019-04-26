@@ -17,7 +17,7 @@ class EffectDB
     }
 
     public static function getAllColumnsOfEffect() {
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT column_name FROM information_schema.columns WHERE table_schema = '1819FW_DRIESD_STEFANOSS' AND table_name = 'Effect'");
+        $resultaat = self::getVerbinding()->voerSqlQueryUit( "SELECT column_name FROM information_schema.columns WHERE table_schema = '1819FW_DRIESD_STEFANOSS' AND table_name = 'Effect'");
         $resultatenArray = array();
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
                 $result = $resultaat->fetch_array();
@@ -28,6 +28,16 @@ class EffectDB
       
     public static function getAllMetaColumnsOfEffect() {
         $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT column_name FROM information_schema.columns WHERE table_schema = '1819FW_DRIESD_STEFANOSS' AND table_name = 'Effect' AND column_name != 'id' AND column_name != 'name' AND column_name != 'status'");
+        $resultatenArray = array();
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+                $result = $resultaat->fetch_array();
+                $resultatenArray[$index] = $result["column_name"];
+            }
+        return $resultatenArray;
+    }
+
+    public static function getAllStandardColumnsOfEffect() {
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT column_name FROM information_schema.columns WHERE table_schema = '1819FW_DRIESD_STEFANOSS' AND table_name = 'Effect' and ordinal_position <= 2");
         $resultatenArray = array();
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
                 $result = $resultaat->fetch_array();
@@ -120,6 +130,28 @@ class EffectDB
         }
         return $resultatenArray;
     }
+
+    public static function getSearchEffectStatus0($searchq, $column) {
+        $resultatenArray = array();
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("select * from Effect where ".$column." LIKE '%$searchq%' AND status = 0 ORDER BY id ASC");
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+            $databaseRij = $resultaat->fetch_array();
+            $nieuw = self::converteerRijNaarEffect($databaseRij);
+            $resultatenArray[$index] = $nieuw;
+        }
+        return $resultatenArray;
+    }
+
+    public static function getSearchEffectStatus1($searchq, $column) {
+        $resultatenArray = array();
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("select * from Effect where ".$column." LIKE '%$searchq%' AND status = 1 ORDER BY id ASC");
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+            $databaseRij = $resultaat->fetch_array();
+            $nieuw = self::converteerRijNaarEffect($databaseRij);
+            $resultatenArray[$index] = $nieuw;
+        }
+        return $resultatenArray;
+    }
     
                            
     public static function getSearchEffectID($searchq) {
@@ -193,4 +225,3 @@ class EffectDB
     }
 
 }
-?>

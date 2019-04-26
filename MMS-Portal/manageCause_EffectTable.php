@@ -128,8 +128,8 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
 
     <div class="container" style="width: 50%; float: left; height: 80%; overflow:auto">
         <h1>Manage Cause - Effect table</h1>
-        <br />
         <h3>Add new column</h3>
+        <p>Make sure not to use spaces and special characters (like: é, #, ',etc.)</p>
         <form method="post" action="manageCause_EffectTable.php">
             <div class="form-group">
                 <input class="col-lg-4" type="text" name="AlterCauseEffectNewColumn"><br><br>

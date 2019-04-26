@@ -44,7 +44,7 @@ include 'Database/Forms/UpdateEffect/server.php';
 if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     header('location: login.php');
 }
-if ($_SESSION['type'] == 0 && isset($_SESSION['type']) && !isset($_GET['id']) || EffectDB::getByIdMeta($_GET['id']) == null) {
+if ($_SESSION['type'] == 0 && isset($_SESSION['type']) && !isset($_GET['id']) || empty($_GET['id']) || ctype_space($_GET['id']) || EffectDB::getByIdMeta($_GET['id']) == null) {
     header('location: index.php');
 }
 ?>

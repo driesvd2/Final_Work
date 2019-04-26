@@ -64,19 +64,19 @@ class CauseEffectDB
     }
  
     public static function getCauseEffects($array) {
-        $finalArray = array();
+        $query = "SELECT * FROM Cause_Effect WHERE ";
         foreach ($array as $a) {
-            $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect WHERE effect=".$a . " ORDER BY id ASC");
-            $resultatenArray = array();
+            $query .= "effect=".$a." OR ";
+        }
+        $query .= " 1=2 ORDER BY effect ASC";
+        $resultaat = self::getVerbinding()->voerSqlQueryUit($query);
+        $resultatenArray = array();
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
             $nieuw = self::converteerRijNaarCauseEffect($databaseRij);
             $resultatenArray[$index] = $nieuw;
         }
-        //array_push($finalArray, $resultatenArray);
-        $finalArray[$a] = $resultatenArray;
-        }
-        return $finalArray;
+        return $resultatenArray;
     }
 
     

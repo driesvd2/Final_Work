@@ -37,7 +37,7 @@ include_once './Database/DAO/ClusterDB.php';
 if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     header('location: login.php');
 }
-if (EffectDB::getById($_GET['id']) == null) {
+if (isset($_GET['id']) && EffectDB::getById($_GET['id']) == null) {
     header('location: relations.php');
 }
 if (isset($_POST['searchCause']) && !empty($_POST['searchCause'])) {
@@ -259,7 +259,7 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
                     </tbody>
                 </table>
 
-
+ 
                 <h2>Effects (Select minimum 2 effects)</h2>
                 <p>No effects selected</p>
             </div>
@@ -303,9 +303,8 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
             </div>
 
         <?php } else if (isset($_SESSION["effectOnChangeName"]) && isset($_SESSION["causeOnChangeName"])) { ?>
-            <div class="form-check container" style="overflow: auto; height: 70%; width: 50%; float: left;">
+        <div class="form-check container" style="overflow: auto; height: 70%; width: 50%; float: left;">
                 <h2>Causes</h2>
-
                 <?php $sessie = CauseDB::getById($_SESSION["causeOnChangeName"]); ?>
                 <table class="table table-bordered table-hover">
                     <thead>
@@ -361,12 +360,10 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
                         <?php } ?>
                     </tbody>
                 </table>
-
-
             </div>
 
 
-            <div class="form-check container" style="overflow: auto; height: 65%; width: 35%; float: left;margin-top:10px;">
+            <div class="form-check container" style="overflow: auto; height: 15%; width: 35%; float: left; margin-top:10px;">
                 <?php if (count($_SESSION["effectOnChangeName"]) >= 2) {   ?>
                     <button type="submit" class="btn btn-success" style="background-color: #0b6623;" name="insert_ClusterSession" style="margin-top: 8px">Insert</button><br />
                     <button type="submit" class="btn btn-danger" style="background-color: #DA291C;" name="unsetSessionsCluster" style="margin-top: 8px">Clear all</button>
@@ -376,8 +373,9 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
         <?php } else { ?>
 
 
-            <div class="container" style="overflow: auto; height: 80%; width: 50%; float: left;">
-                <h1>Clusters</h1>
+            
+        <h1>Clusters</h1>
+        <div class="container" style="overflow: auto; height: 60%; width: 50%; float: right;">
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>

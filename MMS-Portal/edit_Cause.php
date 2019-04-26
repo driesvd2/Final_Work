@@ -41,7 +41,7 @@ include 'Database/Forms/UpdateCause/server.php';
 if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     header('location: login.php');
 }
-if ($_SESSION['type'] == 0 && isset($_SESSION['type']) && !isset($_GET['id']) || CauseDB::getByIdMeta($_GET['id']) == null) {
+if ($_SESSION['type'] == 0 && isset($_SESSION['type']) && !isset($_GET['id']) || empty($_GET['id']) || ctype_space($_GET['id']) || CauseDB::getByIdMeta($_GET['id']) == null) {
     header('location: index.php');
 }
 ?>

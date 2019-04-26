@@ -6,11 +6,11 @@ if (isset($_SESSION["deIdVanStatusPageCauseEffect"])) {
     unset($_SESSION["deIdVanStatusPageCauseEffect"]);
 }
 
-if (isset($_SESSION['causeOnChangeName']) || isset($_SESSION['effectOnChangeName'])) {
+// if (isset($_SESSION['causeOnChangeName']) || isset($_SESSION['effectOnChangeName'])) {
 
-    unset($_SESSION['causeOnChangeName']);
-    unset($_SESSION['effectOnChangeName']);
-}
+//     unset($_SESSION['causeOnChangeName']);
+//     unset($_SESSION['effectOnChangeName']);
+// }
 
 if (isset($_SESSION["insertCauseFromInsertCluster"])) {
 
@@ -53,10 +53,7 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
 
     $_SESSION['effectOnChangeNameWeb'] = array_values($_SESSION['effectOnChangeNameWeb']);
 }
-
 ?>
-
-<?php $counter = 1; ?>
 
 <html style="height: 100%;overflow:auto">
 
@@ -154,7 +151,7 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
         </form>
     </div>
 
-    <div class="container" style="width: 49%; float: left; height: 80%; overflow: auto;">
+    
         <form method="post" action="webservicePage.php">
 
             <?php
@@ -185,15 +182,14 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
             } ?>
 
             <?php if (!isset($_SESSION["effectOnChangeNameWeb"]) && !isset($_SESSION["catchedCause"])) { ?>
-                <div class="form-check container" style="overflow: auto; float: left">
+                <div class="form-check container" style="overflow: auto; height: 70%; width: 50%; float: left;">
                     <h1>Selected effects</h1>
                     <p>No effects selected</p>
                 </div>
             <?php } else if (isset($_SESSION["effectOnChangeNameWeb"]) && !isset($_SESSION["catchedCause"])) { ?>
 
-                <div class="form-check container" style="overflow: auto; float: left">
-
-                    <h1>Selected effects</h1>
+                <h1>Selected effects</h1>
+                <div class="form-check container" style="overflow: auto; height: 68%; width: 50%; float: left;">
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
@@ -225,12 +221,14 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
                         </tbody>
                     </table>
 
-
+                    </div>
+                    <div class="form-check container" style="overflow: auto; height: 12%; width: 35%; float: left;margin-top:10px;">    
                     <?php if (count($_SESSION["effectOnChangeNameWeb"]) >= 2) {   ?>
                         <button type="submit" class="btn btn-success" style="background-color: #0b6623;" name="sendForWebservice" style="margin-top: 8px">Insert</button><br />
                         <button type="submit" class="btn btn-danger" style="background-color: #DA291C;" name="unsetSessionsWebservice" style="margin-top: 8px">Clear all</button>
                     <?php } ?>
-                </div>
+                    </div>
+                
 
 
             <?php } else if (isset($_SESSION["catchedCause"]) || isset($_SESSION["catchedCauseEffects"])) { ?>
@@ -241,7 +239,7 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
                         <button type="submit" class="btn btn-primary" style="background-color: #223A50;" name="new_search_webservice">New search</button>
                     </div>
                 <?php } else if ($_SESSION["catchedCause"] != null && $_SESSION["catchedCauseEffects"] == null) { ?>
-                    <div class="form-check container" style="float: left">
+                    <div class="form-check container" style="overflow: auto; height: 75%; width: 50%; float: left;">
                         <h1>Cluster</h1>
                         <table class="table table-bordered table-hover">
                             <thead>
@@ -265,10 +263,10 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
                                 <?php } ?>
                             </tbody>
                         </table>
-                        <button type="submit" class="btn btn-primary" style="background-color: #223A50;" name="new_search_webservice">New search</button>
                     </div>
+                <button type="submit" class="btn btn-primary" style="background-color: #223A50; margin-top:15px; margin-left:20px;" name="new_search_webservice">New search</button>
                 <?php } else if ($_SESSION["catchedCause"] == null && $_SESSION["catchedCauseEffects"] != null) { ?>
-                    <div class="form-check container" style="float: left">
+                    <div class="form-check container" style="overflow: auto; height: 75%; width: 50%; float: left;">
                         <h1>Cause-Effect</h1>
                         <table class="table table-bordered table-hover">
                             <thead>
@@ -278,8 +276,7 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($_SESSION["catchedCauseEffects"] as $deGecatcheteCauseArray) {
-                                    foreach ($deGecatcheteCauseArray as $deGecatcheteCause) {
+                                <?php foreach ($_SESSION["catchedCauseEffects"] as $deGecatcheteCause) {
                                         ?>
                                         <tr>
                                             <td>
@@ -291,14 +288,16 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
                                                 echo $cause[0]->name; ?>
                                             </td>
                                         </tr>
-                                    <?php }
-                            } ?>
+                                    <?php } ?>
                             </tbody>
                         </table>
-                        <button type="submit" class="btn btn-primary" style="background-color: #223A50;" name="new_search_webservice">New search</button>
+                        <?php if($_SESSION['more'] < sizeof($_SESSION["effectOnChangeNameWeb"]) && sizeof($_SESSION["effectOnChangeNameWeb"]) > 20){?>
+                        <button type="submit" class="btn btn-primary" style="background-color: #223A50;" name="more">Search for More</button>
+                        <?php } ?>
                     </div>
+                <button type="submit" class="btn btn-primary" style="background-color: #223A50; margin-top:15px; margin-left:20px;" name="new_search_webservice">New search</button>
                 <?php } else if ($_SESSION["catchedCause"] != null && $_SESSION["catchedCauseEffects"] != null) { ?>
-                    <div class="form-check container" style="float: left">
+                <div class="form-check container" style="overflow: auto; height: 75%; width: 50%; float: left;">
                         <h1>Cluster</h1>
                         <table class="table table-bordered table-hover">
                             <thead>
@@ -332,8 +331,7 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($_SESSION["catchedCauseEffects"] as $deGecatcheteCauseArray) {
-                                    foreach ($deGecatcheteCauseArray as $deGecatcheteCause) {
+                                <?php foreach ($_SESSION["catchedCauseEffects"] as $deGecatcheteCause) {
                                         ?>
                                         <tr>
                                             <td>
@@ -345,17 +343,18 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
                                                 echo $cause[0]->name; ?>
                                             </td>
                                         </tr>
-                                    <?php }
-                            } ?>
+                                    <?php }?>
                             </tbody>
                         </table>
-
-                        <button type="submit" class="btn btn-primary" style="background-color: #223A50;" name="new_search_webservice">New search</button>
+                        <?php if(isset($_SERVER['more']) && $_SESSION['more'] < sizeof($_SESSION["effectOnChangeNameWeb"]) && sizeof($_SESSION["effectOnChangeNameWeb"]) > 20){?>
+                        <button type="submit" class="btn btn-primary" style="background-color: #223A50;" name="more">Search for More</button>
+                        <?php } ?>
                     </div>
+                <button type="submit" class="btn btn-primary" style="background-color: #223A50; margin-top:15px; margin-left:20px;" name="new_search_webservice">New search</button>
                 <?php } ?>
             <?php  } ?>
         </form>
-    </div>
+    
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
