@@ -10,7 +10,7 @@ y = dataset.iloc[:, 5].values
 
 # Splitting the dataset into the Training set and Test set
 from sklearn.cross_validation import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 35)
 
 # Feature Scaling
 from sklearn.preprocessing import StandardScaler
@@ -23,7 +23,7 @@ from sklearn.neighbors import KNeighborsClassifier
 Acounter = 0
 Apercent = 0
 Aperfect = 0
-for x in range(1, 500):
+for x in range(1, 1500):
     classifier = KNeighborsClassifier(n_neighbors = x, weights='distance' ,algorithm='auto',metric = 'minkowski', p = 2) 
     classifier.fit(X_train, y_train)
 
