@@ -4,11 +4,11 @@ include_once './Database/DAO/CauseDB.php';
 
 
 //Insert Cause in cause table
-if (isset($_POST['insert_cause']) && isset($_POST['Cause'])) {
+if (isset($_POST['insert_cause']) && isset($_POST['Cause']) && isset($_POST['insertTag'])) {
     $cause = $_POST['Cause'];
     if (isset($cause) && !empty($cause) && !is_null($cause))
     {
-        CauseDB::insert($cause);
+        CauseDB::insert($cause,$_POST['insertTag']);
     }else{
         header('location: insert_Cause.php');
     }

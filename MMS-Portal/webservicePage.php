@@ -1,6 +1,7 @@
 <?php
 ini_set('session.cache_limiter', 'public');
 session_cache_limiter(false);
+error_reporting(E_ERROR | E_PARSE);
 if (isset($_SESSION["deIdVanStatusPageCauseEffect"])) {
 
     unset($_SESSION["deIdVanStatusPageCauseEffect"]);

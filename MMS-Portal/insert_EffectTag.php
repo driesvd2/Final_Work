@@ -1,37 +1,32 @@
 <?php
+
 ini_set('session.cache_limiter', 'public');
 session_cache_limiter(false);
-session_start();
+
 error_reporting(E_ERROR | E_PARSE);
-// Ik heb dit in comments gezet want als de session hier geset is en de user op de + van insert cause klikt, een cause toevoegt en terugkomt op insert_cause_effect dan is de geselecteerde effect van status page weg
-//if(isset($_SESSION["deIdVanStatusPageCauseEffect"])){
-//    
-//    unset($_SESSION["deIdVanStatusPageCauseEffect"]);
-//    
-//}
 
-
-//Hetzelfde verhaal als insert cause effect
-//if(isset($_SESSION['causeOnChangeName']) || isset($_SESSION['effectOnChangeName'])){
-//    
-//    unset($_SESSION['causeOnChangeName']);
-//    unset($_SESSION['effectOnChangeName']);  
-//    
-//}
-
-include 'Database/Forms/InsertCause/server.php';
 include_once './Database/DAO/CauseEffectDB.php';
-include_once './Database/DAO/CauseTagDB.php';
+include_once './Database/DAO/EffectTagDB.php';
 include_once './Database/DAO/CauseDB.php';
 include_once './Database/DAO/EffectDB.php';
+
+session_start();
 
 if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     header('location: login.php');
 }
+
+if(isset($_POST['insert_EffectTag'])){
+    if (empty($_POST['tag']) || $_POST['tag'] == null || is_null($_POST['tag'])) {
+        EffectTagDB::insertNull($_POST['name']);
+    }else{
+        EffectTagDB::insert($_POST['name'], $_POST['tag']);
+    }
+}
+
+
 ?>
-
-
-
+ 
 <html style="height: 100%;overflow:hidden">
 
 <head>
@@ -84,6 +79,7 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
                         <?php } else { ?>
                             <a class="nav-link" href="login.php">Login</a>
                         <?php } ?>
+
                     </li>
                 </ul>
             </div>
@@ -93,106 +89,66 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     <br>
     <br>
     <br>
-
-    <?php
-
-    if (isset($_GET['clickedOn'])) {
-        $_SESSION["insertCauseFromInsertCluster"] = $_GET['clickedOn'];
-    }
-
-    if (isset($_GET['clickedOnCauseEffect'])) {
-        $_SESSION["insertCauseFromInsertCauseEffect"] = $_GET['clickedOnCauseEffect'];
-    }
-
-    if (isset($_GET['clickedOnCauseEffectEdit'])) {
-        $_SESSION["insertCauseFromEditCauseEffect"] = $_GET['clickedOnCauseEffectEdit'];
-    }
-
-    if (isset($_GET['clickedOnEditCluster'])) {
-        $_SESSION["insertCauseFromEditCluster"] = $_GET['clickedOnEditCluster'];
-    }
-
-    ?>
-
+    
     <?php 
-        if (isset($_POST['tag'])) {
-            if (CauseTagDB::ifLast($_POST['tag'])) {
-                unset($tags);
-                $causes = CauseDB::getAllWhereTag($_POST['tag']);
-                $tag = CauseTagDB::getById($_POST['tag']);
-            }else{
-                $tag = CauseTagDB::getById($_POST['tag']);
-                $tags = CauseTagDB::getAllWhereParent($tag[0]->id);
-                $tag = null;
-            }
-        }else{
-            $tags = CauseTagDB::getAllFirst();
-        }
+        $firstTags = EffectTagDB::getAllFirst();
+        $secondTags = EffectTagDB::getAllSecond();
+        $thirdTags = EffectTagDB::getAllThird();
     ?>
-
+<form method="post" action="insert_EffectTag.php">
     <div class="container" style="width: 50%; float: left;">
-        <h1>Insert Cause</h1>
-        <p>Check if the Cause is not already listed on the right.</p>
-        <form method="post" action="insert_Cause.php">
+        <h1>Insert Effect Category</h1>
+        <p>Check if the Category is not already listed on the right.</p>
+        
             <div class="form-group">
-                <label for="Cause">Cause: </label>
-                <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
-                <input type="hidden" name="insertTag" value="<?php echo $tag[0]->id ?>">
-                <input type="text" class="form-control" id="Cause" name="Cause" placeholder="Enter Cause..." required>
+                <label for="EffectTag">Category: </label>
+                <input type="text" class="form-control" id="EffectTag" name="name" placeholder="Enter Category..." required>
             </div>
-            <button type="submit" class="btn btn-success" style="background-color: #0b6623;" name="insert_cause">Insert</button>
-        </form>
-        <h1>Categories <a href="insert_CauseTag.php" class="greenIcon"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a></h1>
-        <div class="container" style="width: 100%; height:35%; float: left;overflow:auto">
-        <form method="post" action="insert_Cause.php">
-            <?php if(isset($tags)){ ?>
-                <div class="form-check">
-            <?php foreach($tags as $t){ ?>
-                <input class="form-check-input" onchange="this.form.submit()" type="radio" name="tag" value="<?php echo $t->id ?>" id="<?php echo $t->id ?>">
-                <label class="form-check-label" for="<?php echo $t->id ?>">
-                    <?php echo $t->name ?>
-                </label><br/>
-                <?php }}else{?>
-                <p><?php echo $tag[0]->name ?></p>
-                <?php }?>
-                </div>
-        </form>
-        </div>
+            <button type="submit" class="btn btn-success" style="background-color: #0b6623;" name="insert_EffectTag">Insert</button>
+        
     </div>
-
     <div class="container" style="width: 50%;float: left;">
         <div class="container">
-        <?php 
-        if(!isset($causes)){ 
-            echo '<h1>All Causes</h1>';
-            $causes = CauseDB::getAll();
-        }else{
-            echo '<h1>Causes in '.$tag[0]->name.'</h1>';
-        } ?>
+        <h1>All Categories<h1>
+        <h6>Choose a parent category for your category</h6>
         </div>
         <div class="container" style="float: left; height: 60%;overflow:auto">
             <table class="table table-bordered table-hover" >
             <thead>
                 <tr>
-                    <th>Id</th>
-                    <th>Cause</th>
+                    <th></th>
+                    <th>Category</th>
+                    <th>Parent</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach($causes as $c){  ?>
+                <?php foreach($firstTags as $t){  ?>
                     <tr>
-                        <td><?php echo $c->id ?></td>
-                        <td><?php echo $c->name ?></td>
+                        <td><input type="radio" name="tag" value="<?php echo $t->id ?>"></td>
+                        <td><?php echo $t->name ?></td>
+                        <td><?php echo "None" ?></td>
                     </tr>
-                <?php } ?>
+                    <?php foreach($secondTags as $s){ 
+                        if($s->parent == $t->id){?>
+                    <tr>
+                        <td><input type="radio" name="tag" value="<?php echo $s->id ?>"></td>
+                        <td><?php echo $s->name ?></td>
+                        <td><?php echo $t->name ?></td>
+                    </tr>
+                    <?php foreach($thirdTags as $th){ 
+                        if($th->parent == $s->id){?>
+                    <tr>
+                        <td><input type="radio" disabled></td>
+                        <td><?php echo $th->name ?></td>
+                        <td><?php echo $s->name ?></td>
+                    </tr>
+                <?php }}}}} ?>
                 
             </tbody>
         </table> 
         </div>               
      </div>
-
-
-
+     </form>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

@@ -6,15 +6,16 @@
  * Time: 18:42
  */
 
-class Cause {
+class Cause
+{
     public $id;
     public $name;
+    public $tag;
 
-    public function __construct($id, $naam) {
+    public function __construct($id, $naam, $tag)
+    {
         $this->id = $id;
         $this->name = $naam;
+        $this->tag = $tag;
     }
-
 }
-
-?>

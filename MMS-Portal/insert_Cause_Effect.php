@@ -2,7 +2,7 @@
 ini_set('session.cache_limiter', 'public');
 session_cache_limiter(false);
 session_start();
-
+error_reporting(E_ERROR | E_PARSE);
 include './Database/Forms/InsertCauseEffect/server.php';
 include_once './Database/DAO/CauseEffectDB.php';
 include_once './Database/DAO/CauseDB.php';

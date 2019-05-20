@@ -24,7 +24,7 @@ if(mysqli_num_rows($resultEffect) > 0){
 $outputEffect .= '<div class="form-check">';
     
     while($rowEffect = mysqli_fetch_array($resultEffect)){
-        $outputEffect .= '<input class="form-check-input"  onchange="this.form.submit()" type="checkbox" name="selecEffect" value="'.$rowEffect["id"].'" id="'.$rowEffect["id"].'"></td>
+        $outputEffect .= '<input class="form-check-input" onchange="this.form.submit()" type="checkbox" name="selecEffect" value="'.$rowEffect["id"].'" id="'.$rowEffect["id"].'"></td>
                  <label class="form-check-label" for="'.$rowEffect["id"].'">
                            '.$rowEffect["id"].'. '.$rowEffect["name"].'
                         </label><br/>';

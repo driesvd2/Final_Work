@@ -3,7 +3,7 @@
 ini_set('session.cache_limiter', 'public');
 session_cache_limiter(false);
 session_start();
-
+error_reporting(E_ERROR | E_PARSE);
 if (isset($_SESSION["deIdVanStatusPageCauseEffect"])) {
 
     unset($_SESSION["deIdVanStatusPageCauseEffect"]);
@@ -32,11 +32,16 @@ if (isset($_SESSION["insertCauseFromEditCluster"])) {
 
 include './Database/Forms/InsertEffectAdmin/server.php';
 include_once './Database/DAO/CauseEffectDB.php';
+include_once './Database/DAO/EffectTagDB.php';
 include_once './Database/DAO/CauseDB.php';
 include_once './Database/DAO/EffectDB.php';
 
 if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     header('location: login.php');
+}
+
+if(isset($_GET['id'])){
+    $effect = EffectDB::getById($_GET['id']);
 }
 
 ?>
@@ -51,8 +56,12 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
         Final Work - MMS Portal
     </title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./CSS/custom.css">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./CSS/custom.css">
 </head>
 
 <body style="height: 100%;overflow:auto">
@@ -99,38 +108,85 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     <br>
     <br>
     <br>
+    
+    <?php 
+        if (isset($_POST['tag'])) {
+            if (EffectTagDB::ifLast($_POST['tag'])) {
+                unset($tags);
+                $effects = EffectDB::getAllWhereTag($_POST['tag']);
+                $tag = EffectTagDB::getById($_POST['tag']);
+            }else{
+                $tag = EffectTagDB::getById($_POST['tag']);
+                $tags = EffectTagDB::getAllWhereParent($tag[0]->id);
+                $tag = null;
+            }
+        }else{
+            $tags = EffectTagDB::getAllFirst();
+        }
+    ?>
 
-    <div class="container" style="width: 50%; float: left">
+    <div class="container" style="width: 50%; float: left;">
         <h1>Insert Effect</h1>
         <p>Check if the Effect is not already listed on the right.</p>
         <form method="post" action="insert_effect_admin.php">
             <div class="form-group">
-                <label for="Effect">Effect: </label>
-                <input type="text" class="form-control" id="Effect" name="name" placeholder="Enter Effect..." required>
+                <label for="Cause">Effect: </label>
+                <input type="hidden" name="insertTag" value="<?php echo $tag[0]->id ?>">
+                <input type="hidden" name="id" <?php if (isset($effect)) {echo 'value="'.$effect[0]->id.'"';}else if (isset($_POST['id'])) {echo 'value="'.$_POST['id'].'"';} ?>>
+                <input type="text" class="form-control" id="Effect" name="name" <?php if (isset($effect)) {echo 'value="'.$effect[0]->name.'"';}else if (isset($_POST['getEffect'])) {echo 'value="'.$_POST['getEffect'].'"';} ?> placeholder="Enter Effect..." required>
             </div>
             <button type="submit" class="btn btn-success" style="background-color: #0b6623;" name="insert_effect_admin">Insert</button>
         </form>
+        <h1>Categories <a href="insert_EffectTag.php" class="greenIcon"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a></h1>
+        <div class="container" style="width: 100%; height:35%; float: left;overflow:auto">
+        <form method="post" action="insert_effect_admin.php">
+        <input type="hidden" name="getEffect" <?php if (isset($effect)) {echo 'value="'.$effect[0]->name.'"';}else if (isset($_POST['getEffect'])) {echo 'value="'.$_POST['getEffect'].'"';} ?> >
+        <input type="hidden" name="id" <?php if (isset($effect)) {echo 'value="'.$effect[0]->id.'"';}else if (isset($_POST['id'])) {echo 'value="'.$_POST['id'].'"';} ?>>   
+            <?php if(isset($tags)){ ?>
+                <div class="form-check">
+            <?php foreach($tags as $t){ ?>
+                <input class="form-check-input" onchange="this.form.submit()" type="radio" name="tag" value="<?php echo $t->id ?>" id="<?php echo $t->id ?>">
+                <label class="form-check-label" for="<?php echo $t->id ?>">
+                    <?php echo $t->name ?>
+                </label><br/>
+                <?php }}else{?>
+                <p><?php echo $tag[0]->name ?></p>
+                <?php }?>
+                </div>
+        </form>
+        </div>
     </div>
-    <h1>Effects</h1>
-    <div class="container" style="width: 50%; float: right; height: 60%;overflow:auto">
-        <table class="table table-bordered table-hover">
+
+    <div class="container" style="width: 50%;float: left;">
+        <div class="container">
+        <?php 
+        if(!isset($effects)){ 
+            echo '<h1>All Effects</h1>';
+            $effects = EffectDB::getAllWhereStatusIsOneAndTwo();
+        }else{
+            echo '<h1>Effects in '.$tag[0]->name.'</h1>';
+        } ?>
+        </div>
+        <div class="container" style="float: left; height: 60%;overflow:auto">
+            <table class="table table-bordered table-hover" >
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th>Id</th>
                     <th>Effect</th>
                 </tr>
             </thead>
             <tbody>
-                <?php $effects = EffectDB::getAll();
-                for ($e = 0; $e < count($effects); $e++) { ?>
+                <?php foreach($effects as $c){  ?>
                     <tr>
-                        <td><?php echo $effects[$e]->id ?></td>
-                        <td><?php echo $effects[$e]->name ?></td>
+                        <td><?php echo $c->id ?></td>
+                        <td><?php echo $c->name ?></td>
                     </tr>
                 <?php } ?>
+                
             </tbody>
-        </table>
-    </div>
+        </table> 
+        </div>               
+     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

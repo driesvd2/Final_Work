@@ -36,6 +36,10 @@ if (isset($_SESSION["insertCauseFromEditCluster"])) {
  
 error_reporting(E_ERROR | E_PARSE);
 
+if ($_SESSION['type'] != 0 && $_SESSION['type'] != 1 || !isset($_SESSION['type'])) {
+    header('location: login.php');
+}
+
 if (isset($_GET['logout'])) {
     session_destroy();
     unset($_SESSION['login']);
@@ -44,32 +48,30 @@ if (isset($_GET['logout'])) {
 }
 
 include './Database/Forms/DeleteCause/server.php';
+include_once './Database/DAO/CauseTagDB.php';
+include_once './Database/DAO/EffectTagDB.php';
 include_once './Database/DAO/CauseEffectDB.php';
 include_once './Database/DAO/CauseDB.php';
 include_once './Database/DAO/EffectDB.php';
 include_once './Database/DAO/ClusterDB.php';
 
 if (isset($_POST['search']) && isset($_POST['search_selectCauseColumn'])) {
-
     $searchq = $_POST['search'];
     $selColCause = $_POST['search_selectCauseColumn'];
     $searchq = preg_replace_callback("#[^0-9a-z]#i", "", $searchq);
-    $querySearchCause = EffectDB::getSearchEffectStatus0($searchq, $selColCause);
+    $querySearchCause = CauseDB::getSearchCause($searchq, $selColCause);
 
 }
 
 if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn'])) {
-
     $searchquery = $_POST['searchEffect'];
     $selColEffect = $_POST['search_selectEffectColumn'];
     $searchquery = preg_replace_callback("#[^0-9a-z]#i", "", $searchquery);
     $querySearchEffect = EffectDB::getSearchEffect($searchquery, $selColEffect);
-        
 }
 ?>
 
 <html style="height: 100%;overflow:hidden">
-
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Final Work">
@@ -180,6 +182,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                     <tr>
                         <th>ID</th>
                         <th>Cause</th>
+                        <th>Tag</th>
                         <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                             <th>Delete</th>
                             <th>Edit</th>
@@ -191,6 +194,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                         <tr>
                             <td><?php echo $querySearchCause[$q]->id ?></td>
                             <td><?php echo $querySearchCause[$q]->name ?></td>
+                            <td><?php $causeTag = CauseTagDB::getById($causes[$c]->tag); echo $causeTag[0]->name;?></td>
                             <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                                 <td>
                                     <form method="post" action="index.php">
@@ -216,6 +220,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                     <tr>
                         <th>ID</th>
                         <th>Cause</th>
+                        <th>Tag</th>
                         <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                             <th>Delete</th>
                             <th>Edit</th>
@@ -228,6 +233,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                         <tr>
                             <td><?php echo $causes[$c]->id ?></td>
                             <td><?php echo $causes[$c]->name ?></td>
+                            <td><?php $causeTag = CauseTagDB::getById($causes[$c]->tag); echo $causeTag[0]->name;?></td>
                             <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                                 <td>
                                     <form method="post" action="index.php">
@@ -287,13 +293,14 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
 
         </form>
     </div>
-        <div class="container" style="height: 60%; float:right; overflow:auto;">
+    <div class="container" style="height: 60%; float:right; overflow:auto;">
         <?php if (isset($querySearchEffect)) { ?>
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Effect</th>
+                        <th>Tag</th>
                         <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                             <th>Delete</th>
                             <th>Edit</th>
@@ -305,6 +312,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                         <tr>
                             <td><?php echo $querySearchEffect[$q]->id ?></td>
                             <td><?php echo $querySearchEffect[$q]->name ?></td>
+                            <td><?php $effectTag = EffectTagDB::getById($effects[$q]->tag); echo $effectTag[0]->name;?></td>
                             <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                                 <td>
                                     <form method="post" action="index.php">
@@ -330,6 +338,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                     <tr>
                         <th>ID</th>
                         <th>Effect</th>
+                        <th>Tag</th>
                         <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                             <th>Delete</th>
                             <th>Edit</th>
@@ -342,6 +351,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                         <tr>
                             <td><?php echo $effects[$e]->id ?></td>
                             <td><?php echo $effects[$e]->name ?></td>
+                            <td><?php $effectTag = EffectTagDB::getById($effects[$e]->tag); echo $effectTag[0]->name;?></td>
                             <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                                 <td>
                                     <form method="post" action="index.php">

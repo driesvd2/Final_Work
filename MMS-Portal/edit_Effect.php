@@ -2,7 +2,7 @@
 
 ini_set('session.cache_limiter', 'public');
 session_cache_limiter(false);
-
+error_reporting(E_ERROR | E_PARSE);
 session_start();
 
 if (isset($_SESSION["deIdVanStatusPageCauseEffect"])) {
@@ -40,6 +40,8 @@ if (isset($_SESSION["insertCauseFromEditCluster"])) {
 
 
 include_once './Database/DAO/EffectDB.php';
+include_once './Database/DAO/EffectTagDB.php';
+
 include 'Database/Forms/UpdateEffect/server.php';
 if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     header('location: login.php');
@@ -115,6 +117,9 @@ if ($_SESSION['type'] == 0 && isset($_SESSION['type']) && !isset($_GET['id']) ||
         <h1>Update Effect</h1>
         <?php $effectMetaColumns = EffectDB::getAllMetaColumnsOfEffect(); ?>
         <?php $effectMetaColumnsGetByid = EffectDB::getByIdMeta($_GET['id']); ?>
+        <?php $selectedEffectPropId = EffectDB::getById($_GET['id']); ?>
+        <?php $selectedEffectPropName = EffectTagDB::getById($selectedEffectPropId[0]->tag); ?>
+        <?php $getAllEffectTags = EffectTagDB::getAll(); ?>
         <div>
             <form method="post" action="edit_Effect.php">
                 <input type="hidden" value="<?php echo $effectMetaColumnsGetByid["id"]; ?>" name="id" />
@@ -128,6 +133,16 @@ if ($_SESSION['type'] == 0 && isset($_SESSION['type']) && !isset($_GET['id']) ||
                     <input class="col-lg-4" value="<?php echo $effectMetaColumnsGetByid[$m]; ?>" name="<?php echo $m ?>"><br><br>
 
                 <?php } ?>
+
+                <select name="updateEffectTag">                    
+                    <?php foreach ($getAllEffectTags as $g) {
+                        if (EffectTagDB::ifLast($g->id)) { ?>
+                        <option value="<?php echo $g->id; ?>" <?php if ($selectedEffectPropId[0]->tag == $g->id) {echo 'selected';} ?>><?php echo $g->name; ?></option>
+                    <?php }} ?>
+                    
+                </select>
+                
+                
 
                 <button type="submit" class="btn btn-success" style="background-color: #0b6623;" name="update_effect">Submit</button>
             </form>

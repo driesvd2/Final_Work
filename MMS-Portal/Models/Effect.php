@@ -11,12 +11,14 @@ class Effect
     public $id;
     public $name;
     public $status;
-    
-    
-    public function __construct($id, $naam, $status) {
+    public $tag;
+
+
+    public function __construct($id, $naam, $status, $tag)
+    {
         $this->id = $id;
         $this->name = $naam;
         $this->status = $status;
-        
+        $this->tag = $tag;
     }
 }

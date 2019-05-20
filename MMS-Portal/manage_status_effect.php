@@ -163,7 +163,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                             </td>
                             <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                                 <td>
-                                    <button type="submit" class="btn btn-primary" style="background-color: #223A50;" name="update_effect_zero">Approve</button>
+                                    <a href="insert_effect_admin.php?id=<?php echo $effects[$e]->id; ?>" class="btn btn-primary" style="background-color: #223A50;">Approve</a>
                                 </td>
                                 <td>
                                     <button type="submit" class="btn btn-primary" style="background-color: #223A50;" name="update_effect_one">Deny</button>
@@ -183,8 +183,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                             </td>
                             <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                                 <td>
-                                    <button type="submit" class="btn btn-primary" style="background-color: #223A50;" name="update_effect_zero">Approve</button>
-                                </td>
+                                    <a href="insert_effect_admin.php?id=<?php echo $effects[$e]->id; ?>" class="btn btn-primary" style="background-color: #223A50;">Approve</a>
                                 <td>
                                     <button type="submit" class="btn btn-primary" style="background-color: #223A50;" name="update_effect_one">Deny</button>
                                 </td>

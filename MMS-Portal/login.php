@@ -2,7 +2,7 @@
 ini_set('session.cache_limiter','public');
 session_cache_limiter(false);
 session_start();
-
+error_reporting(E_ERROR | E_PARSE);
 if(isset($_SESSION["deIdVanStatusPageCauseEffect"])){
     
     unset($_SESSION["deIdVanStatusPageCauseEffect"]);
@@ -65,7 +65,9 @@ include 'Database/Forms/Login - Registreer/server.php';
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
+                    <?php if(isset($_SESSION['login']) && $_SESSION['type'] == 0 || $_SESSION['type'] == 1){ ?>
                         <a class="nav-link" href="index.php">Home</a>
+                        <?php } ?>
                     </li>
                     <li class="nav-item">
                         <?php if(isset($_SESSION['login']) && $_SESSION['type'] == 0){ ?>

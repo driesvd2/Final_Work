@@ -2,7 +2,7 @@
 
 ini_set('session.cache_limiter', 'public');
 session_cache_limiter(false);
-
+error_reporting(E_ERROR | E_PARSE);
 session_start();
 
 if (isset($_SESSION["deIdVanStatusPageCauseEffect"])) {
