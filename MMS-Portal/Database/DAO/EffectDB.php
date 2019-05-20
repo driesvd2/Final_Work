@@ -28,10 +28,22 @@ class EffectDB
         }
         return $resultatenArray;
     }
+    
+    public static function getAllWhereTagWithStatus2($tag)
+    {
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect WHERE tag='$tag' AND status=1 ORDER BY id ASC");
+        $resultatenArray = array();
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+            $databaseRij = $resultaat->fetch_array();
+            $nieuw = self::converteerRijNaarEffect($databaseRij);
+            $resultatenArray[$index] = $nieuw;
+        }
+        return $resultatenArray;
+    }
 
     public static function getAllColumnsOfEffect()
     {
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT column_name FROM information_schema.columns WHERE table_schema = '1819FW_DRIESD_STEFANOSS' AND table_name = 'Effect' AND column_name != 'tag'");
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT column_name FROM information_schema.columns WHERE table_schema = '1819FW_DRIESD_STEFANOSS' AND table_name = 'Effect'");
         $resultatenArray = array();
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $result = $resultaat->fetch_array();
@@ -53,7 +65,7 @@ class EffectDB
 
     public static function getAllStandardColumnsOfEffect()
     {
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT column_name FROM information_schema.columns WHERE table_schema = '1819FW_DRIESD_STEFANOSS' AND table_name = 'Effect' and ordinal_position <= 2");
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT column_name FROM information_schema.columns WHERE table_schema = '1819FW_DRIESD_STEFANOSS' AND table_name = 'Effect' and ordinal_position <= 4 AND column_name != 'status'");
         $resultatenArray = array();
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $result = $resultaat->fetch_array();

@@ -102,6 +102,18 @@ class EffectTagDB
         }
         return $resultatenArray;
     }
+    
+    public static function getSearchTagID($searchq)
+    {
+        $resultatenArray = array();
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("select id from EffectTag where name LIKE '%$searchq%' ORDER BY id ASC");
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+            $databaseRij = $resultaat->fetch_array();
+            $nieuw = self::converteerRijNaarEffectTag($databaseRij);
+            $resultatenArray[$index] = $nieuw;
+        }
+        return $resultatenArray;
+    }
 
     public static function insert($name, $parent)
     {

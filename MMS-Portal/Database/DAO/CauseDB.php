@@ -28,7 +28,7 @@ class CauseDB
             $resultatenArray[$index] = $nieuw;
         }
         return $resultatenArray;
-    }
+    } 
 
     public static function getAllWhereTag($tag)
     {
@@ -44,7 +44,7 @@ class CauseDB
 
     public static function getAllColumnsOfCause()
     {
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT column_name FROM information_schema.columns WHERE table_schema = '1819FW_DRIESD_STEFANOSS' AND table_name = 'Cause' AND column_name != 'tag'");
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT column_name FROM information_schema.columns WHERE table_schema = '1819FW_DRIESD_STEFANOSS' AND table_name = 'Cause'");
         $resultatenArray = array();
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $result = $resultaat->fetch_array();

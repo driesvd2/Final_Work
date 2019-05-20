@@ -80,7 +80,7 @@ if (isset($_POST['searchCauseOfCauseEffect']) && isset($_POST['causeOrEffectSele
             
             array_push($resultSearchCausesOfCauseEffect, CauseEffectDB::getCauseEffectWhereIdCause($q->id));
         }
-
+ 
     } else {
 
         $searchquery = $_POST['searchCauseOfCauseEffect'];

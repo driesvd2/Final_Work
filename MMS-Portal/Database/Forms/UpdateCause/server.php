@@ -9,6 +9,7 @@ if (isset($_POST['update_cause']) && isset($_POST['id']) && isset($_POST['name']
 $arrayMeta = array();
 
 $arrayMeta['name'] = $_POST['name'];
+$arrayMeta['tag'] = $_POST['tag'];
 
 $causeMetaData = CauseDB::getAllMetaColumnsOfCause();
 foreach ($causeMetaData as $m) {

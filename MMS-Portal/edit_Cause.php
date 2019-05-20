@@ -37,6 +37,7 @@ if (isset($_SESSION["insertCauseFromEditCluster"])) {
 }
 
 include_once './Database/DAO/CauseDB.php';
+include_once './Database/DAO/CauseTagDB.php';
 include 'Database/Forms/UpdateCause/server.php';
 if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     header('location: login.php');
@@ -112,6 +113,9 @@ if ($_SESSION['type'] == 0 && isset($_SESSION['type']) && !isset($_GET['id']) ||
         <h1>Update Cause</h1>
         <?php $causeMetaData = CauseDB::getAllMetaColumnsOfCause(); ?>
         <?php $causeMetaDataGet = CauseDB::getByIdMeta($_GET['id']); ?>
+        <?php $selectedCausePropId = CauseDB::getById($_GET['id']); ?>
+        <?php $selectedCausePropName = CauseTagDB::getById($selectedCausePropId[0]->tag); ?>
+        <?php $getAllCauseTags = CauseTagDB::getAll(); ?>
 
         <form method="post" action="edit_Cause.php">
             <div class="form-group">
@@ -123,6 +127,17 @@ if ($_SESSION['type'] == 0 && isset($_SESSION['type']) && !isset($_GET['id']) ||
                     <label><?php echo $m ?></label><br>
                     <input class="col-lg-4" value="<?php echo $causeMetaDataGet[$m]; ?>" name="<?php echo $m ?>"><br><br>
                 <?php } ?>
+
+                <select name="tag">                    
+                    <?php foreach ($getAllCauseTags as $g) {
+                        if (CauseTagDB::ifLast($g->id)) { ?>
+                        <option value="<?php echo $g->id; ?>" <?php if ($selectedCausePropId[0]->tag == $g->id) {echo 'selected';} ?>><?php echo $g->name; ?></option>
+                    <?php }} ?>
+                    
+                </select>
+                <br>
+                <br>
+
 
                 <button type="submit" class="btn btn-success" style="background-color: #0b6623;" name="update_cause">Submit</button>
             </div>

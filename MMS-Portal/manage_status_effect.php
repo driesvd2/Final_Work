@@ -42,6 +42,7 @@ include './Database/Forms/UpdateEffectStatus/server.php';
 include_once './Database/DAO/CauseEffectDB.php';
 include_once './Database/DAO/CauseDB.php';
 include_once './Database/DAO/EffectDB.php';
+include_once './Database/DAO/EffectTagDB.php';
 
 if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     header('location: login.php');
@@ -58,7 +59,29 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
     $searchquery = $_POST['searchEffect'];
     $selColEffect = $_POST['search_selectEffectColumn'];
     $searchquery = preg_replace_callback("#[^0-9a-z]#i", "", $searchquery);
-    $querySearchEffect = EffectDB::getSearchEffectStatus1($searchquery, $selColEffect);
+    
+    if($_POST['search_selectEffectColumn'] == 'tag') {
+        
+        $searchTagEffect = $_POST['searchEffect'];
+        
+        $searchTagEffect = preg_replace_callback("#[^0-9a-z]#i", "", $searchTagEffect);
+        
+        $querySearchTagEffect = EffectTagDB::getSearchTagID($searchTagEffect);
+        
+        $resultSearchTagsOfEffectTags = array();
+
+        foreach ($querySearchTagEffect as $q) {
+            
+            array_push($resultSearchTagsOfEffectTags, EffectDB::getAllWhereTagWithStatus2($q->id));
+        }
+        
+    } else {
+        
+        $querySearchEffect = EffectDB::getSearchEffectStatus1($searchquery, $selColEffect);
+        
+    }
+    
+    
 }
 
 ?>
@@ -138,13 +161,13 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                     </button>
                 </div>
             </div>       
-        </form>
+    </form>
     </div>
     <div class="container" style="height: 60%; float:left; overflow:auto;">
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    <th>Effect (Rename the name if u want before approving)</th>
+                    <th>Effect</th>
                     <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                         <th>Approve</th>
                         <th>Deny</th>
@@ -159,7 +182,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                         <form method="post" action="manage_status_effect.php">
                             <td>
                                 <input type="hidden" value="<?php echo $effects[$e]->id; ?>" name="update_idEffect_zero">
-                                <input type="text" class="form-control" name="unap_effectName" value="<?php echo $effects[$e]->name; ?>" />
+                                <p><?php echo $effects[$e]->name; ?></p>
                             </td>
                             <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                                 <td>
@@ -179,7 +202,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                         <form method="post" action="manage_status_effect.php">
                             <td>
                                 <input type="hidden" value="<?php echo $effects[$e]->id; ?>" name="update_idEffect_zero">
-                                <input type="text" class="form-control" name="unap_effectName" value="<?php echo $effects[$e]->name; ?>" />
+                                <p><?php echo $effects[$e]->name; ?></p>
                             </td>
                             <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                                 <td>
@@ -196,6 +219,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
         </table>
     </div>
     </div>
+    
     
     
     <div class="container" style="width: 50%; float:left;">
@@ -227,6 +251,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                 <tr>
                     <th>ID</th>
                     <th>Effect</th>
+                    <th>Tag</th>
                     <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                         <th>Go Cluster</th>
                     <?php } ?>
@@ -242,6 +267,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                     <tr>
                         <td><?php echo $effects[$e]->id ?></td>
                         <td><?php echo $effects[$e]->name ?></td>
+                        <td><?php $effectTag = EffectTagDB::getById($effects[$e]->tag); echo $effectTag[0]->name;?></td>
                         <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                             <td>
                                 <form method="get" action="manage_status_effect.php">
@@ -259,13 +285,44 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                             </td>
                         <?php } ?>
                     </tr>
-                        <?php }
-                        } else{ 
+                          
+                
+                  <?php } } else if(isset($resultSearchTagsOfEffectTags)) { 
+    
+                    $effects = $resultSearchTagsOfEffectTags;
+                for ($e = 0; $e < count($effects); $e++) { 
+                
+                    foreach($effects[$e] as $res) {   ?>
+                    <tr>
+                        <td><?php echo $res->id ?></td>
+                        <td><?php echo $res->name ?></td>
+                        <td><?php $effectTag = EffectTagDB::getById($res->tag); echo $effectTag[0]->name;?></td>
+                        <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
+                            <td>
+                                <form method="get" action="manage_status_effect.php">
+                                    <input type="hidden" value="<?php echo $res->id ?>" name="update_idEffect_one">
+                                    <a href="insert_Cluster.php?id=<?php echo $res->id; ?>" class="btn btn-primary" style="background-color: #223A50;">Go Cluster</a>
+                                </form>
+                            </td>
+                        <?php } ?>
+                        <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
+                            <td>
+                                <form method="get" action="manage_status_effect.php">
+                                    <input type="hidden" value="<?php echo $res->id ?>" name="update_idEffect_two">
+                                    <a href="insert_Cause_Effect.php?id=<?php echo $res->id; ?>" class="btn btn-primary" style="background-color: #223A50;">Go insert Cause effect</a>
+                                </form>
+                            </td>
+                        <?php } ?>
+                    </tr>
+                
+                
+                    <?php } } } else { 
                     $effects = EffectDB::getAllStatusOne();
                 for ($e = 0; $e < count($effects); $e++) { ?>
                     <tr>
                         <td><?php echo $effects[$e]->id ?></td>
                         <td><?php echo $effects[$e]->name ?></td>
+                        <td><?php $effectTag = EffectTagDB::getById($effects[$e]->tag); echo $effectTag[0]->name;?></td>
                         <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                             <td>
                                 <form method="get" action="manage_status_effect.php">

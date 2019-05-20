@@ -21,7 +21,7 @@ class CauseTagDB
             return true;
         }
     }
-
+ 
     public static function getAll()
     {
         $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM CauseTag ORDER BY id ASC");
@@ -55,7 +55,7 @@ class CauseTagDB
         }
         return $resultatenArray;
     }
-
+ 
     public static function getAllThird(){
         $resultaat = self::getVerbinding()->voerSqlQueryUit("Select * from CauseTag where parent in (SELECT id FROM CauseTag WHERE parent in (SELECT id FROM CauseTag WHERE parent IS null))");
         $resultatenArray = array();
@@ -95,6 +95,18 @@ class CauseTagDB
     {
         $resultatenArray = array();
         $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM CauseTag WHERE id = '$id'");
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+            $databaseRij = $resultaat->fetch_array();
+            $nieuw = self::converteerRijNaarCauseTag($databaseRij);
+            $resultatenArray[$index] = $nieuw;
+        }
+        return $resultatenArray;
+    }
+    
+    public static function getSearchTagID($searchq)
+    {
+        $resultatenArray = array();
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("select id from CauseTag where name LIKE '%$searchq%' ORDER BY id ASC");
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
             $nieuw = self::converteerRijNaarCauseTag($databaseRij);

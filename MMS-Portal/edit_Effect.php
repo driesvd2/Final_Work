@@ -134,16 +134,15 @@ if ($_SESSION['type'] == 0 && isset($_SESSION['type']) && !isset($_GET['id']) ||
 
                 <?php } ?>
 
-                <select name="updateEffectTag">                    
+                <select name="tag">                    
                     <?php foreach ($getAllEffectTags as $g) {
                         if (EffectTagDB::ifLast($g->id)) { ?>
                         <option value="<?php echo $g->id; ?>" <?php if ($selectedEffectPropId[0]->tag == $g->id) {echo 'selected';} ?>><?php echo $g->name; ?></option>
                     <?php }} ?>
                     
                 </select>
-                
-                
-
+                <br>
+                <br>
                 <button type="submit" class="btn btn-success" style="background-color: #0b6623;" name="update_effect">Submit</button>
             </form>
         </div>

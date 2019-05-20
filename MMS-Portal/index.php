@@ -59,15 +59,56 @@ if (isset($_POST['search']) && isset($_POST['search_selectCauseColumn'])) {
     $searchq = $_POST['search'];
     $selColCause = $_POST['search_selectCauseColumn'];
     $searchq = preg_replace_callback("#[^0-9a-z]#i", "", $searchq);
-    $querySearchCause = CauseDB::getSearchCause($searchq, $selColCause);
+    
+    if($_POST['search_selectCauseColumn'] == 'tag'){
+        
+        $searchTag = $_POST['search'];
+        
+        $searchTag = preg_replace_callback("#[^0-9a-z]#i", "", $searchTag);
+        
+        $querySearchTag = CauseTagDB::getSearchTagID($searchTag);
+        
+        $resultSearchTagsOfCauseTags = array();
 
+        foreach ($querySearchTag as $q) {
+            
+            array_push($resultSearchTagsOfCauseTags, CauseDB::getAllWhereTag($q->id));
+        }
+        
+    } else{
+        
+        $querySearchCause = CauseDB::getSearchCause($searchq, $selColCause);
+        
+    }
+    
 }
 
 if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn'])) {
     $searchquery = $_POST['searchEffect'];
     $selColEffect = $_POST['search_selectEffectColumn'];
     $searchquery = preg_replace_callback("#[^0-9a-z]#i", "", $searchquery);
-    $querySearchEffect = EffectDB::getSearchEffect($searchquery, $selColEffect);
+    
+    if($_POST['search_selectEffectColumn'] == 'tag') {
+        
+        $searchTagEffect = $_POST['searchEffect'];
+        
+        $searchTagEffect = preg_replace_callback("#[^0-9a-z]#i", "", $searchTagEffect);
+        
+        $querySearchTagEffect = EffectTagDB::getSearchTagID($searchTagEffect);
+        
+        $resultSearchTagsOfEffectTags = array();
+
+        foreach ($querySearchTagEffect as $q) {
+            
+            array_push($resultSearchTagsOfEffectTags, EffectDB::getAllWhereTag($q->id));
+        }
+        
+    } else {
+        
+        $querySearchEffect = EffectDB::getSearchEffect($searchquery, $selColEffect);
+        
+    }
+    
 }
 ?>
 
@@ -194,7 +235,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                         <tr>
                             <td><?php echo $querySearchCause[$q]->id ?></td>
                             <td><?php echo $querySearchCause[$q]->name ?></td>
-                            <td><?php $causeTag = CauseTagDB::getById($causes[$c]->tag); echo $causeTag[0]->name;?></td>
+                            <td><?php $causeTag = CauseTagDB::getById($querySearchCause[$q]->tag); echo $causeTag[0]->name;?></td>
                             <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                                 <td>
                                     <form method="post" action="index.php">
@@ -212,6 +253,50 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                     <?php } ?>
                 </tbody>
             </table>
+        
+        
+        
+        <?php } else if (isset($resultSearchTagsOfCauseTags)) { ?>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cause</th>
+                        <th>Tag</th>
+                        <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
+                            <th>Delete</th>
+                            <th>Edit</th>
+                        <?php } ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php for ($q = 0; $q < count($resultSearchTagsOfCauseTags); $q++) { 
+                    
+                            foreach ($resultSearchTagsOfCauseTags[$q] as $res) {  ?>
+                    
+                        <tr>
+                            <td><?php echo $res->id ?></td>
+                            <td><?php echo $res->name ?></td>
+                            <td><?php $causeTag = CauseTagDB::getById($res->tag); echo $causeTag[0]->name;?></td>
+                            <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
+                                <td>
+                                    <form method="post" action="index.php">
+                                        <input type="hidden" value="<?php echo $res->id ?>" name="delete_idCause">
+                                        <button type="submit" class="btn btn-danger" style="background-color: #DA291C;" style="background-color: #DA291C;" name="delete_cause"><i class="fa fa-trash" style="font-size: 20px;"></i></button>
+                                    </form>
+                                </td>
+                            <?php } ?>
+                            <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
+                                <td>
+                                    <a href="edit_Cause.php?id=<?php echo $res->id; ?>" class="btn btn-primary" style="background-color: #223A50;"><i class="fa fa-edit" style="font-size: 20px;"></i></a>
+                                </td>
+                            <?php } ?>
+                        </tr>
+                    <?php } } ?>
+                </tbody>
+            </table>
+        
+        
 
         <?php } else { ?>
 
@@ -292,7 +377,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
             <?php errorHandlingDeleteEffect(); ?>
 
         </form>
-    </div>
+    </div> 
     <div class="container" style="height: 60%; float:right; overflow:auto;">
         <?php if (isset($querySearchEffect)) { ?>
             <table class="table table-bordered table-hover">
@@ -312,7 +397,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                         <tr>
                             <td><?php echo $querySearchEffect[$q]->id ?></td>
                             <td><?php echo $querySearchEffect[$q]->name ?></td>
-                            <td><?php $effectTag = EffectTagDB::getById($effects[$q]->tag); echo $effectTag[0]->name;?></td>
+                            <td><?php $effectTag = EffectTagDB::getById($querySearchEffect[$q]->tag); echo $effectTag[0]->name;?></td>
                             <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                                 <td>
                                     <form method="post" action="index.php">
@@ -331,7 +416,46 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                 </tbody>
             </table>
 
-
+        <?php } else if (isset($resultSearchTagsOfEffectTags)) { ?>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Effect</th>
+                        <th>Tag</th>
+                        <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
+                            <th>Delete</th>
+                            <th>Edit</th>
+                        <?php } ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php for ($q = 0; $q < count($resultSearchTagsOfEffectTags); $q++) { 
+                    
+                          foreach ($resultSearchTagsOfEffectTags[$q] as $res) { ?>
+                        <tr>
+                            <td><?php echo $res->id ?></td>
+                            <td><?php echo $res->name ?></td>
+                            <td><?php $effectTag = EffectTagDB::getById($res->tag); echo $effectTag[0]->name;?></td>
+                            <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
+                                <td>
+                                    <form method="post" action="index.php">
+                                        <input type="hidden" value="<?php echo $res->id ?>" name="delete_idEffect">
+                                        <button type="submit" class="btn btn-danger" style="background-color: #DA291C;" name="delete_effect"><i class="fa fa-trash" style="font-size: 20px;"></i></button>
+                                    </form>
+                                </td>
+                            <?php } ?>
+                            <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
+                                <td>
+                                    <a href="edit_Effect.php?id=<?php echo $res->id; ?>" class="btn btn-primary" style="background-color: #223A50;"><i class="fa fa-edit" style="font-size: 20px;"></i></a>
+                                </td>
+                            <?php } ?>
+                        </tr>
+                    <?php } } ?>
+                </tbody>
+            </table>
+        
+        
         <?php } else { ?>
             <table class="table table-bordered table-hover">
                 <thead>
