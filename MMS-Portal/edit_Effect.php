@@ -134,6 +134,7 @@ if ($_SESSION['type'] == 0 && isset($_SESSION['type']) && !isset($_GET['id']) ||
 
                 <?php } ?>
 
+                <label><?php echo "Tag" ?></label><br> 
                 <select name="tag">                    
                     <?php foreach ($getAllEffectTags as $g) {
                         if (EffectTagDB::ifLast($g->id)) { ?>

@@ -154,7 +154,7 @@ class EffectDB
     }
 
     public static function insertNewEffect($effectname, $effectstatus){
-        return self::getVerbinding()->voerSqlQueryUit("INSERT INTO Effect(id,name, status, Error_idError) VALUES (null, '$effectname',$effectstatus,null)");
+        return self::getVerbinding()->voerSqlQueryUit("INSERT INTO Effect(id,name, status, tag) VALUES (null, '$effectname',$effectstatus,null)");
     }
 
     public static function deleteById($id) {

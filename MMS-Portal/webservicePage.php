@@ -155,6 +155,9 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
     
         <form method="post" action="webservicePage.php">
 
+            
+            
+            
             <?php
 
             if (isset($_POST['selecEffect']) && !isset($_SESSION["effectOnChangeNameWeb"])) {
@@ -190,6 +193,7 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
             <?php } else if (isset($_SESSION["effectOnChangeNameWeb"]) && !isset($_SESSION["catchedCause"])) { ?>
 
                 <h1>Selected effects</h1>
+                
                 <div class="form-check container" style="overflow: auto; height: 68%; width: 50%; float: left;">
                     <table class="table table-bordered table-hover">
                         <thead>

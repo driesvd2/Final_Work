@@ -45,7 +45,7 @@ if(isset($_GET['id'])){
 }
 
 ?>
- 
+  
 <html style="height: 100%;overflow:hidden">
 
 <head>
@@ -128,6 +128,7 @@ if(isset($_GET['id'])){
     <div class="container" style="width: 50%; float: left;">
         <h1>Insert Effect</h1>
         <p>Check if the Effect is not already listed on the right.</p>
+        <?php errorhandlingRadioEffect(); ?>
         <form method="post" action="insert_effect_admin.php">
             <div class="form-group">
                 <label for="Cause">Effect: </label>
@@ -150,7 +151,10 @@ if(isset($_GET['id'])){
                     <?php echo $t->name ?>
                 </label><br/>
                 <?php }}else{?>
-                <p><?php echo $tag[0]->name ?></p>
+                <input class="form-check-input" type="radio" name="tagLast" checked disabled value="<?php echo $tag[0]->id ?>" id="<?php echo $tag[0]->id ?>">
+                <label class="form-check-label" for="<?php echo $tag[0]->id ?>">
+                    <?php echo $tag[0]->name ?>
+                </label>
                 <?php }?>
                 </div>
         </form>

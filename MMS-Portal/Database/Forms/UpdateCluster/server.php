@@ -11,7 +11,7 @@ session_start();
 include_once './Database/DAO/ClusterDB.php';
 include_once './Database/DAO/EffectDB.php';
 include_once './Database/DAO/CauseDB.php';
-
+include_once './Database/DAO/CauseEffectDB.php';
 
 
 if (isset($_POST['edit_The_Cluster']) && isset($_SESSION['effectsClusterOfObjEdit']) && isset($_POST['selCause'])) {
@@ -36,18 +36,42 @@ if (isset($_POST['edit_The_Cluster']) && isset($_SESSION['effectsClusterOfObjEdi
         
         
         ClusterDB::updateCluster($arrayMeta,$_POST['id']);
+        foreach($arrayMeta['effects'] as $a){
+            EffectDB::setStatus2($a);
+        }
         
+        
+        $_SESSION['effectsConversion'] = array();
 
+        foreach (ClusterDB::translateStringToEffects($_SESSION['clusterObjEdit']['effects']) as $theTranslation) {
+
+        array_push($_SESSION['effectsConversion'], $theTranslation);
+            
+        }
+  
         
+        if($_SESSION['effectsConversion'] != $arrayMeta['effects']){
+            
+            foreach($_SESSION['effectsConversion'] as $a){
+                $CauseEffect = CauseEffectDB::getCausebyEffectIdOne($a);
+                $Cluster = ClusterDB::getSearchClusterEffects($a);
+                if(empty($CauseEffect) && empty($Cluster)){
+                    EffectDB::setStatus1AfterDelete($a);
+                }
+            }
+            
+        }
+            
         header('location: relations.php');
 
         unset($_SESSION['effectsClusterOfObjEdit']);    
         unset($_SESSION['clusterObjEdit']);    
+        unset($_SESSION['effectsConversion']);    
         
         
     }
 }
-
+ 
  
  
 

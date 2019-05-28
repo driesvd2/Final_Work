@@ -128,7 +128,8 @@ if ($_SESSION['type'] == 0 && isset($_SESSION['type']) && !isset($_GET['id']) ||
                     <input class="col-lg-4" value="<?php echo $causeMetaDataGet[$m]; ?>" name="<?php echo $m ?>"><br><br>
                 <?php } ?>
 
-                <select name="tag">                    
+                <label><?php echo "Tag" ?></label><br>   
+                <select name="tag">                 
                     <?php foreach ($getAllCauseTags as $g) {
                         if (CauseTagDB::ifLast($g->id)) { ?>
                         <option value="<?php echo $g->id; ?>" <?php if ($selectedCausePropId[0]->tag == $g->id) {echo 'selected';} ?>><?php echo $g->name; ?></option>

@@ -4,13 +4,23 @@ include_once './Database/DAO/CauseDB.php';
 
 
 //Insert Cause in cause table
-if (isset($_POST['insert_cause']) && isset($_POST['Cause']) && isset($_POST['insertTag'])) {
+function errorhandlingSelectedCategoryRadio(){
+
+if (isset($_POST['insert_cause']) && isset($_POST['Cause'])) {
     $cause = $_POST['Cause'];
-    if (isset($cause) && !empty($cause) && !is_null($cause))
-    {
-        CauseDB::insert($cause,$_POST['insertTag']);
-    }else{
+    
+    if(empty($_POST['insertTag'])){
+        
+    echo '<span style="color:red">you have to select the last level category!</span>';
+        
+    } else { 
+    
+        if(isset($cause) && !empty($cause) && !is_null($cause)) {
+            CauseDB::insert($cause,$_POST['insertTag']);
+        } else {
         header('location: insert_Cause.php');
+        }
+        
     }
     
  if (isset($_SESSION["insertCauseFromInsertCluster"]) && $_SESSION["insertCauseFromInsertCluster"] == 'insertCluster') {
@@ -36,9 +46,24 @@ if (isset($_POST['insert_cause']) && isset($_POST['Cause']) && isset($_POST['ins
     $id = $_POST['id'];
     header("location: edit_cluster.php?id=$id");
     unset($_SESSION["insertCauseFromEditCluster"]);
- }    
+ }
+    
+ 
     
 }
+
+}
+
+
+    
+    
+    
+    
+
+
+
+
+
 
 
 ?>

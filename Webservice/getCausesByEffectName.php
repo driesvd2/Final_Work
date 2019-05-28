@@ -80,14 +80,18 @@ function functionAPI($array){
 
 
 $data = json_decode(file_get_contents("php://input"));
+$logPassword = strtoupper(hash('sha512', $data->credentials->pass));
 
 
 if (isset($data->credentials->login) && isset($data->credentials->pass)){
-    if (UserDB::Login($data->credentials->login,$data->credentials->pass) == 0){
+    if (UserDB::Login($data->credentials->login,$logPassword) == 0){
         if (isset($data->effects) && !empty($data->effects)){
             $array = array();
             $causes = array();
-            $tempEffectsArray = array();
+            $causes1 = array();
+            $causes2 = array();
+            $causeEffects = array();
+            $tempEffectsArray = array(); 
             $effectsArray = array();
             foreach ($data->effects as $key => $value) {
                 array_push($array, $value);
@@ -107,9 +111,18 @@ if (isset($data->credentials->login) && isset($data->credentials->pass)){
                 $ik = array_count_values($ik);
                 arsort($ik);
                 foreach ($ik as $key => $value) {
-                    array_push($causes, CauseDB::getById($key));
+                    array_push($causes1, CauseDB::getById($key));
+                }
+                foreach ($effectsArray as $key) {
+                    $causeEffect = CauseEffectDB::getCausebyEffectId($key);
+                    foreach ($causeEffect as $c){
+                        $cause = CauseDB::getById($c->cause);
+                        array_push($causes2, $cause);
+                    }
                 }
                 http_response_code(200);
+                array_push($causes, $causes1);
+                array_push($causes, $causes2);
                 echo json_encode($causes);
                 die();
             }else if (sizeof($effectsArray) <= 1) {

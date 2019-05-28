@@ -24,7 +24,7 @@ if (isset($_POST['Delete_Cluster_id']) && isset($_POST['Delete_Cluster'])) {
             EffectDB::setStatus1AfterDelete($a);
         }
     }  
-}
+} 
   
 if (isset($_POST['Delete_causeEffect_id']) && isset($_POST['Delete_causeEffect'])) {
 

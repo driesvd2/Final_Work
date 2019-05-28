@@ -193,6 +193,7 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
     </div>
 
     <form method="post" action="insert_Cluster.php">
+        
         <?php
 
         if (isset($_POST['selectedCause'])) {
@@ -209,6 +210,8 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
 
             array_push($_SESSION["effectOnChangeName"], $effectsInitSessionGet[0]->id);
         }
+        
+        
 
         if (isset($_POST['selectedEffects']) && !isset($_SESSION["effectOnChangeName"])) {
 
@@ -217,21 +220,33 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
             $_SESSION["effectOnChangeName"] = array();
 
             array_push($_SESSION["effectOnChangeName"], $effectsInitSession[0]->id);
+            
         } else if (isset($_POST['selectedEffects']) && isset($_SESSION["effectOnChangeName"])) {
-
+            
             $sessietje = array();
             $caughtEffect = EffectDB::getById($_POST['selectedEffects']);
 
             if (is_array($sessietje)) {
+                
                 if (in_array($caughtEffect[0]->id, $_SESSION["effectOnChangeName"])) {
 
-                    echo "<script type='text/javascript'>alert('Effect already in the list!');</script>";
-                } else {
+                    
+                        
+                        echo '<span style="color:red; padding-left:1%;">The effect is already in the list!</span>';
+                    
+                    
+                    
+                }  else {
 
                     array_push($_SESSION["effectOnChangeName"], $caughtEffect[0]->id);
                 }
+                
             }
-        } ?>
+            
+        }
+        
+        
+        ?>
 
         <?php if (isset($_SESSION["causeOnChangeName"]) && !isset($_SESSION["effectOnChangeName"])) { ?>
             <div class="form-check" style="overflow: auto; height: 70%; width: 50%; float: left">
@@ -267,9 +282,8 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
             <div class="form-check container" style="overflow: auto; height: 70%; width: 50%; float: left">
                 <h2>Causes</h2>
                 <p>No cause selected</p>
-
                 <h2>Effects (Select minimum 2 effects)</h2>
-
+                
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
@@ -327,7 +341,7 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
                 </table>
 
                 <h2>Effects (Select minimum 2 effects)</h2>
-
+                
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>

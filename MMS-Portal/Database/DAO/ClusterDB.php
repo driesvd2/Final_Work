@@ -31,7 +31,7 @@ class ClusterDB
         }
         return $resultatenArray;
     }
-    
+     
     public static function getByIdMeta($id) {
         $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cluster WHERE id=".$id." ORDER BY id ASC");
         $result = $resultaat->fetch_array();

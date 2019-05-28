@@ -33,7 +33,7 @@ if(isset($_POST['insert_CauseEffect'])){
     }   
     
 }
-
+  
 if (isset($_POST['Delete_causeEffect_id']) && isset($_POST['Delete_causeEffect'])) {
     
     CauseEffectDB::deleteById($_POST['Delete_causeEffect_id']);

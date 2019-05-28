@@ -9,7 +9,7 @@ include_once './Database/DAO/CauseDB.php';
 include_once './Database/DAO/EffectDB.php';
 include_once './Database/DAO/ClusterDB.php';
  
-session_start();
+
 
 $variable = 0;
 if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
@@ -23,7 +23,7 @@ if (isset($_POST['cause']) && !isset($_POST['effect'])) {
     }
     $variable = 1;
 }
-
+ 
 if (isset($_POST['effect']) && !isset($_POST['cause'])) {
 
     if (!empty(EffectDB::getById($_POST['effect']))) {
@@ -64,11 +64,12 @@ if (isset($_SESSION["insertCauseFromEditCluster"])) {
 
 if (isset($_GET['id']) && !empty($_GET['id']) && !ctype_space($_GET['id'])) {
 
-    $_SESSION['causeEffectObjEdit'] = CauseEffectDB::getByIdMeta($_GET['id']);
-
+    $_SESSION['causeEffectObjEdit'] = CauseEffectDB::getByIdMeta($_GET['id']); 
+    
     $_SESSION['causeObjEdit'] = CauseDB::getByIdMeta($_SESSION['causeEffectObjEdit']['cause']);
 
     $_SESSION['effectObjEdit'] = EffectDB::getByIdMeta($_SESSION['causeEffectObjEdit']['effect']);
+    
 }
 
 ?>

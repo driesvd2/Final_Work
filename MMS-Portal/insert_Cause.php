@@ -28,6 +28,7 @@ include_once './Database/DAO/EffectDB.php';
 if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     header('location: login.php');
 }
+
 ?>
 
 
@@ -133,6 +134,7 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     <div class="container" style="width: 50%; float: left;">
         <h1>Insert Cause</h1>
         <p>Check if the Cause is not already listed on the right.</p>
+        <?php errorhandlingSelectedCategoryRadio(); ?>
         <form method="post" action="insert_Cause.php">
             <div class="form-group">
                 <label for="Cause">Cause: </label>
@@ -147,14 +149,17 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
         <form method="post" action="insert_Cause.php">
             <?php if(isset($tags)){ ?>
                 <div class="form-check">
-            <?php foreach($tags as $t){ ?>
+            <?php foreach($tags as $t) { ?>
                 <input class="form-check-input" onchange="this.form.submit()" type="radio" name="tag" value="<?php echo $t->id ?>" id="<?php echo $t->id ?>">
                 <label class="form-check-label" for="<?php echo $t->id ?>">
                     <?php echo $t->name ?>
                 </label><br/>
-                <?php }}else{?>
-                <p><?php echo $tag[0]->name ?></p>
-                <?php }?>
+                <?php } }else { ?>
+                <input class="form-check-input" type="radio" name="tagLast" checked disabled value="<?php echo $tag[0]->id ?>" id="<?php echo $tag[0]->id ?>">
+                <label class="form-check-label" for="<?php echo $tag[0]->id ?>">
+                    <?php echo $tag[0]->name ?>
+                </label>
+                <?php } ?>
                 </div>
         </form>
         </div>

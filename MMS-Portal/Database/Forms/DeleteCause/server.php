@@ -11,7 +11,7 @@ include_once './Database/DAO/EffectDB.php';
 include_once './Database/DAO/ClusterDB.php';
 include_once './Database/DAO/CauseEffectDB.php';
 
-//Delete user
+
 function errorHandlingDeleteEffect(){
 if (isset($_POST['delete_effect']) && isset($_POST['delete_idEffect'])) {
     
@@ -34,7 +34,7 @@ if (isset($_POST['delete_effect']) && isset($_POST['delete_idEffect'])) {
         
     }
 }
-
+ 
 function errorHandlingDeleteCause(){
     
     if (isset($_POST['delete_cause']) && isset($_POST['delete_idCause'])) {

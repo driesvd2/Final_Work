@@ -80,7 +80,7 @@ class CauseEffectDB
     }
 
     
-
+ 
     public static function getCausebyEffectId($id) {
         $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect WHERE id=".$id . " ORDER BY id ASC");
         $resultatenArray = array();

@@ -33,7 +33,7 @@ include_once './Database/DAO/ClusterDB.php';
 //    
 //}
 
-
+ 
 // OFWEL KIEZEN VOOR DIT UIT COMMENT MAAR ALS JE DIT DOET DAN KAN JE NIET MEER TERUG OP EDIT CLUSTER ALS JE EEN CAUSE WIL TOEVOEGEN VANUIT EDIT_CLUSTER.PHP
 //if (!isset($_GET['id'])) {
 // 
@@ -46,18 +46,14 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     header('location: login.php');
 }
 
+
 if (isset($_POST['effect'])) {
-
     $sessietje = array();
-
     $tempVarPostEffectClusterClick = EffectDB::getByIdMeta($_POST['effect']);
-
     if (is_array($sessietje)) {
         if (in_array($tempVarPostEffectClusterClick['id'], $_SESSION["effectsClusterOfObjEdit"])) {
-
             echo "<script type='text/javascript'>alert('Effect already in the list!');</script>";
         } else {
-
             array_push($_SESSION['effectsClusterOfObjEdit'], $tempVarPostEffectClusterClick['id']);
         }
     }
@@ -75,7 +71,7 @@ if (isset($_GET['id']) && !ctype_space($_GET['id']) && !empty($_GET['id']) && Cl
 } else if ($variable == 1) {
     $variable = 1;
 } else {
-    header('location: relations.php');
+   // header('location: relations.php');
 }
 
 if (isset($_POST['searchCause']) && !empty($_POST['searchCause'])) {
@@ -111,10 +107,7 @@ if (isset($_GET['id'])  && !ctype_space($_GET['id']) && !empty($_GET['id'])) {
 
     $_SESSION['clusterObjEdit'] = ClusterDB::getByIdMeta($_GET['id']);
 
-
-
     $_SESSION['causeClusterObjEdit'] = CauseDB::getByIdMeta($_SESSION['clusterObjEdit']['cause']);
-
 
     $_SESSION['effectsClusterOfObjEdit'] = array();
 
