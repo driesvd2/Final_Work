@@ -21,7 +21,7 @@ class CauseTagDB
             return true;
         }
     }
- 
+   
     public static function getAll()
     {
         $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM CauseTag ORDER BY id ASC");
@@ -90,7 +90,7 @@ class CauseTagDB
         }
         return $resultatenArray;
     }
-
+ 
     public static function getById($id)
     {
         $resultatenArray = array();
@@ -106,7 +106,7 @@ class CauseTagDB
     public static function getSearchTagID($searchq)
     {
         $resultatenArray = array();
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("select id from CauseTag where name LIKE '%$searchq%' ORDER BY id ASC");
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("select * from CauseTag where name LIKE '%$searchq%' ORDER BY id ASC");
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
             $nieuw = self::converteerRijNaarCauseTag($databaseRij);
@@ -128,6 +128,11 @@ class CauseTagDB
     public static function deleteById($id)
     {
         return self::getVerbinding()->voerSqlQueryUit("DELETE FROM CauseTag WHERE id=" . $id);
+    }
+    
+    public static function changeNameTag($tagName, $tagId)
+    {
+        return self::getVerbinding()->voerSqlQueryUit("UPDATE CauseTag SET name='$tagName' WHERE id=" . $tagId);
     }
 
     protected static function converteerRijNaarCauseTag($databaseRij)

@@ -3,11 +3,25 @@ include_once './Database/DAO/CauseEffectDB.php';
 include_once './Database/DAO/CauseDB.php';
 include_once './Database/DAO/EffectDB.php';
 include_once './Database/DAO/ClusterDB.php';
+include_once './Database/DAO/EffectTagDB.php';
 
 $connect = mysqli_connect('dt5.ehb.be', '1819FW_DRIESD_STEFANOSS', 'DzwWqw', '1819FW_DRIESD_STEFANOSS');
 
 $outputEffect = '';
-if(isset($_POST["queryCauseEffectEditEffect"]) && isset($_POST["columnSearchEffectCauseEffectEdit"]))
+if(isset($_POST["queryCauseEffectEditEffect"]) && isset($_POST["columnSearchEffectCauseEffectEdit"]) && $_POST["columnSearchEffectCauseEffectEdit"] == 'tag')
+{
+    $search = mysqli_real_escape_string($connect, $_POST["queryCauseEffectEditEffect"]);
+    $querySearchTag = EffectTagDB::getSearchTagID($search);
+    
+    $temp = "SELECT * FROM Effect WHERE ";
+
+    foreach($querySearchTag as $q){
+        $temp .= "tag='$q->id' OR ";
+    }
+    $temp .= " 1!=1 ORDER BY id ASC";   
+    $queryEffect = $temp;
+
+} else if(isset($_POST["queryCauseEffectEditEffect"]) && isset($_POST["columnSearchEffectCauseEffectEdit"]))
 {
     $searchEffect = mysqli_real_escape_string($connect, $_POST["queryCauseEffectEditEffect"]);
     $queryEffect = "SELECT * FROM Effect WHERE ".$_POST["columnSearchEffectCauseEffectEdit"]." LIKE '%".$searchEffect."%' AND (status = 1 OR status = 2)";
@@ -36,5 +50,5 @@ if(mysqli_num_rows($resultEffect) > 0){
 }  else {
     echo 'Data Not Found';
 }
-
+ 
 ?>

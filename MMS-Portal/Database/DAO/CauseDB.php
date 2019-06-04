@@ -12,12 +12,12 @@ include_once "Database/DatabaseFactory.php";
 
 class CauseDB
 {
-
+ 
     private static function getVerbinding()
     {
         return DatabaseFactory::getDatabase();
     }
-
+ 
     public static function getAll()
     {
         $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause ORDER BY id ASC");
@@ -29,7 +29,7 @@ class CauseDB
         }
         return $resultatenArray;
     } 
-
+ 
     public static function getAllWhereTag($tag)
     {
         $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause WHERE tag='$tag' ORDER BY id ASC");
@@ -80,6 +80,11 @@ class CauseDB
     {
         return self::getVerbinding()->voerSqlQueryUit('ALTER TABLE Cause ADD ' . $name . ' VARCHAR(1500) NULL');
     }
+    
+    public static function editColumnCause($old, $name)
+    {
+        return self::getVerbinding()->voerSqlQueryUit('ALTER TABLE Cause Change COLUMN ' . $old . ' ' . $name . ' VARCHAR(1500) ');
+    }
 
     public static function deleteColumnCause($name)
     {
@@ -115,6 +120,18 @@ class CauseDB
     {
         $resultatenArray = array();
         $resultaat = self::getVerbinding()->voerSqlQueryUit("select id from Cause where name LIKE '%$searchq%' ORDER BY id ASC");
+        for ($index = 0; $index < $resultaat->num_rows; $index++) {
+            $databaseRij = $resultaat->fetch_array();
+            $nieuw = self::converteerRijNaarCause($databaseRij);
+            $resultatenArray[$index] = $nieuw;
+        }
+        return $resultatenArray;
+    }
+    
+    public static function getSearchTag($searchq)
+    {
+        $resultatenArray = array();
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("select id from Cause where tag LIKE '%$searchq%' ORDER BY id ASC");
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
             $nieuw = self::converteerRijNaarCause($databaseRij);

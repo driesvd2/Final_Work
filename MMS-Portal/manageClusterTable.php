@@ -152,8 +152,14 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
                 <tbody>
                     <?php foreach ($metaColumnsCluster as $meta) { ?>
                         <tr>
-                            <td><?php echo $meta; ?></td>
-                            <td><button type="submit" class="btn btn-danger" style="background-color: #DA291C; margin-left: 50%;" value="<?php echo $meta; ?>" name="deleteColumnCluster"><i class="fa fa-trash" style="font-size: 20px;"></i></button></td>
+                            <form method="post" action="manageClusterTable.php">
+                            <td>
+                            <input type="hidden" value="<?php echo $meta ?>" name="oldColumn">
+                            <input type="text" class="form-control" style="width:70%; float: left; margin-right: 2px" name="newColumn" value="<?php echo $meta ?>">
+                            <button type="submit" name="editColumn" class="btn btn-primary" style="background-color: #223A50;margin-top: 2px"><i class="fa fa-edit" style="font-size: 20px;"></i></button>
+                            </td>
+                            <td><button type="submit" class="btn btn-danger" style="background-color: #DA291C; position: sticky;" value="<?php echo $meta; ?>" name="deleteColumnCluster"><i class="fa fa-trash" style="font-size: 20px;"></i></button></td>
+                            </form>
                         </tr>
                     <?php } ?>
                 </tbody>

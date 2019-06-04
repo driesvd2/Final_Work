@@ -12,6 +12,9 @@ if(isset($_POST['deleteColumnCauseEffect'])){
     CauseEffectDB::deleteColumnCauseEffect($_POST['deleteColumnCauseEffect']);
 }
 
+if(isset($_POST['editColumn']) && isset($_POST['oldColumn']) && isset($_POST['newColumn'])){
+    CauseEffectDB::editColumnCauseEffect($_POST['oldColumn'],$_POST['newColumn']);
+}
 
 
 ?> 

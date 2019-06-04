@@ -3,13 +3,13 @@
 ini_set('session.cache_limiter', 'public');
 session_cache_limiter(false);
 error_reporting(E_ERROR | E_PARSE);
-include './Database/Forms/UpdateCauseEffect/server.php';
+session_start();
 include_once './Database/DAO/CauseEffectDB.php';
 include_once './Database/DAO/CauseDB.php';
 include_once './Database/DAO/EffectDB.php';
 include_once './Database/DAO/ClusterDB.php';
  
-
+ 
 
 $variable = 0;
 if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
@@ -36,9 +36,7 @@ if (isset($_GET['id']) && !ctype_space($_GET['id']) && !empty($_GET['id']) && Ca
     $variable = 1;
 } else if ($variable == 1) {
     $variable = 1;
-} else {
-    header('location: relations.php');
-}
+} 
 
 if (isset($_SESSION['causeOnChangeName']) || isset($_SESSION['effectOnChangeName'])) {
 
@@ -137,6 +135,7 @@ if (isset($_GET['id']) && !empty($_GET['id']) && !ctype_space($_GET['id'])) {
 
     <div class="container" style="width: 50%; float: left; height: 80%;">
         <h1>Update Cause - Effect</h1>
+        <?php include './Database/Forms/UpdateCauseEffect/server.php'; ?>
         <?php $metaColumnsCause = CauseDB::getAllColumnsOfCause(); ?>
         <?php $metaColumnsEffect = EffectDB::getAllColumnsOfEffect(); ?>
         <form method="post" action="edit_cause_effect.php">

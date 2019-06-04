@@ -33,7 +33,7 @@ if (isset($_SESSION["insertCauseFromEditCluster"])) {
 
     unset($_SESSION["insertCauseFromEditCluster"]);
 }
-
+ 
 error_reporting(E_ERROR | E_PARSE);
 
 if (isset($_GET['logout'])) {
@@ -139,9 +139,9 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     </div>
 
     <?php $metaColumnsCause = CauseDB::getAllMetaColumnsOfCause(); ?>
-    <div class="container" style="width: 35%; float: left; height: 80%; overflow:auto">
+    <div class="container" style="width: 45%; float: left; height: 80%; overflow:auto">
+    <form method="post" action="manageCauseTable.php">
         <table class="table table-bordered table-hover">
-            <form method="post" action="manageCauseTable.php">
                 <thead>
                     <tr>
                         <th>Column Name</th>
@@ -149,17 +149,23 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
                     </tr>
                 </thead>
                 <tbody>
-
+                
                     <?php foreach ($metaColumnsCause as $meta) { ?>
                         <tr>
-                            <td><?php echo $meta; ?></td>
-                            <td><button type="submit" class="btn btn-danger" style="background-color: #DA291C; position: sticky; margin-left: 50%;" value="<?php echo $meta; ?>" name="deleteColumnCause"><i class="fa fa-trash" style="font-size: 20px;"></i></button></td>
+                            <form method="post" action="manageCauseTable.php">
+                            <td>
+                            <input type="hidden" value="<?php echo $meta ?>" name="oldColumn">
+                            <input type="text" class="form-control" style="width:70%; float: left; margin-right: 2px" name="newColumn" value="<?php echo $meta ?>">
+                            <button type="submit" name="editColumn" class="btn btn-primary" style="background-color: #223A50;margin-top: 2px"><i class="fa fa-edit" style="font-size: 20px;"></i></button>
+                            </td>
+                            <td><button type="submit" class="btn btn-danger" style="background-color: #DA291C; position: sticky;" value="<?php echo $meta; ?>" name="deleteColumnCause"><i class="fa fa-trash" style="font-size: 20px;"></i></button></td>
+                            </form>
                         </tr>
                     <?php } ?>
-
+                    
                 </tbody>
-            </form>
         </table>
+        </form>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

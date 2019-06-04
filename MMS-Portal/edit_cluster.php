@@ -40,25 +40,14 @@ include_once './Database/DAO/ClusterDB.php';
 //    header('location: relations.php');
 //    
 //} 
-
+ 
 $variable = 0;
 if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     header('location: login.php');
 }
 
 
-if (isset($_POST['effect'])) {
-    $sessietje = array();
-    $tempVarPostEffectClusterClick = EffectDB::getByIdMeta($_POST['effect']);
-    if (is_array($sessietje)) {
-        if (in_array($tempVarPostEffectClusterClick['id'], $_SESSION["effectsClusterOfObjEdit"])) {
-            echo "<script type='text/javascript'>alert('Effect already in the list!');</script>";
-        } else {
-            array_push($_SESSION['effectsClusterOfObjEdit'], $tempVarPostEffectClusterClick['id']);
-        }
-    }
-    $variable = 1;
-}
+
 
 
 if (isset($_POST['cause'])) {
@@ -70,9 +59,7 @@ if (isset($_GET['id']) && !ctype_space($_GET['id']) && !empty($_GET['id']) && Cl
     $variable = 1;
 } else if ($variable == 1) {
     $variable = 1;
-} else {
-   // header('location: relations.php');
-}
+} 
 
 if (isset($_POST['searchCause']) && !empty($_POST['searchCause'])) {
 
@@ -194,9 +181,24 @@ if (isset($_GET['id'])  && !ctype_space($_GET['id']) && !empty($_GET['id'])) {
 
     <div class="container" style="width: 50%; float: left; height: 80%;">
         <h1>Edit Cluster</h1>
-
+        <?php include './Database/Forms/UpdateCluster/server.php'; ?>
         <?php $metaColumnsCause = CauseDB::getAllColumnsOfCause(); ?>
         <?php $metaColumnsEffect = EffectDB::getAllColumnsOfEffect(); ?>
+        <?php 
+                if (isset($_POST['effect'])) {
+                    $sessietje = array();
+                    $tempVarPostEffectClusterClick = EffectDB::getByIdMeta($_POST['effect']);
+                    if (is_array($sessietje)) {
+                        if (in_array($tempVarPostEffectClusterClick['id'], $_SESSION["effectsClusterOfObjEdit"])) {
+                            echo '<span style="color:red;">The effect is already in the list!</span>';
+                        } else {
+                            array_push($_SESSION['effectsClusterOfObjEdit'], $tempVarPostEffectClusterClick['id']);
+                        }
+                    }
+                    $variable = 1;
+                }
+                
+                ?>
         <form method="post" action="edit_cluster.php" onchange="this.form.submit()">
             <h2>Causes <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>
                     <a href="insert_Cause.php?clickedOnEditCluster=editCluster&id=<?php echo $_SESSION['clusterObjEdit']['id'] ?>" class="greenIcon"><i class="fa fa-plus-square" style="font-size: 28px;"></i></a>
@@ -287,7 +289,7 @@ if (isset($_GET['id'])  && !ctype_space($_GET['id']) && !empty($_GET['id'])) {
                 </table>
 
                 <h2>Effects (Select minimum 2 effects)</h2>
-
+                
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
@@ -319,13 +321,14 @@ if (isset($_GET['id'])  && !ctype_space($_GET['id']) && !empty($_GET['id'])) {
                         <?php } ?>
                     </tbody>
                 </table>
-
+                
                 <?php foreach ($clusterMetaData as $m) { ?>
 
                     <label><?php echo $m ?></label><br>
                     <input class="col-lg-4" value="<?php echo $_SESSION['clusterObjEdit'][$m]; ?>" name="<?php echo $m ?>"><br><br>
                 
                 <?php } ?>
+                
                 </div>
                 <div class="form-check container" style="overflow: auto; padding-top:25px; width: 35%; float: left;margin-top:10px;">
                 <?php if (count($_SESSION["effectsClusterOfObjEdit"]) >= 2) {   ?>

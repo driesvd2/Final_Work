@@ -32,7 +32,7 @@ if (isset($_SESSION["insertCauseFromEditCauseEffect"])) {
 if (isset($_SESSION["insertCauseFromEditCluster"])) {
 
     unset($_SESSION["insertCauseFromEditCluster"]);
-}
+} 
  
 error_reporting(E_ERROR | E_PARSE);
 
@@ -82,7 +82,7 @@ if (isset($_POST['search']) && isset($_POST['search_selectCauseColumn'])) {
     }
     
 }
-
+ 
 if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn'])) {
     $searchquery = $_POST['searchEffect'];
     $selColEffect = $_POST['search_selectEffectColumn'];
@@ -254,7 +254,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                 </tbody>
             </table>
         
-        
+         
         
         <?php } else if (isset($resultSearchTagsOfCauseTags)) { ?>
             <table class="table table-bordered table-hover">
@@ -282,6 +282,7 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                                 <td>
                                     <form method="post" action="index.php">
                                         <input type="hidden" value="<?php echo $res->id ?>" name="delete_idCause">
+                                        
                                         <button type="submit" class="btn btn-danger" style="background-color: #DA291C;" style="background-color: #DA291C;" name="delete_cause"><i class="fa fa-trash" style="font-size: 20px;"></i></button>
                                     </form>
                                 </td>
@@ -295,9 +296,6 @@ if (isset($_POST['searchEffect']) && isset($_POST['search_selectEffectColumn']))
                     <?php } } ?>
                 </tbody>
             </table>
-        
-        
-
         <?php } else { ?>
 
             <table class="table table-bordered table-hover">

@@ -11,4 +11,8 @@ if(isset($_POST['deleteColumnEffect'])){
     EffectDB::deleteColumnEffect($_POST['deleteColumnEffect']);
 }
 
+if(isset($_POST['editColumn']) && isset($_POST['oldColumn']) && isset($_POST['newColumn'])){
+    EffectDB::editColumnEffect($_POST['oldColumn'],$_POST['newColumn']);
+}
+
 ?>

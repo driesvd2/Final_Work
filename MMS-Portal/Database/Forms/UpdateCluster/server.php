@@ -20,7 +20,7 @@ if (isset($_POST['edit_The_Cluster']) && isset($_SESSION['effectsClusterOfObjEdi
     $arrayMeta['cause'] = $_POST['selCause'];
     $arrayMeta['effects'] = $_SESSION['effectsClusterOfObjEdit'];
     
-    if (!ClusterDB::ifExists($_POST['selCause'], $arrayMeta['effects'])) {
+    if (!ClusterDB::ifExists($_POST['selCause'], $arrayMeta['effects'], $_POST['id'])) {
        
         
         
@@ -34,7 +34,7 @@ if (isset($_POST['edit_The_Cluster']) && isset($_SESSION['effectsClusterOfObjEdi
             }  
         }
         
-        
+         
         ClusterDB::updateCluster($arrayMeta,$_POST['id']);
         foreach($arrayMeta['effects'] as $a){
             EffectDB::setStatus2($a);
@@ -69,6 +69,8 @@ if (isset($_POST['edit_The_Cluster']) && isset($_SESSION['effectsClusterOfObjEdi
         unset($_SESSION['effectsConversion']);    
         
         
+    } else{
+        echo '<span style="color:red;">This cluster already exists!</span>';
     }
 }
  

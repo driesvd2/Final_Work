@@ -10,7 +10,7 @@ include_once "Models/Cause.php";
 include_once "Models/Effect.php";
 include_once "Models/Cause_Effect.php";
 include_once "Database/DatabaseFactory.php";
-
+ 
 class CauseEffectDB
 {
 
@@ -33,13 +33,18 @@ class CauseEffectDB
             }
         return $resultatenArray;
     }
-    
+     
     public static function addColumnCauseEffect($name) {
         return self::getVerbinding()->voerSqlQueryUit('ALTER TABLE Cause_Effect ADD '.$name.' VARCHAR(1500) NULL');
     }
 
     public static function deleteColumnCauseEffect($name) {
         return self::getVerbinding()->voerSqlQueryUit('ALTER TABLE Cause_Effect DROP COLUMN '.$name);
+    }
+
+    public static function editColumnCauseEffect($old, $name)
+    {
+        return self::getVerbinding()->voerSqlQueryUit('ALTER TABLE Cause_Effect Change COLUMN ' . $old . ' ' . $name . ' VARCHAR(1500) ');
     }
 
     private static function getVerbinding() {
@@ -79,8 +84,29 @@ class CauseEffectDB
         return $resultatenArray;
     }
 
+    public static function ifExists($causeid, $effect, $id){
+        $mysqli = new mysqli("dt5.ehb.be", "1819FW_DRIESD_STEFANOSS", "DzwWqw", "1819FW_DRIESD_STEFANOSS");
+        $result = $mysqli->query("SELECT id FROM Cause_Effect WHERE cause=".$causeid." AND effect=".$effect." ORDER BY id ASC");
+        $resultaat = $result->fetch_array();
+        if($result->num_rows == 0 || $resultaat['id'] == $id) {
+            return false;
+        } else {
+            return true;
+        }
+        $mysqli->close();
+    }
     
- 
+    public static function ifExistsInsert($causeid, $effectId){
+        $mysqli = new mysqli("dt5.ehb.be", "1819FW_DRIESD_STEFANOSS", "DzwWqw", "1819FW_DRIESD_STEFANOSS");
+        $result = $mysqli->query("SELECT * FROM Cause_Effect WHERE cause=".$causeid." AND effect=".$effectId . " ORDER BY id ASC");
+        if($result->num_rows == 0) {
+            return false;
+        } else {
+            return true;
+        }
+        $mysqli->close();
+    }
+  
     public static function getCausebyEffectId($id) {
         $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect WHERE id=".$id . " ORDER BY id ASC");
         $resultatenArray = array();
@@ -91,7 +117,7 @@ class CauseEffectDB
         }
         return $resultatenArray;
     }
-    
+     
     public static function getCausebyEffectIdOne($id) {
         $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Cause_Effect WHERE effect=".$id . " ORDER BY id ASC");
         $resultatenArray = array();
@@ -148,16 +174,6 @@ class CauseEffectDB
         return $resultatenArray;
     }
 
-    public static function ifExists($causeid, $effectId){
-        $mysqli = new mysqli("dt5.ehb.be", "1819FW_DRIESD_STEFANOSS", "DzwWqw", "1819FW_DRIESD_STEFANOSS");
-        $result = $mysqli->query("SELECT * FROM Cause_Effect WHERE cause=".$causeid." AND effect=".$effectId . " ORDER BY id ASC");
-        if($result->num_rows == 0) {
-            return false;
-        } else {
-            return true;
-        }
-        $mysqli->close();
-    }
 
     public static function insert($causeid, $effectId) {
         return self::getVerbinding()->voerSqlQueryUit("INSERT INTO Cause_Effect(cause, effect) VALUES ('$causeid','$effectId')");

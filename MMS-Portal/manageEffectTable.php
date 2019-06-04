@@ -149,10 +149,16 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
                 </thead>
                 <tbody>
 
-                    <?php foreach ($metaColumnsEffect as $meta) { ?>
+                <?php foreach ($metaColumnsEffect as $meta) { ?>
                         <tr>
-                            <td><?php echo $meta; ?></td>
-                            <td><button type="submit" class="btn btn-danger" style="background-color: #DA291C; margin-left: 50%;" value="<?php echo $meta; ?>" name="deleteColumnEffect"><i class="fa fa-trash" style="font-size: 20px;"></i></button></td>
+                            <form method="post" action="manageEffectTable.php">
+                            <td>
+                            <input type="hidden" value="<?php echo $meta ?>" name="oldColumn">
+                            <input type="text" class="form-control" style="width:70%; float: left; margin-right: 2px" name="newColumn" value="<?php echo $meta ?>">
+                            <button type="submit" name="editColumn" class="btn btn-primary" style="background-color: #223A50;margin-top: 2px"><i class="fa fa-edit" style="font-size: 20px;"></i></button>
+                            </td>
+                            <td><button type="submit" class="btn btn-danger" style="background-color: #DA291C; position: sticky;" value="<?php echo $meta; ?>" name="deleteColumnEffect"><i class="fa fa-trash" style="font-size: 20px;"></i></button></td>
+                            </form>
                         </tr>
                     <?php } ?>
 

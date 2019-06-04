@@ -1,6 +1,7 @@
 <?php 
 
 include './Database/Forms/DeleteCause/server.php';
+include_once './Database/DAO/CauseTagDB.php';
 include_once './Database/DAO/CauseEffectDB.php';
 include_once './Database/DAO/CauseDB.php';
 include_once './Database/DAO/EffectDB.php';
@@ -8,11 +9,27 @@ include_once './Database/DAO/EffectDB.php';
 $connect = mysqli_connect('dt5.ehb.be', '1819FW_DRIESD_STEFANOSS', 'DzwWqw', '1819FW_DRIESD_STEFANOSS');
 $output = '';
 
-if(isset($_POST["query"]) && isset($_POST["columnSearch"]))
+if(isset($_POST["query"]) && isset($_POST["columnSearch"]) && $_POST["columnSearch"] == 'tag')
 {
     $search = mysqli_real_escape_string($connect, $_POST["query"]);
+    $querySearchTag = CauseTagDB::getSearchTagID($search);
+    
+    $temp = "SELECT * FROM Cause WHERE ";
+
+    foreach($querySearchTag as $q){
+        $temp .= "tag='$q->id' OR ";
+    }
+    $temp .= " 1!=1 ORDER BY id ASC";   
+    $query = $temp;
+
+} else if (isset($_POST["query"]) && isset($_POST["columnSearch"])) {
+    
+    $search = mysqli_real_escape_string($connect, $_POST["query"]);
     $query = "SELECT * FROM Cause WHERE ".$_POST["columnSearch"]." LIKE '%".$search."%'";
-}else{
+    
+      
+    
+} else {
     $query = "SELECT * FROM Cause ORDER BY id";
 }
 

@@ -14,7 +14,7 @@ include_once './Database/DAO/CauseEffectDB.php';
 
 function errorHandlingDeleteEffect(){
 if (isset($_POST['delete_effect']) && isset($_POST['delete_idEffect'])) {
-    
+        
         if(ClusterDB::getSearchClusterEffects($_POST['delete_idEffect']) && CauseEffectDB::getCausebyEffectIdOne($_POST['delete_idEffect'])){
             
             echo '<span style="color:red">Delete denied: Effect exists in Cluster and in Cause-Effect</span>';
@@ -33,8 +33,8 @@ if (isset($_POST['delete_effect']) && isset($_POST['delete_idEffect'])) {
         
         
     }
-}
- 
+} 
+  
 function errorHandlingDeleteCause(){
     
     if (isset($_POST['delete_cause']) && isset($_POST['delete_idCause'])) {

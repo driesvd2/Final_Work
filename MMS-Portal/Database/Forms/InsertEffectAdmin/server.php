@@ -11,6 +11,10 @@ function errorhandlingRadioEffect(){
             
         echo '<span style="color:red">you have to select the last level category!</span>';
             
+        } else if($name == null){
+            
+            echo '<span style="color:red">Fill in an Effect name!</span>';
+            
         } else {
             
                 if (isset($name) && !empty($name))
@@ -26,7 +30,7 @@ function errorhandlingRadioEffect(){
         }        
     }
     
-}
+} 
 
 
  

@@ -1,5 +1,5 @@
 <?php 
-session_start();
+
 include_once './Database/DAO/CauseEffectDB.php';
 include_once './Database/DAO/CauseDB.php';
 include_once './Database/DAO/EffectDB.php';
@@ -14,6 +14,8 @@ if (isset($_POST['update_causeEffect']) && isset($_POST['id']) && isset($_POST['
     
     $arrayMeta['cause'] = $_POST['cause'];
     $arrayMeta['effect'] = $_POST['effect'];
+    
+    if (!CauseEffectDB::ifExists($arrayMeta['cause'], $arrayMeta['effect'], $_POST['id'])) {
 
     $causeEffectMetaData = CauseEffectDB::getAllMetaColumnsOfCauseEffect();
     foreach($causeEffectMetaData as $m){
@@ -28,8 +30,7 @@ if (isset($_POST['update_causeEffect']) && isset($_POST['id']) && isset($_POST['
     CauseEffectDB::updateCauseEffectEntity($arrayMeta, $_POST['id']);
     EffectDB::setStatus2($arrayMeta['effect']);
      
-    
-    
+        
     if($_SESSION['causeEffectObjEdit']['effect'] != $arrayMeta['effect']){
         
         $searchOfEffectID = CauseEffectDB::getCausebyEffectIdOne($_SESSION['causeEffectObjEdit']['effect']);
@@ -45,8 +46,13 @@ if (isset($_POST['update_causeEffect']) && isset($_POST['id']) && isset($_POST['
     unset($_SESSION['effectObjEdit']);
     
     header('location: relations.php'); 
+        
+        
+    } else {
+        echo '<span style="color:red;">This Cause-Effect already exists!</span>';
+    }
  
-
+ 
 }
  
 

@@ -13,6 +13,11 @@ if (isset($_POST['insert_cause']) && isset($_POST['Cause'])) {
         
     echo '<span style="color:red">you have to select the last level category!</span>';
         
+    } else if($_POST['Cause'] == null){
+        
+    echo '<span style="color:red">Fill in a cause name!</span>';
+
+        
     } else { 
     
         if(isset($cause) && !empty($cause) && !is_null($cause)) {
@@ -21,7 +26,7 @@ if (isset($_POST['insert_cause']) && isset($_POST['Cause'])) {
         header('location: insert_Cause.php');
         }
         
-    }
+    } 
     
  if (isset($_SESSION["insertCauseFromInsertCluster"]) && $_SESSION["insertCauseFromInsertCluster"] == 'insertCluster') {
     header("location: insert_Cluster.php");

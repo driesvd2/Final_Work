@@ -21,7 +21,7 @@ class ClusterDB
             }
         return $resultatenArray;
     }
-    
+     
     public static function getAllMetaColumnsOfCluster() {
         $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT column_name FROM information_schema.columns WHERE table_schema = '1819FW_DRIESD_STEFANOSS' AND table_name = 'Cluster' AND column_name != 'id' AND column_name != 'cause' AND column_name != 'effects'");
         $resultatenArray = array();
@@ -44,6 +44,11 @@ class ClusterDB
 
     public static function deleteColumnCluster($name) {
         return self::getVerbinding()->voerSqlQueryUit('ALTER TABLE Cluster DROP COLUMN '.$name);
+    }
+
+    public static function editColumnCluster($old, $name)
+    {
+        return self::getVerbinding()->voerSqlQueryUit('ALTER TABLE Cluster Change COLUMN ' . $old . ' ' . $name . ' VARCHAR(1500) ');
     }
 
 
@@ -79,7 +84,7 @@ class ClusterDB
         }
         return $resultatenArray;
     }
-    
+     
     
     public static function getSearchClusterEffects($searchq) {
         $resultatenArray = array();
@@ -119,7 +124,20 @@ class ClusterDB
         return $string;
     }
 
-    public static function ifExists($causeid, $array){
+    public static function ifExists($causeid, $array, $id){
+        $string = self::arrayToClusterEffects($array);
+        $mysqli = new mysqli("dt5.ehb.be", "1819FW_DRIESD_STEFANOSS", "DzwWqw", "1819FW_DRIESD_STEFANOSS");
+        $result = $mysqli->query("SELECT id FROM Cluster WHERE cause=".$causeid." AND effects= '$string' ORDER BY id ASC");
+        $resultaat = $result->fetch_array();
+        if($result->num_rows == 0 || $resultaat['id'] == $id) {
+            return false;
+        } else {
+            return true;
+        }
+        $mysqli->close();
+    } 
+    
+    public static function ifExistsInsert($causeid, $array){
         $string = self::arrayToClusterEffects($array);
         $mysqli = new mysqli("dt5.ehb.be", "1819FW_DRIESD_STEFANOSS", "DzwWqw", "1819FW_DRIESD_STEFANOSS");
         $result = $mysqli->query("SELECT * FROM Cluster WHERE cause=".$causeid." AND effects= '$string' ORDER BY id ASC");
@@ -173,7 +191,7 @@ class ClusterDB
 
         $query .= " where id =".$id;
         
-            //var_dump($query);
+            
         
         return self::getVerbinding()->voerSqlQueryUit($query);
     }

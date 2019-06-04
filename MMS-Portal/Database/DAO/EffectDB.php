@@ -84,6 +84,11 @@ class EffectDB
         return self::getVerbinding()->voerSqlQueryUit('ALTER TABLE Effect DROP COLUMN ' . $name);
     }
 
+    public static function editColumnEffect($old, $name)
+    {
+        return self::getVerbinding()->voerSqlQueryUit('ALTER TABLE Effect Change COLUMN ' . $old . ' ' . $name . ' VARCHAR(1500) ');
+    }
+
     public static function getAll()
     {
         $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM Effect ORDER BY id ASC");
@@ -234,7 +239,7 @@ class EffectDB
     {
         return self::getVerbinding()->voerSqlQueryUit("UPDATE Effect SET status=2 WHERE id=" . $effectId);
     }
-
+ 
     public static function getByName($effectName){
         $resultatenArray = array();
         $resultaat = self::getVerbinding()->voerSqlQueryUit("select * from Effect where name = '$effectName'");

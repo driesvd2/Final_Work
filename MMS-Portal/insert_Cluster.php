@@ -27,8 +27,8 @@ if (isset($_SESSION["insertCauseFromEditCluster"])) {
 
     unset($_SESSION["insertCauseFromEditCluster"]);
 }
+ 
 
-include './Database/Forms/InsertCluster/server.php';
 include_once './Database/DAO/CauseEffectDB.php';
 include_once './Database/DAO/CauseDB.php';
 include_once './Database/DAO/EffectDB.php';
@@ -47,10 +47,10 @@ if (isset($_POST['searchCause']) && !empty($_POST['searchCause'])) {
     $searchqf = preg_replace_callback("#[^0-9a-z]#i", function ($found) {
         return strtolower($found[1]);
     }, $searchqf);
-
+ 
     $querySearchCauseInsertCluster = CauseDB::getSearchCause($searchqf);
 }
-
+ 
 if (isset($_POST['searchEffectCluster']) && !empty($_POST['searchEffectCluster'])) {
 
     $searchquery = $_POST['searchEffectCluster'];
@@ -134,12 +134,13 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
     <br>
     <br>
     <br>
-
+ 
     <div class="container" style="width: 50%; float: left; height: 80%;">
         <h1>Insert Cluster</h1>
         <?php if (isset($_GET['id'])) {
             $deIdVanStatusPage = $_GET['id'];
         }
+        include './Database/Forms/InsertCluster/server.php';
         ?>
         <?php $metaColumnsCause = CauseDB::getAllColumnsOfCause(); ?>
         <?php $metaColumnsEffect = EffectDB::getAllColumnsOfEffect(); ?>
@@ -230,12 +231,8 @@ if (isset($_POST["deleteEffectList"]) && isset($_POST["delete_effectFromList"]))
                 
                 if (in_array($caughtEffect[0]->id, $_SESSION["effectOnChangeName"])) {
 
-                    
-                        
-                        echo '<span style="color:red; padding-left:1%;">The effect is already in the list!</span>';
-                    
-                    
-                    
+                    echo '<span style="color:red; padding-left:1%;">The effect is already in the list!</span>';
+                
                 }  else {
 
                     array_push($_SESSION["effectOnChangeName"], $caughtEffect[0]->id);

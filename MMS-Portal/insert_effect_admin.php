@@ -28,7 +28,7 @@ if (isset($_SESSION["insertCauseFromInsertCauseEffect"])) {
 if (isset($_SESSION["insertCauseFromEditCluster"])) {
 
     unset($_SESSION["insertCauseFromEditCluster"]);
-}
+} 
 
 include './Database/Forms/InsertEffectAdmin/server.php';
 include_once './Database/DAO/CauseEffectDB.php';
@@ -134,7 +134,7 @@ if(isset($_GET['id'])){
                 <label for="Cause">Effect: </label>
                 <input type="hidden" name="insertTag" value="<?php echo $tag[0]->id ?>">
                 <input type="hidden" name="id" <?php if (isset($effect)) {echo 'value="'.$effect[0]->id.'"';}else if (isset($_POST['id'])) {echo 'value="'.$_POST['id'].'"';} ?>>
-                <input type="text" class="form-control" id="Effect" name="name" <?php if (isset($effect)) {echo 'value="'.$effect[0]->name.'"';}else if (isset($_POST['getEffect'])) {echo 'value="'.$_POST['getEffect'].'"';} ?> placeholder="Enter Effect..." required>
+                <input type="text" class="form-control" id="Effect" name="name" <?php if (isset($effect)) {echo 'value="'.$effect[0]->name.'"';}else if (isset($_POST['getEffect'])) {echo 'value="'.$_POST['getEffect'].'"';} ?> placeholder="Enter Effect...">
             </div>
             <button type="submit" class="btn btn-success" style="background-color: #0b6623;" name="insert_effect_admin">Insert</button>
         </form>

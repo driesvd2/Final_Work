@@ -12,4 +12,8 @@ if(isset($_POST['deleteColumnCluster'])){
     ClusterDB::deleteColumnCluster($_POST['deleteColumnCluster']);
 }
 
+if(isset($_POST['editColumn']) && isset($_POST['oldColumn']) && isset($_POST['newColumn'])){
+    ClusterDB::editColumnCluster($_POST['oldColumn'],$_POST['newColumn']);
+}
+
 ?>

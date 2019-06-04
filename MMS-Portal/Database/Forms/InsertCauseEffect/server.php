@@ -10,7 +10,7 @@ include_once './Database/DAO/CauseEffectDB.php';
 include_once './Database/DAO/EffectDB.php';
 
 //Insert Cause in cause table
-function handleErrorRadioButtons(){
+
     
 if(isset($_POST['insert_CauseEffect'])){
     
@@ -20,19 +20,20 @@ if(isset($_POST['insert_CauseEffect'])){
            
     }else{
         
-            if (!CauseEffectDB::ifExists($_POST['Cause'],$_POST['Effect'])){
+            if (!CauseEffectDB::ifExistsInsert($_POST['Cause'],$_POST['Effect'])){
                 EffectDB::setStatus2($_POST['Effect']);
                 CauseEffectDB::insert($_POST['Cause'],$_POST['Effect']);
                 if(isset($_SESSION["deIdVanStatusPageCauseEffect"])){
                     unset($_SESSION["deIdVanStatusPageCauseEffect"]);
                 }
-                
+//                header('location: relations.php');
+            } else{
+                echo '<span style="color:red;">This Cause-Effect already exists!</span>';
             }
         }
+}   
     
-    }   
-    
-}
+ 
   
 if (isset($_POST['Delete_causeEffect_id']) && isset($_POST['Delete_causeEffect'])) {
     

@@ -3,7 +3,7 @@ ini_set('session.cache_limiter', 'public');
 session_cache_limiter(false);
 session_start();
 error_reporting(E_ERROR | E_PARSE);
-include './Database/Forms/InsertCauseEffect/server.php';
+
 include_once './Database/DAO/CauseEffectDB.php';
 include_once './Database/DAO/CauseDB.php';
 include_once './Database/DAO/EffectDB.php';
@@ -41,9 +41,9 @@ if (isset($_SESSION["insertCauseFromEditCluster"])) {
 
     unset($_SESSION["insertCauseFromEditCluster"]);
 }
-
+ 
 ?>
-
+ 
 <html style="height: 100%;overflow:hidden">
 
 <head>
@@ -107,13 +107,14 @@ if (isset($_SESSION["insertCauseFromEditCluster"])) {
  
     <div class="container" style="width: 50%; float: left; height: 80%;">
         <h1>Insert Cause - Effect</h1>
-        <?php handleErrorRadioButtons(); ?>
+        
+        <?php include './Database/Forms/InsertCauseEffect/server.php'; ?>
         <?php if (isset($_GET['id'])) {
             $_SESSION["deIdVanStatusPageCauseEffect"] = $_GET['id'];
         }
         ?>
-
-
+ 
+ 
         <?php $metaColumnsCause = CauseDB::getAllColumnsOfCause(); ?>
         <form method="post" action="insert_Cause_Effect.php">
             <h2>Causes <?php if (isset($_SESSION['login']) && $_SESSION['type'] == 0) {   ?>

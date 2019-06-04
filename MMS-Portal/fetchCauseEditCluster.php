@@ -4,10 +4,24 @@ include './Database/Forms/DeleteCause/server.php';
 include_once './Database/DAO/CauseEffectDB.php';
 include_once './Database/DAO/CauseDB.php';
 include_once './Database/DAO/EffectDB.php';
+include_once './Database/DAO/CauseTagDB.php';
 
 $connect = mysqli_connect('dt5.ehb.be', '1819FW_DRIESD_STEFANOSS', 'DzwWqw', '1819FW_DRIESD_STEFANOSS');
 $output = '';
-if(isset($_POST["queryClusterEditCause"]) && isset($_POST["columnSearchCauseClusterEdit"]))
+if(isset($_POST["queryClusterEditCause"]) && isset($_POST["columnSearchCauseClusterEdit"]) && $_POST["columnSearchCauseClusterEdit"] == 'tag')
+{
+    $search = mysqli_real_escape_string($connect, $_POST["queryClusterEditCause"]);
+    $querySearchTag = CauseTagDB::getSearchTagID($search);
+    
+    $temp = "SELECT * FROM Cause WHERE ";
+
+    foreach($querySearchTag as $q){
+        $temp .= "tag='$q->id' OR ";
+    }
+    $temp .= " 1!=1 ORDER BY id ASC";   
+    $query = $temp;
+
+} else if(isset($_POST["queryClusterEditCause"]) && isset($_POST["columnSearchCauseClusterEdit"]))
 {
     $search = mysqli_real_escape_string($connect, $_POST["queryClusterEditCause"]);
     $query = "SELECT * FROM Cause WHERE ".$_POST["columnSearchCauseClusterEdit"]." LIKE '%".$search."%'";
@@ -34,5 +48,5 @@ $output .= '<div class="form-check">';
 }else {
     echo 'Data Not Found';
 }
- 
+  
 ?>

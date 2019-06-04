@@ -3,30 +3,25 @@
 ini_set('session.cache_limiter', 'public');
 session_cache_limiter(false);
 
+session_start();
+
 error_reporting(E_ERROR | E_PARSE);
+
+
 
 include_once './Database/DAO/CauseEffectDB.php';
 include_once './Database/DAO/EffectTagDB.php';
 include_once './Database/DAO/CauseDB.php';
 include_once './Database/DAO/EffectDB.php';
 
-session_start();
+
 
 if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     header('location: login.php');
 }
-
-if(isset($_POST['insert_EffectTag'])){
-    if (empty($_POST['tag']) || $_POST['tag'] == null || is_null($_POST['tag'])) {
-        EffectTagDB::insertNull($_POST['name']);
-    }else{
-        EffectTagDB::insert($_POST['name'], $_POST['tag']);
-    }
-}
-
-
-?>
  
+?>
+   
 <html style="height: 100%;overflow:hidden">
 
 <head>
@@ -44,7 +39,7 @@ if(isset($_POST['insert_EffectTag'])){
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./CSS/custom.css">
 </head>
-
+  
 <body style="height: 100%;overflow:auto">
     <nav class="navbar navbar-expand-lg navbar-dark   fixed-top">
         <div class="container">
@@ -91,6 +86,69 @@ if(isset($_POST['insert_EffectTag'])){
     <br>
     
     <?php 
+    
+    function showErrorUsedTagDelete(){
+        echo '<span style="color:red; padding-left:51.5%;" >This tag is used by an Effect</span>';
+    }
+    
+    function showErrorNoNameFilled(){
+        echo '<span style="color:red; padding-left:51.5%;" >Please enter a category name</span>';
+    }
+    
+    function showErrorNameAlreadyExists(){
+        echo '<span style="color:red; padding-left:51.5%;" >This Category name already exists</span>';
+    }
+    
+    if(isset($_POST['insert_EffectTag']) && $_POST['name'] == null){
+        
+        showErrorNoNameFilled();
+        
+    }
+    
+    if(isset($_POST['insert_EffectTag']) && $_POST['name'] != null){
+        
+        if(EffectTagDB::getSearchTagID($_POST['name'])){
+            
+            showErrorNameAlreadyExists();
+            
+        } else {
+            
+            if (empty($_POST['tag']) || $_POST['tag'] == null || is_null($_POST['tag'])) {
+                
+            EffectTagDB::insertNull($_POST['name']);
+                
+            } else {
+                
+            EffectTagDB::insert($_POST['name'], $_POST['tag']);
+                    
+            }
+        }
+        
+    }
+    
+    
+    
+    if(isset($_POST['delete_effecttag']) && isset($_POST['delete_idEffecttag'])){
+        
+        if(EffectDB::getAllWhereTag($_POST['delete_idEffecttag'])){
+            
+            showErrorUsedTagDelete();
+            
+        }else{
+            EffectTagDB::deleteById($_POST['delete_idEffecttag']);
+        }
+    }
+    
+    if(isset($_POST['changeTagName']) && isset($_POST['textToChange']) && isset($_POST['updateIdTag'])){
+        
+        EffectTagDB::changeNameTag($_POST['textToChange'], $_POST['updateIdTag']);
+        
+    }
+    
+    ?>
+     
+    
+    <?php 
         $firstTags = EffectTagDB::getAllFirst();
         $secondTags = EffectTagDB::getAllSecond();
         $thirdTags = EffectTagDB::getAllThird();
@@ -102,45 +160,86 @@ if(isset($_POST['insert_EffectTag'])){
         
             <div class="form-group">
                 <label for="EffectTag">Category: </label>
-                <input type="text" class="form-control" id="EffectTag" name="name" placeholder="Enter Category..." required>
+                <input type="text" class="form-control" id="EffectTag" name="name" placeholder="Enter Category...">
             </div>
             <button type="submit" class="btn btn-success" style="background-color: #0b6623;" name="insert_EffectTag">Insert</button>
         
     </div>
     <div class="container" style="width: 50%;float: left;">
         <div class="container">
-        <h1>All Categories<h1>
-        <h6>Choose a parent category for your category</h6>
+            <h1>All Categories</h1>
+            <h6>Choose a parent category for your category</h6>
         </div>
         <div class="container" style="float: left; height: 60%;overflow:auto">
             <table class="table table-bordered table-hover" >
             <thead>
                 <tr>
-                    <th></th>
-                    <th>Category</th>
-                    <th>Parent</th>
+                    <th width="2%"></th>
+                    <th width="20%">Category</th>
+                    <th width="10%">Parent</th>
+                    <th width="5%">Delete</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach($firstTags as $t){  ?>
                     <tr>
                         <td><input type="radio" name="tag" value="<?php echo $t->id ?>"></td>
-                        <td><?php echo $t->name ?></td>
-                        <td><?php echo "None" ?></td>
+                        <form method="post" action="insert_EffectTag.php">
+                        <td>
+                            <input type="hidden" value="<?php echo $t->id ?>" name="updateIdTag">
+                            <input type="text" class="form-control" style="width:70%; float: left; margin-right: 2px" name="textToChange" value="<?php echo $t->name ?>">
+                            <button type="submit" name="changeTagName" class="btn btn-primary" style="background-color: #223A50;margin-top: 2px"><i class="fa fa-edit" style="font-size: 20px;"></i></button>
+                        </td>
+                        <td><?php echo "No parent" ?></td>
+                        <?php if(EffectTagDB::ifLast($t->id)){ ?>  
+                            <input type="hidden" value="<?php echo $t->id ?>" name="delete_idEffecttag">
+                            <td><button type="submit" class="btn btn-danger" style="background-color: #DA291C;" style="background-color: #DA291C;" name="delete_effecttag"><i class="fa fa-trash" style="font-size: 20px;"></i></button></td>  
+                        <?php } else { ?>
+                            <td><p>Not Available</p></td>
+                        <?php } ?>
+                        </form>
                     </tr>
                     <?php foreach($secondTags as $s){ 
                         if($s->parent == $t->id){?>
-                    <tr>
+                    <tr> 
                         <td><input type="radio" name="tag" value="<?php echo $s->id ?>"></td>
-                        <td><?php echo $s->name ?></td>
+                        <form method="post" action="insert_EffectTag.php">
+                        <td>
+                            <input type="hidden" value="<?php echo $s->id ?>" name="updateIdTag">
+                            <input type="text" class="form-control" style="width:70%; float: left; margin-right: 2px" name="textToChange" value="<?php echo $s->name ?>">
+                            <button type="submit" name="changeTagName" class="btn btn-primary" style="background-color: #223A50;margin-top: 2px"><i class="fa fa-edit" style="font-size: 20px;"></i></button>
+                        </td>
                         <td><?php echo $t->name ?></td>
+                        <?php if(EffectTagDB::ifLast($s->id)){ ?>
+                            <input type="hidden" value="<?php echo $s->id ?>" name="delete_idEffecttag">
+                            <td>
+                                <button type="submit" class="btn btn-danger" style="background-color: #DA291C;" style="background-color: #DA291C;" name="delete_effecttag"><i class="fa fa-trash" style="font-size: 20px;"></i></button>
+                            </td>  
+                        <?php } else { ?>
+                            <td><p>Not Available</p></td>
+                        <?php } ?>
+                        </form>
                     </tr>
                     <?php foreach($thirdTags as $th){ 
                         if($th->parent == $s->id){?>
                     <tr>
                         <td><input type="radio" disabled></td>
-                        <td><?php echo $th->name ?></td>
+                        <form method="post" action="insert_EffectTag.php">
+                        <td>
+                            <input type="hidden" value="<?php echo $th->id ?>" name="updateIdTag">
+                            <input type="text" class="form-control" style="width:70%; float: left; margin-right: 2px" name="textToChange" value="<?php echo $th->name ?>">
+                            <button type="submit" name="changeTagName" class="btn btn-primary" style="background-color: #223A50;margin-top: 2px"><i class="fa fa-edit" style="font-size: 20px;"></i></button>
+                        </td>
                         <td><?php echo $s->name ?></td>
+                        <?php if(EffectTagDB::ifLast($th->id)){ ?>
+                                
+                            <input type="hidden" value="<?php echo $th->id ?>" name="delete_idEffecttag">
+                            <td><button type="submit" class="btn btn-danger" style="background-color: #DA291C;" style="background-color: #DA291C;" name="delete_effecttag"><i class="fa fa-trash" style="font-size: 20px;"></i></button></td>  
+                            
+                        <?php } else { ?>
+                            <td><p>Not Available</p></td>
+                        <?php } ?>
+                        </form>
                     </tr>
                 <?php }}}}} ?>
                 
@@ -148,7 +247,7 @@ if(isset($_POST['insert_EffectTag'])){
         </table> 
         </div>               
      </div>
-     </form>
+</form>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

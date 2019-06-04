@@ -164,7 +164,7 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
         </form>
         </div>
     </div>
-
+ 
     <div class="container" style="width: 50%;float: left;">
         <div class="container">
         <?php 

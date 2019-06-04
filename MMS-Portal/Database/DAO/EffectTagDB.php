@@ -10,7 +10,7 @@ class EffectTagDB
     {
         return DatabaseFactory::getDatabase();
     }
-
+ 
     public static function ifLast($id)
     {
         $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM EffectTag WHERE parent = '$id' ORDER BY id ASC");
@@ -21,7 +21,7 @@ class EffectTagDB
             return true;
         }
     }
-
+ 
     public static function getAll()
     {
         $resultaat = self::getVerbinding()->voerSqlQueryUit("SELECT * FROM EffectTag ORDER BY id ASC");
@@ -102,11 +102,11 @@ class EffectTagDB
         }
         return $resultatenArray;
     }
-    
+     
     public static function getSearchTagID($searchq)
     {
         $resultatenArray = array();
-        $resultaat = self::getVerbinding()->voerSqlQueryUit("select id from EffectTag where name LIKE '%$searchq%' ORDER BY id ASC");
+        $resultaat = self::getVerbinding()->voerSqlQueryUit("select * from EffectTag where name LIKE '%$searchq%' ORDER BY id ASC");
         for ($index = 0; $index < $resultaat->num_rows; $index++) {
             $databaseRij = $resultaat->fetch_array();
             $nieuw = self::converteerRijNaarEffectTag($databaseRij);
@@ -128,6 +128,11 @@ class EffectTagDB
     public static function deleteById($id)
     {
         return self::getVerbinding()->voerSqlQueryUit("DELETE FROM EffectTag WHERE id=" . $id);
+    }
+    
+    public static function changeNameTag($tagName, $tagId)
+    {
+        return self::getVerbinding()->voerSqlQueryUit("UPDATE EffectTag SET name='$tagName' WHERE id=" . $tagId);
     }
 
     protected static function converteerRijNaarEffectTag($databaseRij)
