@@ -139,7 +139,7 @@ if ($_SESSION['type'] != 0 || !isset($_SESSION['type'])) {
     </div>
 
     <?php $metaColumnsCause = CauseDB::getAllMetaColumnsOfCause(); ?>
-    <div class="container" style="width: 45%; float: left; height: 80%; overflow:auto">
+    <div class="container" style="width: 35%; float: left; height: 80%; overflow:auto">
     <form method="post" action="manageCauseTable.php">
         <table class="table table-bordered table-hover">
                 <thead>
