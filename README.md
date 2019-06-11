@@ -9,19 +9,19 @@ Gemaakt tot het behalen van de graad van bachelor in de toegepaste informatica t
 
 ## Frontend
 
-* Frontend: http://dtsl.ehb.be/~stefanos.stoikos/Final_Work_Frontend/
+* Frontend: https://dtprojecten.ehb.be/MMS_Portal/
 
 * Frontend DB: https://dt5.ehb.be/phpmyadmin/index.php
 
 ## Web Service
 
-* Link: http://dtsl.ehb.be/~stefanos.stoikos/Final_Work_Frontend/API/
+* Link: https://dtprojecten.ehb.be/MMS_Portal/API/
 
-* getAll(): POST http://dtsl.ehb.be/~stefanos.stoikos/Final_Work_Frontend/API/getAll.php
+* getAll(): POST https://dtprojecten.ehb.be/MMS_Portal/API/getAll.php
 
-* getCausesSearch(): POST http://dtsl.ehb.be/~stefanos.stoikos/Final_Work_Frontend/API/getCausesSearch.php
+* getCausesSearch(): POST https://dtprojecten.ehb.be/MMS_Portal/API/getCausesSearch.php
 
-* getCausesByEffectName(): POST http://dtsl.ehb.be/~stefanos.stoikos/Final_Work_Frontend/API/getCausesByEffectName.php
+* getCausesByEffectName(): POST https://dtprojecten.ehb.be/MMS_Portal/API/getCausesByEffectName.php
 
 Voor Credentials: contacteer ons.
 
